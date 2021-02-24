@@ -24,15 +24,19 @@ private:
 	UPROPERTY()
 	class UProVRNetworkManager* NetworkManager;
 
+	static TWeakObjectPtr<UProVRGameInstance> GameInstanceWeakPtr;
+	
 public:
-	UFUNCTION(BlueprintCallable, Category = "ProVR|Managers")
-	class UProVRActionManager* GetActionManager() const;
+	UFUNCTION(BlueprintPure, Category = "ProVR|Managers")
+	static class UProVRActionManager* GetActionManager();
 
-	UFUNCTION(BlueprintCallable, Category = "ProVR|Managers")
-	class UProVRViewManager* GetViewManager() const;
+	UFUNCTION(BlueprintPure, Category = "ProVR|Managers")
+	static class UProVRViewManager* GetViewManager();
 
-	UFUNCTION(BlueprintCallable, Category = "ProVR|Managers")
-	class UProVRNetworkManager* GetNetworkManager() const;
+	UFUNCTION(BlueprintPure, Category = "ProVR|Managers")
+	static class UProVRNetworkManager* GetNetworkManager();
+
+	static UProVRGameInstance* GetCurrentGameInstance();
 
 	UProVRGameInstance();
 

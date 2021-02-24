@@ -4,21 +4,11 @@
 #include "Managers/ProVRViewManager.h"
 #include "ProVRGameInstance.h"
 
-bool UProVRSwitchViewAction::PerformAction()
+EProVRActionBehavior UProVRSwitchViewAction::PerformAction()
 {
-	if (GEngine)
+	if (UProVRViewManager* ViewManager = UProVRGameInstance::GetViewManager())
 	{
-		if (UWorld* World = GEngine->GetWorld())
-		{
-			if (UProVRGameInstance* GameInstance = (UProVRGameInstance*)World->GetGameInstance())
-			{
-				if (UProVRViewManager* ViewManager = GameInstance->GetViewManager())
-				{
-					ViewManager->SwitchView(DesiredNextView);
-					return true;
-				}
-			}
-		}
+		ViewManager->SwitchView(DesiredNextView);
 	}
-	return false;
+	return EProVRActionBehavior::Synchronous;
 }

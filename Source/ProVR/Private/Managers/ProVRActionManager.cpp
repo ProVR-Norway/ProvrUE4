@@ -13,8 +13,7 @@ void UProVRActionManager::Tick(float DeltaTime)
 
 		ActionQueue.RemoveAt(0);
 
-		//If PerformAction returns false, it is an async. process; if true; we can remove it from the queue directly
-		if (!ActionToExecute->PerformAction())
+		if (ActionToExecute->PerformAction() == EProVRActionBehavior::Asynchronous)
 		{
 			OngoingActions.Add(ActionToExecute);
 		}

@@ -16,5 +16,5 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ProVR|Actions")
 	EProVRView DesiredNextView = EProVRView::None;
 
-	virtual bool PerformAction() override;
+	virtual EProVRActionBehavior PerformAction() override;
 };

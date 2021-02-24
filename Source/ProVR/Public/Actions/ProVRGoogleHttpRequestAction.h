@@ -15,7 +15,7 @@ class PROVR_API UProVRGoogleHttpRequestAction : public UProVRActionBase
 	GENERATED_BODY()
 	
 public:
-	virtual bool PerformAction() override;
+	virtual EProVRActionBehavior PerformAction() override;
 
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FProVRRequestDoneDelegate, bool, Success, FString, Content);
 	UPROPERTY(BlueprintAssignable, Category = "ProVR|Actions")

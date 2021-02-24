@@ -15,5 +15,5 @@ class PROVR_API UProVRHelloWorldAction : public UProVRActionBase
 	GENERATED_BODY()
 
 protected:
-    virtual bool PerformAction() override;
+    virtual EProVRActionBehavior PerformAction() override;
 };

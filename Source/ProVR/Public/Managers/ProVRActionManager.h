@@ -21,6 +21,8 @@ private:
 	UPROPERTY()
 	TArray<class UProVRActionBase*> OngoingActions;
 
+	friend class UProVRActionBase;
+
 public:
 	virtual void Tick(float DeltaTime) override;
 

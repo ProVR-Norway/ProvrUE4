@@ -5,24 +5,48 @@
 #include "Managers/ProVRViewManager.h"
 #include "Managers/ProVRNetworkManager.h"
 
-UProVRActionManager* UProVRGameInstance::GetActionManager() const
+UProVRGameInstance* UProVRGameInstance::GetCurrentGameInstance()
 {
-	return ActionManager;
+	if (GameInstanceWeakPtr.IsValid())
+	{
+		return GameInstanceWeakPtr.Get();
+	}
+	return nullptr;
+}
+TWeakObjectPtr<UProVRGameInstance> UProVRGameInstance::GameInstanceWeakPtr;
+
+UProVRActionManager* UProVRGameInstance::GetActionManager()
+{
+	if (UProVRGameInstance* GameInstance = GetCurrentGameInstance())
+	{
+		return GameInstance->ActionManager;
+	}
+	return nullptr;
 }
 
-UProVRViewManager* UProVRGameInstance::GetViewManager() const
+UProVRViewManager* UProVRGameInstance::GetViewManager()
 {
-	return ViewManager;
+	if (UProVRGameInstance* GameInstance = GetCurrentGameInstance())
+	{
+		return GameInstance->ViewManager;
+	}
+	return nullptr;
 }
 
-UProVRNetworkManager* UProVRGameInstance::GetNetworkManager() const
+UProVRNetworkManager* UProVRGameInstance::GetNetworkManager()
 {
-	return NetworkManager;
+	if (UProVRGameInstance* GameInstance = GetCurrentGameInstance())
+	{
+		return GameInstance->NetworkManager;
+	}
+	return nullptr;
 }
 
 UProVRGameInstance::UProVRGameInstance()
 {
 	if (HasAnyFlags(RF_ClassDefaultObject | RF_ArchetypeObject)) return;
+
+	GameInstanceWeakPtr = this;
 
 	static ConstructorHelpers::FClassFinder<UProVRActionManager> BPActionManager(TEXT("/Game/Blueprints/Managers/BP_ProVRActionManager"));
 	if (BPActionManager.Class != NULL)

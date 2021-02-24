@@ -43,7 +43,10 @@ void UProVRViewManager::SwitchView(EProVRView NextView)
 {
 	if (CurrentView != NextView)
 	{
-		ViewWidgetMap[CurrentView]->RemoveFromParent();
+		if (ViewWidgetMap.Contains(CurrentView))
+		{
+			ViewWidgetMap[CurrentView]->RemoveFromParent();
+		}
 		ViewWidgetMap[NextView]->AddToViewport();
 
 		CurrentView = NextView;

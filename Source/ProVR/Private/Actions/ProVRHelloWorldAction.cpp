@@ -2,12 +2,11 @@
 
 #include "Actions/ProVRHelloWorldAction.h"
 
-bool UProVRHelloWorldAction::PerformAction()
+EProVRActionBehavior UProVRHelloWorldAction::PerformAction()
 {
 	if (GEngine)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Hello world!"));
-		return true;
 	}
-	return false;
+	return EProVRActionBehavior::Synchronous;
 }

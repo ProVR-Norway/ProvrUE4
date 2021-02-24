@@ -6,16 +6,22 @@
 #include "UObject/NoExportTypes.h"
 #include "ProVRActionBase.generated.h"
 
-/**
- * 
- */
+UENUM()
+enum class EProVRActionBehavior : uint8
+{
+	Synchronous = 0,
+	Asynchronous = 1
+};
+
 UCLASS(BlueprintType)
 class PROVR_API UProVRActionBase : public UObject
 {
 	GENERATED_BODY()
 	
 protected:
-	virtual bool PerformAction() { return false; }
+	virtual EProVRActionBehavior PerformAction() { return EProVRActionBehavior::Synchronous; }
 
 	friend class UProVRActionManager;
+
+	void OnAsyncronousActionCompleted();
 };
