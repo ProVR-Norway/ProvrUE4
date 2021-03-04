@@ -5,25 +5,31 @@
 #include "Runtime/Online/HTTP/Public/Http.h"
 
 
+void UProVRSpawnModelAction::Event(UglTFRuntimeAsset* Asset_)
+{
+	if (!Asset)
+	{
+		OnActionComplete.Broadcast(false);
+	}
+	else
+	{
+		OnActionComplete.Broadcast(true);
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("Event() Completed"));
+	OnAsyncronousActionCompleted();
+}
+
+
 EProVRActionBehavior UProVRSpawnModelAction::PerformAction()
 {
 
-	//Completed Called when GetFromURL http request is finished, see: glTFRuntimeFunctionalLibrary.cpp and IHttpRequest.h
+	Completed.BindUFunction(this, "Event");
 
-/*
-	Completed.BindDynamic(this, BindLambda([this]() {
-		UE_LOG(LogTemp, Warning, TEXT("Delegate and Lambda worked"));
-		ActionComplete.Broadcast();
-		OnAsyncronousActionCompleted();
-		}));
-	*/
-
-	//How should I make sure that this function returns Synchronous when the delegate "Completed" is called
-
-		//Completed.BindUFunction( this, "DownloadComplete"); // struggling with blue print
-
+	/*
 	FglTFRuntimeHttpResponse event;
-	event.BindDynamic([this](UglTFRuntimeAsset* Asset)
+	
+	event.BindDynamic(this, [this](UglTFRuntimeAsset* Asset)
 		{
 			if (!Asset)
 			{
@@ -36,18 +42,11 @@ EProVRActionBehavior UProVRSpawnModelAction::PerformAction()
 
 			OnAsyncronousActionCompleted();
 		});
-
-	UglTFRuntimeFunctionLibrary::glTFLoadAssetFromUrl(URL, Headers, event, LoaderConfig);
+		*/
+	UglTFRuntimeFunctionLibrary::glTFLoadAssetFromUrl(URL, Headers, Completed, LoaderConfig);
 
 	return EProVRActionBehavior::Asynchronous;
 
 }
 
-/*
-void UProVRSpawnModelAction::DownloadComplete()
-{
-	UE_LOG(LogTemp, Warning, TEXT("UProVRSpawnModelAction::DownloadComplete() is running"));
-	ActionComplete.Broadcast();
-	OnAsyncronousActionCompleted();
-}
-*/
+

@@ -18,34 +18,35 @@ UCLASS()
 class PROVR_API UProVRSpawnModelAction : public UProVRActionBase
 {
 	GENERATED_BODY()
-
-
+	// Not possible with two Loadings form URL at the same time????
+	
 public:
 
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FProVRSpawnModelComplete, bool, bSuccessful);
-	UPROPERTY(BlueprintReadWrite, Category = "ProVR|Actions")
+	UPROPERTY(BlueprintAssignable, Category = "ProVR|Actions")
 		FProVRSpawnModelComplete OnActionComplete;
-	/*
-		UPROPERTY(BlueprintReadWrite, Category = "ProVR|Actions")
-			FglTFRuntimeHttpResponse Completed;
-		*/
-
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ProVR|Actions")
 		FString URL;
-
-	//Possibility to add extra header info on HttpRequest
+	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ProVR|Actions")
 		TMap<FString, FString> Headers;
 
-	//Enum, constructior takes no paramenters
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ProVR|Actions")
 		FglTFRuntimeConfig LoaderConfig;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ProVR|Actions")
+		UglTFRuntimeAsset* Asset;
+
+	FglTFRuntimeHttpResponse Completed;
+
+	UFUNCTION()
+		void Event(UglTFRuntimeAsset* Asset_);
 
 	EProVRActionBehavior PerformAction();
 
 
+	
 	//protected:
 	//void DownloadComplete();
 };
