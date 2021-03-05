@@ -15,6 +15,8 @@ enum class EHttpRequestType : uint8
 	ENUM_Delete
 };
 
+#define HTTP_UNEXPECTED_ERROR -1
+
 UCLASS()
 class PROVR_API UProVRHttpRequest : public UObject
 {
@@ -26,11 +28,11 @@ private:
 	TArray<uint8> RequestContent;
 
 	//bool: Success?, int32: Http Response Code, TSharedPtr<class FJsonObject> JsonContent
-	TFunction<void(bool, int32, TSharedPtr<class FJsonObject>)> OnResponseCompleted;
+	TFunction<void(int32, TSharedPtr<class FJsonObject>)> OnResponseCompleted;
 
 	TSharedPtr<class IHttpRequest, ESPMode::ThreadSafe> InternalHttpRequest;
 
-	static UProVRHttpRequest* CreateInternalRequest(const FString& _Path, TFunction<void(bool, int32, TSharedPtr<class FJsonObject>)> _OnResponseCompleted);
+	static UProVRHttpRequest* CreateInternalRequest(const FString& _Path, TFunction<void(int32, TSharedPtr<class FJsonObject>)> _OnResponseCompleted);
 	void ProcessInternalRequest();
 
 	void OnInternalRequestCompleted(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bWasSuccessful);
@@ -42,11 +44,11 @@ private:
 	static TSharedPtr<class FJsonObject> ErrorMessageJson(const FString& Message);
 
 public:
-	static void Get(const FString& _Path, TFunction<void(bool, int32, TSharedPtr<class FJsonObject>)> _OnResponseCompleted);
-	static void Delete(const FString& _Path, TFunction<void(bool, int32, TSharedPtr<class FJsonObject>)> _OnResponseCompleted);
-	static void PostJson(const FString& _Path, TSharedPtr<class FJsonObject> _Content, TFunction<void(bool, int32, TSharedPtr<class FJsonObject>)> _OnResponseCompleted);
-	static void PutJson(const FString& _Path, TSharedPtr<class FJsonObject> _Content, TFunction<void(bool, int32, TSharedPtr<class FJsonObject>)> _OnResponseCompleted);
-	static void PutFile(const FString& _Path, const TArray<uint8>& _Content, TFunction<void(bool, int32, TSharedPtr<class FJsonObject>)> _OnResponseCompleted);
+	static void Get(const FString& _Path, TFunction<void(int32, TSharedPtr<class FJsonObject>)> _OnResponseCompleted);
+	static void Delete(const FString& _Path, TFunction<void(int32, TSharedPtr<class FJsonObject>)> _OnResponseCompleted);
+	static void PostJson(const FString& _Path, TSharedPtr<class FJsonObject> _Content, TFunction<void(int32, TSharedPtr<class FJsonObject>)> _OnResponseCompleted);
+	static void PutJson(const FString& _Path, TSharedPtr<class FJsonObject> _Content, TFunction<void(int32, TSharedPtr<class FJsonObject>)> _OnResponseCompleted);
+	static void PutFile(const FString& _Path, const TArray<uint8>& _Content, TFunction<void(int32, TSharedPtr<class FJsonObject>)> _OnResponseCompleted);
 
 	FORCEINLINE EHttpRequestType GetRequestType()
 	{

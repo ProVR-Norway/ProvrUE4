@@ -41,11 +41,11 @@ private:
 	UPROPERTY()
 	TArray<class UProVRHttpRequest*> ActiveHttpRequests;
 
-	TArray<TFunction<void(bool)>> OngoingTryRenewingAuthTokenRequestSubscribers;
+	TArray<TFunction<void(int32)>> OngoingTryRenewingAuthTokenRequestSubscribers;
 	bool bTryRenewingAuthTokenRequestIsOngoing = false;
 	TSharedPtr<class IHttpRequest, ESPMode::ThreadSafe> OngoingTryRenewingAuthTokenRequest;
 	bool bWasOngoingTryRenewingAuthTokenRequestCanceled = false;
-	void CallSubscribersAfterTryRenewingAuthTokenResponse(bool bSuccess);
+	void CallSubscribersAfterTryRenewingAuthTokenResponse(int32 HttpResponseCode);
 
 	void OnRenewingAuthTokenRequestCompleted(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bWasSuccessful);
 
@@ -55,8 +55,8 @@ public:
 		return CurrentAuthToken;
 	}
 
-	void PerformLoginRequest(const FString& EmailAddress, const FString& Password, TFunction<void(bool)> OnCompleted);
-	void TryRenewingAuthToken(TFunction<void(bool)> OnCompleted);
+	void PerformLoginRequest(const FString& EmailAddress, const FString& Password, TFunction<void(int32)> OnCompleted);
+	void TryRenewingAuthToken(TFunction<void(int32)> OnCompleted);
 
 	void PushNewHttpRequest(class UProVRHttpRequest* NewHttpRequest);
 	void RemoveHttpRequest(class UProVRHttpRequest* HttpRequest);

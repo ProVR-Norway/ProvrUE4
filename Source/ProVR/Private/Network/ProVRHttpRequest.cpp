@@ -6,7 +6,7 @@
 #include "Dom/JsonObject.h"
 #include "Serialization/JsonSerializer.h"
 
-void UProVRHttpRequest::Get(const FString& _Path, TFunction<void(bool, int32, TSharedPtr<FJsonObject>)> _OnResponseCompleted)
+void UProVRHttpRequest::Get(const FString& _Path, TFunction<void(int32, TSharedPtr<FJsonObject>)> _OnResponseCompleted)
 {
 	if (UProVRHttpRequest* CreatedRequest = CreateInternalRequest(_Path, _OnResponseCompleted))
 	{
@@ -15,11 +15,11 @@ void UProVRHttpRequest::Get(const FString& _Path, TFunction<void(bool, int32, TS
 	}
 	else
 	{
-		_OnResponseCompleted(false, -1, ErrorMessageJson(TEXT("Failed to create a request.")));
+		_OnResponseCompleted(HTTP_UNEXPECTED_ERROR, ErrorMessageJson(TEXT("Failed to create a request.")));
 	}
 }
 
-void UProVRHttpRequest::Delete(const FString& _Path, TFunction<void(bool, int32, TSharedPtr<FJsonObject>)> _OnResponseCompleted)
+void UProVRHttpRequest::Delete(const FString& _Path, TFunction<void(int32, TSharedPtr<FJsonObject>)> _OnResponseCompleted)
 {
 	if (UProVRHttpRequest* CreatedRequest = CreateInternalRequest(_Path, _OnResponseCompleted))
 	{
@@ -29,15 +29,15 @@ void UProVRHttpRequest::Delete(const FString& _Path, TFunction<void(bool, int32,
 	}
 	else
 	{
-		_OnResponseCompleted(false, -1, ErrorMessageJson(TEXT("Failed to create a request.")));
+		_OnResponseCompleted(HTTP_UNEXPECTED_ERROR, ErrorMessageJson(TEXT("Failed to create a request.")));
 	}
 }
 
-void UProVRHttpRequest::PostJson(const FString& _Path, TSharedPtr<FJsonObject> _Content, TFunction<void(bool, int32, TSharedPtr<FJsonObject>)> _OnResponseCompleted)
+void UProVRHttpRequest::PostJson(const FString& _Path, TSharedPtr<FJsonObject> _Content, TFunction<void(int32, TSharedPtr<FJsonObject>)> _OnResponseCompleted)
 {
 	if (!_Content.IsValid())
 	{
-		_OnResponseCompleted(false, -1, ErrorMessageJson(TEXT("Content is invalid.")));
+		_OnResponseCompleted(HTTP_UNEXPECTED_ERROR, ErrorMessageJson(TEXT("Content is invalid.")));
 		return;
 	}
 
@@ -58,15 +58,15 @@ void UProVRHttpRequest::PostJson(const FString& _Path, TSharedPtr<FJsonObject> _
 	}
 	else
 	{
-		_OnResponseCompleted(false, -1, ErrorMessageJson(TEXT("Failed to create a request.")));
+		_OnResponseCompleted(HTTP_UNEXPECTED_ERROR, ErrorMessageJson(TEXT("Failed to create a request.")));
 	}
 }
 
-void UProVRHttpRequest::PutJson(const FString& _Path, TSharedPtr<FJsonObject> _Content, TFunction<void(bool, int32, TSharedPtr<FJsonObject>)> _OnResponseCompleted)
+void UProVRHttpRequest::PutJson(const FString& _Path, TSharedPtr<FJsonObject> _Content, TFunction<void(int32, TSharedPtr<FJsonObject>)> _OnResponseCompleted)
 {
 	if (!_Content.IsValid())
 	{
-		_OnResponseCompleted(false, -1, ErrorMessageJson(TEXT("Content is invalid.")));
+		_OnResponseCompleted(HTTP_UNEXPECTED_ERROR, ErrorMessageJson(TEXT("Content is invalid.")));
 		return;
 	}
 
@@ -87,15 +87,15 @@ void UProVRHttpRequest::PutJson(const FString& _Path, TSharedPtr<FJsonObject> _C
 	}
 	else
 	{
-		_OnResponseCompleted(false, -1, ErrorMessageJson(TEXT("Failed to create a request.")));
+		_OnResponseCompleted(HTTP_UNEXPECTED_ERROR, ErrorMessageJson(TEXT("Failed to create a request.")));
 	}
 }
 
-void UProVRHttpRequest::PutFile(const FString& _Path, const TArray<uint8>& _Content, TFunction<void(bool, int32, TSharedPtr<FJsonObject>)> _OnResponseCompleted)
+void UProVRHttpRequest::PutFile(const FString& _Path, const TArray<uint8>& _Content, TFunction<void(int32, TSharedPtr<FJsonObject>)> _OnResponseCompleted)
 {
 	if (_Content.Num() == 0)
 	{
-		_OnResponseCompleted(false, -1, ErrorMessageJson(TEXT("Content is invalid.")));
+		_OnResponseCompleted(HTTP_UNEXPECTED_ERROR, ErrorMessageJson(TEXT("Content is invalid.")));
 		return;
 	}
 
@@ -111,11 +111,11 @@ void UProVRHttpRequest::PutFile(const FString& _Path, const TArray<uint8>& _Cont
 	}
 	else
 	{
-		_OnResponseCompleted(false, -1, ErrorMessageJson(TEXT("Failed to create a request.")));
+		_OnResponseCompleted(HTTP_UNEXPECTED_ERROR, ErrorMessageJson(TEXT("Failed to create a request.")));
 	}
 }
 
-UProVRHttpRequest* UProVRHttpRequest::CreateInternalRequest(const FString& _Path, TFunction<void(bool, int32, TSharedPtr<FJsonObject>)> _OnResponseCompleted)
+UProVRHttpRequest* UProVRHttpRequest::CreateInternalRequest(const FString& _Path, TFunction<void(int32, TSharedPtr<FJsonObject>)> _OnResponseCompleted)
 {
 	if (UProVRNetworkManager* NetworkManager = UProVRGameInstance::GetNetworkManager())
 	{
@@ -143,7 +143,7 @@ void UProVRHttpRequest::ProcessInternalRequest()
 {
 	if (!InternalHttpRequest->ProcessRequest()) //Fails to initialize the request
 	{
-		OnResponseCompleted(false, -1, ErrorMessageJson(TEXT("Failed to initialize the request.")));
+		OnResponseCompleted(HTTP_UNEXPECTED_ERROR, ErrorMessageJson(TEXT("Failed to initialize the request.")));
 
 		if (UProVRNetworkManager* NetworkManager = UProVRGameInstance::GetNetworkManager())
 		{
@@ -158,7 +158,7 @@ void UProVRHttpRequest::OnInternalRequestCompleted(FHttpRequestPtr Request, FHtt
 	{
 		if (!bWasSuccessful || !Response.IsValid())
 		{
-			OnResponseCompleted(false, -1, ErrorMessageJson(TEXT("Request was not successful.")));
+			OnResponseCompleted(HTTP_UNEXPECTED_ERROR, ErrorMessageJson(TEXT("Request was not successful.")));
 		}
 		else
 		{
@@ -169,7 +169,7 @@ void UProVRHttpRequest::OnInternalRequestCompleted(FHttpRequestPtr Request, FHtt
 				if (++InternalErrorRetriedCount >= INTERNAL_ERROR_RETRY_TIMES)
 				{
 					//Exhausted
-					OnResponseCompleted(false, ResponseCode, ErrorMessageJson("Exhausted after retrying " + FString::FromInt(INTERNAL_ERROR_RETRY_TIMES) + " times: " + Response->GetContentAsString()));
+					OnResponseCompleted(ResponseCode, ErrorMessageJson("Exhausted after retrying " + FString::FromInt(INTERNAL_ERROR_RETRY_TIMES) + " times: " + Response->GetContentAsString()));
 				}
 				else
 				{
@@ -179,15 +179,15 @@ void UProVRHttpRequest::OnInternalRequestCompleted(FHttpRequestPtr Request, FHtt
 			}
 			else if (ResponseCode == 401) //Retry in case the token is expired
 			{
-				NetworkManager->TryRenewingAuthToken([this](bool bSuccess)
+				NetworkManager->TryRenewingAuthToken([this](int32 RenewTokenResponseCode)
 					{
-						if (bSuccess)
+						if (EHttpResponseCodes::IsOk(RenewTokenResponseCode))
 						{
 							RetryRequest();
 						}
 						else
 						{
-							OnResponseCompleted(false, 401, ErrorMessageJson("Unauthorized."));
+							OnResponseCompleted(401, ErrorMessageJson("Unauthorized."));
 
 							if (UProVRNetworkManager* NetworkManager = UProVRGameInstance::GetNetworkManager())
 							{
@@ -203,15 +203,15 @@ void UProVRHttpRequest::OnInternalRequestCompleted(FHttpRequestPtr Request, FHtt
 				TSharedPtr<FJsonObject> JsonObject = MakeShareable(new FJsonObject);
 				if (!FJsonSerializer::Deserialize(JsonReader, JsonObject) || !JsonObject.IsValid())
 				{
-					OnResponseCompleted(false, ResponseCode, ErrorMessageJson("Failed to deserialize the response: " + Response->GetContentAsString()));
+					OnResponseCompleted(ResponseCode, ErrorMessageJson("Failed to deserialize the response: " + Response->GetContentAsString()));
 				}
 				else if (!EHttpResponseCodes::IsOk(ResponseCode))
 				{
-					OnResponseCompleted(false, ResponseCode, JsonObject);
+					OnResponseCompleted(ResponseCode, JsonObject);
 				}
 				else
 				{
-					OnResponseCompleted(true, ResponseCode, JsonObject);
+					OnResponseCompleted(ResponseCode, JsonObject);
 				}
 			}
 		}
@@ -220,7 +220,7 @@ void UProVRHttpRequest::OnInternalRequestCompleted(FHttpRequestPtr Request, FHtt
 	}
 	else
 	{
-		OnResponseCompleted(false, -1, ErrorMessageJson(TEXT("Failed to get reference to NetworkManager.")));
+		OnResponseCompleted(HTTP_UNEXPECTED_ERROR, ErrorMessageJson(TEXT("Failed to get reference to NetworkManager.")));
 	}
 }
 

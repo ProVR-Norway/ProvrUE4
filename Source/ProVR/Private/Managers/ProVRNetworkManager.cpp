@@ -14,7 +14,7 @@ void UProVRNetworkManager::RemoveHttpRequest(UProVRHttpRequest* HttpRequest)
 	ActiveHttpRequests.Remove(HttpRequest);
 }
 
-void UProVRNetworkManager::PerformLoginRequest(const FString& EmailAddress, const FString& Password, TFunction<void(bool)> OnCompleted)
+void UProVRNetworkManager::PerformLoginRequest(const FString& EmailAddress, const FString& Password, TFunction<void(int32)> OnCompleted)
 {
 	LastEmailAddress = EmailAddress;
 	LastPassword = Password;
@@ -29,7 +29,7 @@ void UProVRNetworkManager::PerformLoginRequest(const FString& EmailAddress, cons
 	TryRenewingAuthToken(OnCompleted);
 }
 
-void UProVRNetworkManager::TryRenewingAuthToken(TFunction<void(bool)> OnCompleted)
+void UProVRNetworkManager::TryRenewingAuthToken(TFunction<void(int32)> OnCompleted)
 {
 	OngoingTryRenewingAuthTokenRequestSubscribers.Add(OnCompleted);
 
@@ -54,7 +54,7 @@ void UProVRNetworkManager::TryRenewingAuthToken(TFunction<void(bool)> OnComplete
 
 	if (!OngoingTryRenewingAuthTokenRequest->ProcessRequest())
 	{
-		CallSubscribersAfterTryRenewingAuthTokenResponse(false);
+		CallSubscribersAfterTryRenewingAuthTokenResponse(HTTP_UNEXPECTED_ERROR);
 	}
 }
 
@@ -69,38 +69,46 @@ void UProVRNetworkManager::OnRenewingAuthTokenRequestCompleted(FHttpRequestPtr R
 
 	bTryRenewingAuthTokenRequestIsOngoing = false;
 
-	if (!bWasSuccessful || !Response.IsValid() || !EHttpResponseCodes::IsOk(Response->GetResponseCode()))
+	if (!bWasSuccessful || !Response.IsValid())
 	{
-		CallSubscribersAfterTryRenewingAuthTokenResponse(false);
+		CallSubscribersAfterTryRenewingAuthTokenResponse(HTTP_UNEXPECTED_ERROR);
 	}
 	else
 	{
-		TSharedRef<TJsonReader<TCHAR>> JsonReader = TJsonReaderFactory<TCHAR>::Create(Response->GetContentAsString());
-		TSharedPtr<FJsonObject> JsonObject = MakeShareable(new FJsonObject);
-		if (!FJsonSerializer::Deserialize(JsonReader, JsonObject)
-			|| !JsonObject.IsValid()
-			|| !JsonObject->HasTypedField<EJson::String>("token"))
+		int32 ResponseCode = Response->GetResponseCode();
+		if (!EHttpResponseCodes::IsOk(ResponseCode))
 		{
-			CallSubscribersAfterTryRenewingAuthTokenResponse(false);
+			CallSubscribersAfterTryRenewingAuthTokenResponse(ResponseCode);
 		}
 		else
 		{
-			CurrentAuthToken = JsonObject->GetStringField("token");
+			TSharedRef<TJsonReader<TCHAR>> JsonReader = TJsonReaderFactory<TCHAR>::Create(Response->GetContentAsString());
+			TSharedPtr<FJsonObject> JsonObject = MakeShareable(new FJsonObject);
+			if (!FJsonSerializer::Deserialize(JsonReader, JsonObject)
+				|| !JsonObject.IsValid()
+				|| !JsonObject->HasTypedField<EJson::String>("token"))
+			{
+				CallSubscribersAfterTryRenewingAuthTokenResponse(HTTP_UNEXPECTED_ERROR);
+			}
+			else
+			{
+				CurrentAuthToken = JsonObject->GetStringField("token");
 
-			CallSubscribersAfterTryRenewingAuthTokenResponse(true);
+				CallSubscribersAfterTryRenewingAuthTokenResponse(ResponseCode);
+			}
 		}
 	}
 
 	OngoingTryRenewingAuthTokenRequest.Reset();
 }
 
-void UProVRNetworkManager::CallSubscribersAfterTryRenewingAuthTokenResponse(bool bSuccess)
+void UProVRNetworkManager::CallSubscribersAfterTryRenewingAuthTokenResponse(int32 HttpResponseCode)
 {
 	for (auto& Subscriber : OngoingTryRenewingAuthTokenRequestSubscribers)
 	{
 		if (Subscriber)
 		{
-			Subscriber(bSuccess);
+			Subscriber(HttpResponseCode);
 		}
 	}
 
