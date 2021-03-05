@@ -12,6 +12,7 @@ void UProVRHttpRequest::Get(const FString& _Path, TFunction<void(int32, TSharedP
 	{
 		CreatedRequest->InternalHttpRequest->SetVerb("GET");
 		CreatedRequest->RequestType = EHttpRequestType::ENUM_Get;
+		CreatedRequest->ProcessInternalRequest();
 	}
 	else
 	{
@@ -204,10 +205,6 @@ void UProVRHttpRequest::OnInternalRequestCompleted(FHttpRequestPtr Request, FHtt
 				if (!FJsonSerializer::Deserialize(JsonReader, JsonObject) || !JsonObject.IsValid())
 				{
 					OnResponseCompleted(ResponseCode, ErrorMessageJson("Failed to deserialize the response: " + Response->GetContentAsString()));
-				}
-				else if (!EHttpResponseCodes::IsOk(ResponseCode))
-				{
-					OnResponseCompleted(ResponseCode, JsonObject);
 				}
 				else
 				{

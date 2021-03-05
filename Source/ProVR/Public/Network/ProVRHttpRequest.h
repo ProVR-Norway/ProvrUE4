@@ -27,7 +27,7 @@ private:
 	FString RequestFinalUrl;
 	TArray<uint8> RequestContent;
 
-	//bool: Success?, int32: Http Response Code, TSharedPtr<class FJsonObject> JsonContent
+	//int32: Http Response Code, TSharedPtr<class FJsonObject> JsonContent
 	TFunction<void(int32, TSharedPtr<class FJsonObject>)> OnResponseCompleted;
 
 	TSharedPtr<class IHttpRequest, ESPMode::ThreadSafe> InternalHttpRequest;
