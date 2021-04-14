@@ -7,7 +7,7 @@
 #include "Network/ProVRHttpRequest.h"
 #include "ProVRNetworkManager.generated.h"
 
-#define BACKEND_BASE_URL FString(TEXT("https://api.provr.no"))
+#define BACKEND_BASE_URL FString(TEXT("https://auth-microservice-development-iu3tuzfidq-ez.a.run.app"))
 #define INTERNAL_ERROR_RETRY_TIMES 3
 
 /*

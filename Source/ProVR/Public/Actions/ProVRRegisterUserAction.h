@@ -30,6 +30,9 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ProVR|Actions")
 	FString Password;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ProVR|Actions")
+		FString Username;
+
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FProVRRegisterUserActionDoneDelegate, EProVRRegisterUserActionResult, Result);
 	UPROPERTY(BlueprintAssignable, Category = "ProVR|Actions")
 	FProVRRegisterUserActionDoneDelegate OnActionComplete;
