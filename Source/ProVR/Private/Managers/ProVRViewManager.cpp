@@ -31,11 +31,13 @@ UProVRViewManager::UProVRViewManager()
 		ViewWidgetMap.Add(EProVRView::Logout, NewObject<UProVRWidgetBase>(this, LogoutViewAsset.Class, TEXT("UI_ProVR_LogoutView")));
 	}
 
+
 	static ConstructorHelpers::FClassFinder<UProVRWidgetBase> ModelViewAsset(TEXT("/Game/Widgets/UI_ProVR_ModelView"));
 	if (ModelViewAsset.Class != NULL)
 	{
 		ViewWidgetMap.Add(EProVRView::ModelView, NewObject<UProVRWidgetBase>(this, ModelViewAsset.Class, TEXT("UI_ProVR_ModelView")));
 	}
+
 }
 
 void UProVRViewManager::Tick(float DeltaTime)
