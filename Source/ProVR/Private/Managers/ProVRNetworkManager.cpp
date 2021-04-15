@@ -13,10 +13,10 @@ void UProVRNetworkManager::RemoveHttpRequest(UProVRHttpRequest* HttpRequest)
 {
 	ActiveHttpRequests.Remove(HttpRequest);
 }
-
-void UProVRNetworkManager::PerformLoginRequest(const FString& EmailAddress, const FString& Password, TFunction<void(int32)> OnCompleted)
+//EmailAdress -> Username | David 15.04
+void UProVRNetworkManager::PerformLoginRequest(const FString& Username, const FString& Password, TFunction<void(int32)> OnCompleted) //EmailAdress -> Username
 {
-	LastEmailAddress = EmailAddress;
+	LastUsername = Username; //LastEmailAdress -> LastUsername | David 15.04
 	LastPassword = Password;
 
 	if (OngoingTryRenewingAuthTokenRequest.IsValid())
@@ -42,9 +42,10 @@ void UProVRNetworkManager::TryRenewingAuthToken(TFunction<void(int32)> OnComplet
 
 	OngoingTryRenewingAuthTokenRequest->SetURL(BACKEND_BASE_URL + AUTH_SERVICE_LOGIN_REQUEST_PATH);
 	OngoingTryRenewingAuthTokenRequest->SetVerb("POST");
-
+	OngoingTryRenewingAuthTokenRequest->SetHeader("Content-Type", "application/json");
+	//emailAdress -> username | 15.04 David
 	TSharedPtr<FJsonObject> LoginRequestContent = MakeShareable(new FJsonObject);
-	LoginRequestContent->SetStringField("emailAddress", LastEmailAddress);
+	LoginRequestContent->SetStringField("username", LastUsername); //LastEmailAdress -> LastUsername | 15.04 David
 	LoginRequestContent->SetStringField("password", LastPassword);
 
 	FString OutputString;
