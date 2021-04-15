@@ -45,6 +45,7 @@ void UProVRHttpRequest::PostJson(const FString& _Path, TSharedPtr<FJsonObject> _
 	if (UProVRHttpRequest* CreatedRequest = CreateInternalRequest(_Path, _OnResponseCompleted))
 	{
 		CreatedRequest->InternalHttpRequest->SetVerb("POST");
+		CreatedRequest->InternalHttpRequest->SetHeader("Content-Type", "application/json");
 		CreatedRequest->RequestType = EHttpRequestType::ENUM_Post;
 
 		FString OutputString;

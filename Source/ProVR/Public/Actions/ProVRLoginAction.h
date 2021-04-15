@@ -11,7 +11,7 @@ enum class EProVRLoginActionResult : uint8
 {
 	ENUM_OK						UMETA(DisplayName = "Login OK"),
 	ENUM_UserDoesNotExists		UMETA(DisplayName = "User Does Not Exists"),
-	ENUM_InvalidEmailOrPass		UMETA(DisplayName = "Invalid Email or Password"),
+	ENUM_InvalidUsernameOrPass	UMETA(DisplayName = "Invalid Username or Password"),
 	ENUM_ServerError			UMETA(DisplayName = "Server Error"),
 	ENUM_OtherError				UMETA(DisplayName = "Other Errors"),
 };
@@ -25,7 +25,7 @@ public:
 	virtual EProVRActionBehavior PerformAction() override;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ProVR|Actions")
-	FString EmailAddress;
+	FString Username;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ProVR|Actions")
 	FString Password;
