@@ -18,10 +18,7 @@ class GLTFRUNTIME_API UglTFRuntimeFunctionLibrary : public UBlueprintFunctionLib
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "glTF Load Asset from File Path", AutoCreateRefTerm = "LoaderConfig"), Category = "glTFRuntime")
-	static UglTFRuntimeAsset* glTFLoadAssetFromFilePath(const FString& FullFilePath, const FglTFRuntimeConfig& LoaderConfig);
-
-	UFUNCTION(BlueprintCallable, meta=(DisplayName="glTF Load Asset from Filename (Does not work)", AutoCreateRefTerm = "LoaderConfig"), Category="glTFRuntime")
+	UFUNCTION(BlueprintCallable, meta=(DisplayName="glTF Load Asset from Filename", AutoCreateRefTerm = "LoaderConfig"), Category="glTFRuntime")
 	static UglTFRuntimeAsset* glTFLoadAssetFromFilename(const FString& Filename, const bool bPathRelativeToContent, const FglTFRuntimeConfig& LoaderConfig);
 
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "glTF Load Asset from String", AutoCreateRefTerm = "LoaderConfig"), Category = "glTFRuntime")

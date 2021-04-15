@@ -5,7 +5,6 @@
 #include "HttpModule.h"
 #include "Interfaces/IHttpRequest.h"
 #include "Interfaces/IHttpResponse.h"
-#include "Misc/FileHelper.h"
 
 UglTFRuntimeAsset* UglTFRuntimeFunctionLibrary::glTFLoadAssetFromFilename(const FString& Filename, const bool bPathRelativeToContent, const FglTFRuntimeConfig& LoaderConfig)
 {
@@ -66,19 +65,6 @@ void UglTFRuntimeFunctionLibrary::glTFLoadAssetFromUrl(const FString& Url, TMap<
 	}, Completed, LoaderConfig);
 
 	HttpRequest->ProcessRequest();
-}
-
-UglTFRuntimeAsset* UglTFRuntimeFunctionLibrary::glTFLoadAssetFromFilePath(const FString& FullFilePath, const FglTFRuntimeConfig& LoaderConfig)
-{
-	TArray<uint8> Content;
-
-	if (!FFileHelper::LoadFileToArray(Content, *FullFilePath))
-	{
-		UE_LOG(LogTemp, Error, TEXT("Unable to load file %s"), *FullFilePath);
-		return nullptr;
-	}
-
-	return glTFLoadAssetFromData(Content, LoaderConfig);
 }
 
 UglTFRuntimeAsset* UglTFRuntimeFunctionLibrary::glTFLoadAssetFromData(const TArray<uint8>& Data, const FglTFRuntimeConfig& LoaderConfig)
