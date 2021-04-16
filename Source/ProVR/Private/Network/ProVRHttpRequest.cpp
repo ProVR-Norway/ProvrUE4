@@ -45,18 +45,19 @@ void UProVRHttpRequest::PostJson(const FString& _Path, TSharedPtr<FJsonObject> _
 	if (UProVRHttpRequest* CreatedRequest = CreateInternalRequest(_Path, _OnResponseCompleted))
 	{
 		CreatedRequest->InternalHttpRequest->SetVerb("POST");
+		CreatedRequest->InternalHttpRequest->SetHeader("Content-Type", "application/json");
 		CreatedRequest->RequestType = EHttpRequestType::ENUM_Post;
 
 		FString OutputString;
 		TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&OutputString);
 		FJsonSerializer::Serialize(_Content.ToSharedRef(), Writer);
 
-		/*
+		
 		const FTCHARToUTF8 Converter(*OutputString, OutputString.Len());
 		CreatedRequest->RequestContent.Append(reinterpret_cast<const uint8*>(Converter.Get()), Converter.Length());
 		CreatedRequest->InternalHttpRequest->SetContent(CreatedRequest->RequestContent);
-		*/
-		CreatedRequest->InternalHttpRequest->SetContentAsString(OutputString);
+		
+		//CreatedRequest->InternalHttpRequest->SetContentAsString(OutputString);
 		CreatedRequest->ProcessInternalRequest();
 	}
 	else
