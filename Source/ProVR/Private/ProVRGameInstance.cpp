@@ -4,6 +4,7 @@
 #include "Managers/ProVRActionManager.h"
 #include "Managers/ProVRViewManager.h"
 #include "Managers/ProVRNetworkManager.h"
+#include "ProVRPawn.h"
 
 UProVRGameInstance* UProVRGameInstance::GetCurrentGameInstance()
 {
@@ -42,6 +43,15 @@ UProVRNetworkManager* UProVRGameInstance::GetNetworkManager()
 	return nullptr;
 }
 
+class AProVRPawn* UProVRGameInstance::GetPawn()
+{
+	if (UProVRGameInstance* GameInstance = GetCurrentGameInstance())
+	{
+		return GameInstance->ProVRPawn;
+	}
+	return nullptr;
+}
+
 UProVRGameInstance::UProVRGameInstance()
 {
 	if (HasAnyFlags(RF_ClassDefaultObject | RF_ArchetypeObject)) return;
@@ -65,6 +75,13 @@ UProVRGameInstance::UProVRGameInstance()
 	{
 		NetworkManager = NewObject<UProVRNetworkManager>(this, BPNetworkManager.Class, TEXT("NetworkManager"));
 	}
+	
+	static ConstructorHelpers::FClassFinder<AProVRPawn> ProVRPawn(TEXT("/Game/Blueprints/BP_ProVRParticipantPawn"));
+	if (ProVRPawn.Class != NULL)
+	{
+		ProVRPawn = NewObject<AProVRPawn>(this, BPNetworkManager.Class, TEXT("BP_ProVRParticipantPawn"));
+	}
+	
 }
 
 void UProVRGameInstance::Init()
