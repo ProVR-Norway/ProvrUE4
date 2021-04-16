@@ -25,7 +25,7 @@ private:
 	class UProVRNetworkManager* NetworkManager;
 
 	UPROPERTY()
-	class AProVRPawn* ProVRPawn;
+	class AProVRPawn* Pawn;
 
 	static TWeakObjectPtr<UProVRGameInstance> GameInstanceWeakPtr;
 	

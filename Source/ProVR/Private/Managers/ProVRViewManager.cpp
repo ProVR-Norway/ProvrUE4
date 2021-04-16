@@ -3,7 +3,10 @@
 #include "Managers/ProVRViewManager.h"
 #include "Views/ProVRWidgetBase.h"
 #include "ProVRPawn.h"
+#include "Kismet/GameplayStatics.h"
 #include "ProVRGameInstance.h"
+#include "Engine/World.h"
+#include "UObject/UObjectGlobals.h"
 
 UProVRViewManager::UProVRViewManager()
 {
@@ -75,18 +78,24 @@ void UProVRViewManager::SwitchView(EProVRView NextView)
 		}
 
 		//ViewWidgetMap[NextView]->AddToViewport();
-
+		
 		if (UProVRGameInstance* GameInstance = UProVRGameInstance::GetCurrentGameInstance())
 		{
-			GameInstance->GetPawn()->WidgetComp->SetWidget(ViewWidgetMap[NextView]);
-		}
-		CurrentView = NextView;
+			
+			UWorld* world = UWorld::GetWorld();
+			APawn* p = UGameplayStatics::GetPlayerPawn(world, 0);
+			AProVRPawn* player = Cast<AProVRPawn>(p);
+			player->WidgetComp->SetWidget(ViewWidgetMap[NextView]);
+			//GameInstance->GetPawn()->WidgetComp->SetWidget(ViewWidgetMap[NextView]);
+			//AProVRPawn::WidgetComp->SetWidget(ViewWidgetMap[NextView]);
+			
+		}		
 	}
 	
 	
-	
-	//if (UProVRGameInstance* GameInstance = GetCurrentGameInstance())
 	/*
+	/if (UProVRGameInstance* GameInstance = GetCurrentGameInstance())
+	
 	if (NextView == EProVRView::Register )
 	{
 			AProVRPawn::WidgetComp->SetWidget(ViewWidgetMap[NextView]);

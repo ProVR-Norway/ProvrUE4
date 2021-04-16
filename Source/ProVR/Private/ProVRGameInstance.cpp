@@ -47,7 +47,7 @@ class AProVRPawn* UProVRGameInstance::GetPawn()
 {
 	if (UProVRGameInstance* GameInstance = GetCurrentGameInstance())
 	{
-		return GameInstance->ProVRPawn;
+		return GameInstance->Pawn;
 	}
 	return nullptr;
 }
@@ -76,10 +76,10 @@ UProVRGameInstance::UProVRGameInstance()
 		NetworkManager = NewObject<UProVRNetworkManager>(this, BPNetworkManager.Class, TEXT("NetworkManager"));
 	}
 	
-	static ConstructorHelpers::FClassFinder<AProVRPawn> ProVRPawn(TEXT("/Game/Blueprints/BP_ProVRParticipantPawn"));
-	if (ProVRPawn.Class != NULL)
+	static ConstructorHelpers::FClassFinder<AProVRPawn> BPPawn(TEXT("/Game/Blueprints/BP_ProVRParticipantPawn"));
+	if (BPPawn.Class != NULL)
 	{
-		ProVRPawn = NewObject<AProVRPawn>(this, BPNetworkManager.Class, TEXT("BP_ProVRParticipantPawn"));
+		BPPawn = NewObject<AProVRPawn>(this, BPPawn.Class, TEXT("BP_ProVRParticipantPawn"));
 	}
 	
 }
