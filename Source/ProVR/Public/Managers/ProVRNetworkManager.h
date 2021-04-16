@@ -7,7 +7,11 @@
 #include "Network/ProVRHttpRequest.h"
 #include "ProVRNetworkManager.generated.h"
 
+<<<<<<< HEAD
 #define BACKEND_BASE_URL FString(TEXT("https://api-gateway-iu3tuzfidq-ez.a.run.app"))
+=======
+#define BACKEND_BASE_URL FString(TEXT("https://auth-microservice-development-iu3tuzfidq-ez.a.run.app"))
+>>>>>>> development
 #define INTERNAL_ERROR_RETRY_TIMES 3
 
 /*
@@ -35,7 +39,7 @@ private:
 	//https://en.wikipedia.org/wiki/Basic_access_authentication
 	FString CurrentAuthToken;
 
-	FString LastEmailAddress;
+	FString LastUsername;
 	FString LastPassword;
 
 	UPROPERTY()
@@ -55,7 +59,7 @@ public:
 		return CurrentAuthToken;
 	}
 
-	void PerformLoginRequest(const FString& EmailAddress, const FString& Password, TFunction<void(int32)> OnCompleted);
+	void PerformLoginRequest(const FString& Username, const FString& Password, TFunction<void(int32)> OnCompleted);
 	void TryRenewingAuthToken(TFunction<void(int32)> OnCompleted);
 
 	void PushNewHttpRequest(class UProVRHttpRequest* NewHttpRequest);

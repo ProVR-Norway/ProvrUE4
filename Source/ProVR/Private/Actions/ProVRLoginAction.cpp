@@ -7,8 +7,8 @@
 EProVRActionBehavior UProVRLoginAction::PerformAction()
 {
 	if (UProVRNetworkManager* NetworkManager = UProVRGameInstance::GetNetworkManager())
-	{
-		NetworkManager->PerformLoginRequest(EmailAddress, Password, [this](int32 LoginHttpResponseCode)
+	{ ///EmailAdress -> Username | David 15.04
+		NetworkManager->PerformLoginRequest(Username, Password, [this](int32 LoginHttpResponseCode)
 			{
 				if (EHttpResponseCodes::IsOk(LoginHttpResponseCode))
 				{
@@ -24,7 +24,7 @@ EProVRActionBehavior UProVRLoginAction::PerformAction()
 				}
 				else if (LoginHttpResponseCode == 400) //Bad Request
 				{
-					OnActionComplete.Broadcast(EProVRLoginActionResult::ENUM_InvalidEmailOrPass);
+					OnActionComplete.Broadcast(EProVRLoginActionResult::ENUM_InvalidUsernameOrPass);
 				}
 				else
 				{
