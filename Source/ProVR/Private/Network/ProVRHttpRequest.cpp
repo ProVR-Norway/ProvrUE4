@@ -52,10 +52,12 @@ void UProVRHttpRequest::PostJson(const FString& _Path, TSharedPtr<FJsonObject> _
 		TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&OutputString);
 		FJsonSerializer::Serialize(_Content.ToSharedRef(), Writer);
 
+		
 		const FTCHARToUTF8 Converter(*OutputString, OutputString.Len());
 		CreatedRequest->RequestContent.Append(reinterpret_cast<const uint8*>(Converter.Get()), Converter.Length());
 		CreatedRequest->InternalHttpRequest->SetContent(CreatedRequest->RequestContent);
-
+		
+		//CreatedRequest->InternalHttpRequest->SetContentAsString(OutputString);
 		CreatedRequest->ProcessInternalRequest();
 	}
 	else
