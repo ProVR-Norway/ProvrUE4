@@ -7,6 +7,10 @@
 #include "Network/ProVRHttpRequest.h"
 #include "ProVRNetworkManager.generated.h"
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> development
 #define BACKEND_BASE_URL FString(TEXT("https://api-gateway-iu3tuzfidq-ez.a.run.app"))
 #define INTERNAL_ERROR_RETRY_TIMES 3
 
