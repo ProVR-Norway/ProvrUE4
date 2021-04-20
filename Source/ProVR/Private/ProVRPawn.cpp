@@ -27,7 +27,7 @@ AProVRPawn::AProVRPawn()
 
 	SceneComp->SetupAttachment(RootComponent);
 	CameraComp->SetupAttachment(SceneComp);
-	WidgetComp->SetupAttachment(CameraComp);
+	WidgetComp->SetupAttachment(SceneComp);
 	/*
 	MotionControllerCompRight->SetupAttachment(SceneComp);
 	MotionControllerCompLeft->SetupAttachment(SceneComp);
