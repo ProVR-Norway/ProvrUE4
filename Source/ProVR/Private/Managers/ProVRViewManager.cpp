@@ -76,31 +76,15 @@ void UProVRViewManager::SwitchView(EProVRView NextView)
 		{
 			ViewWidgetMap[CurrentView]->RemoveFromParent();
 		}
-
-		//ViewWidgetMap[NextView]->AddToViewport();
 		
 		if (UProVRGameInstance* GameInstance = UProVRGameInstance::GetCurrentGameInstance())
 		{
-			/*
-			UWorld* world = UWorld::GetWorld();
-			APawn* p = UGameplayStatics::GetPlayerPawn(world, 0);
-			AProVRPawn* player = Cast<AProVRPawn>(p);
-			player->WidgetComp->SetWidget(ViewWidgetMap[NextView]);
-			//GameInstance->GetPawn()->WidgetComp->SetWidget(ViewWidgetMap[NextView]);
-			//AProVRPawn::WidgetComp->SetWidget(ViewWidgetMap[NextView]);
-			*/
-
-
+			APawn* Pawn = GameInstance->GetWorld()->GetFirstPlayerController()->GetPawn();
+			if (Pawn)
+			{
+				AProVRPawn* Pawn_ = Cast<AProVRPawn>(Pawn);
+				Pawn_->WidgetComp->SetWidget(ViewWidgetMap[NextView]);
+			}
 		}		
 	}
-	
-	
-	/*
-	/if (UProVRGameInstance* GameInstance = GetCurrentGameInstance())
-	
-	if (NextView == EProVRView::Register )
-	{
-			AProVRPawn::WidgetComp->SetWidget(ViewWidgetMap[NextView]);
-	}
-	*/
 }
