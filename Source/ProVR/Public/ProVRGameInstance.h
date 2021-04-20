@@ -24,9 +24,6 @@ private:
 	UPROPERTY()
 	class UProVRNetworkManager* NetworkManager;
 
-	UPROPERTY()
-	class AProVRPawn* Pawn;
-
 	static TWeakObjectPtr<UProVRGameInstance> GameInstanceWeakPtr;
 	
 public:
@@ -38,9 +35,6 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "ProVR|Managers")
 	static class UProVRNetworkManager* GetNetworkManager();
-
-	UFUNCTION(BlueprintPure, Category = "ProVR|Managers")
-	static class AProVRPawn* GetPawn();
 
 	static UProVRGameInstance* GetCurrentGameInstance();
 
