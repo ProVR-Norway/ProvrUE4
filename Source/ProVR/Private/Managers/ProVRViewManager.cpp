@@ -81,14 +81,16 @@ void UProVRViewManager::SwitchView(EProVRView NextView)
 		
 		if (UProVRGameInstance* GameInstance = UProVRGameInstance::GetCurrentGameInstance())
 		{
-			
+			/*
 			UWorld* world = UWorld::GetWorld();
 			APawn* p = UGameplayStatics::GetPlayerPawn(world, 0);
 			AProVRPawn* player = Cast<AProVRPawn>(p);
 			player->WidgetComp->SetWidget(ViewWidgetMap[NextView]);
 			//GameInstance->GetPawn()->WidgetComp->SetWidget(ViewWidgetMap[NextView]);
 			//AProVRPawn::WidgetComp->SetWidget(ViewWidgetMap[NextView]);
-			
+			*/
+
+
 		}		
 	}
 	

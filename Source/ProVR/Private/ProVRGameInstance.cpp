@@ -75,13 +75,13 @@ UProVRGameInstance::UProVRGameInstance()
 	{
 		NetworkManager = NewObject<UProVRNetworkManager>(this, BPNetworkManager.Class, TEXT("NetworkManager"));
 	}
-	
+	/*
 	static ConstructorHelpers::FClassFinder<AProVRPawn> BPPawn(TEXT("/Game/Blueprints/BP_ProVRParticipantPawn"));
 	if (BPPawn.Class != NULL)
 	{
 		BPPawn = NewObject<AProVRPawn>(this, BPPawn.Class, TEXT("BP_ProVRParticipantPawn"));
 	}
-	
+	*/
 }
 
 void UProVRGameInstance::Init()
