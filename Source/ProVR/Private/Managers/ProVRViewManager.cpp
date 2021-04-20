@@ -2,11 +2,18 @@
 
 #include "Managers/ProVRViewManager.h"
 #include "Views/ProVRWidgetBase.h"
+#include "ProVRPawn.h"
+#include "Kismet/GameplayStatics.h"
+#include "ProVRGameInstance.h"
+#include "Engine/World.h"
+#include "UObject/UObjectGlobals.h"
 
 UProVRViewManager::UProVRViewManager()
 {
-	if (HasAnyFlags(RF_ClassDefaultObject | RF_ArchetypeObject)) return;
 
+	
+	if (HasAnyFlags(RF_ClassDefaultObject | RF_ArchetypeObject)) return;
+	
 	static ConstructorHelpers::FClassFinder<UProVRWidgetBase> WelcomeViewAsset(TEXT("/Game/Widgets/UI_ProVR_WelcomeView"));
 	if (WelcomeViewAsset.Class != NULL)
 	{
@@ -37,7 +44,20 @@ UProVRViewManager::UProVRViewManager()
 	{
 		ViewWidgetMap.Add(EProVRView::ModelView, NewObject<UProVRWidgetBase>(this, ModelViewAsset.Class, TEXT("UI_ProVR_ModelView")));
 	}
+	
+	/*
+	static ConstructorHelpers::FClassFinder<UProVRWidgetBase> RegisterViewAsset(TEXT("/Game/Widgets/UI_ProVR_RegisterView"));
+	if (RegisterViewAsset.Class != NULL)
+	{
+		ViewWidgetMap.Add(EProVRView::Register, RegisterViewAsset);
+	}
 
+	static ConstructorHelpers::FClassFinder<UProVRWidgetBase> LoginViewAsset(TEXT("/Game/Widgets/UI_ProVR_LoginView"));
+	if (LoginViewAsset.Class != NULL)
+	{
+		ViewWidgetMap.Add(EProVRView::Login,  LoginViewAsset);
+	}
+	*/
 }
 
 void UProVRViewManager::Tick(float DeltaTime)
@@ -49,14 +69,22 @@ void UProVRViewManager::Tick(float DeltaTime)
 
 void UProVRViewManager::SwitchView(EProVRView NextView)
 {
+	
 	if (CurrentView != NextView)
 	{
 		if (ViewWidgetMap.Contains(CurrentView))
 		{
 			ViewWidgetMap[CurrentView]->RemoveFromParent();
 		}
-		ViewWidgetMap[NextView]->AddToViewport();
-
-		CurrentView = NextView;
+		
+		if (UProVRGameInstance* GameInstance = UProVRGameInstance::GetCurrentGameInstance())
+		{
+			APawn* Pawn = GameInstance->GetWorld()->GetFirstPlayerController()->GetPawn();
+			if (Pawn)
+			{
+				AProVRPawn* Pawn_ = Cast<AProVRPawn>(Pawn);
+				Pawn_->WidgetComp->SetWidget(ViewWidgetMap[NextView]);
+			}
+		}		
 	}
 }

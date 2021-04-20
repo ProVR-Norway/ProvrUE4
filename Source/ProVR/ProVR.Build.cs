@@ -8,7 +8,7 @@ public class ProVR : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HTTP", "Json", "JsonUtilities", "glTFRuntime" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HTTP", "Json", "JsonUtilities", "glTFRuntime", "HeadMountedDisplay" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 
