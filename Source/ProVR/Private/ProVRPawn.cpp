@@ -43,7 +43,7 @@ void AProVRPawn::BeginPlay()
 	Super::BeginPlay();
 
 }
-
+/*
 void AProVRPawn::MoveForward(float Value)
 {
 	AddMovementInput(GetActorForwardVector() * Value);
@@ -53,7 +53,7 @@ void AProVRPawn::MoveRight(float Value)
 {
 	AddMovementInput(GetActorRightVector() * Value);
 }
-
+*/
 /*
 void AProVRPawn::TestInput()
 {
@@ -72,6 +72,7 @@ void AProVRPawn::Tick(float DeltaTime)
 void AProVRPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	/*
 	//PlayerInputComponent->BindAction("TEST", this, IE_Pressed, &AProVRPawn::Test);
 	PlayerInputComponent->BindAxis("MoveForward", this, &AProVRPawn::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AProVRPawn::MoveRight);
@@ -89,5 +90,6 @@ void AProVRPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 	PlayerInputComponent->BindAction("DeleteButton", IE_Pressed, this, &AProVRPawn::DeleteButton);
 	PlayerInputComponent->BindAction("WidgetInteraction", IE_Pressed, this, &AProVRPawn::WidgetInteraction);
 	PlayerInputComponent->BindAction("EnableRotation", IE_Pressed, this, &AProVRPawn::EnableRotation);
+	*/
 }
 

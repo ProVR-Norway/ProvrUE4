@@ -28,10 +28,14 @@ public:
 		UWidgetComponent* WidgetComp;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "ProVR|Actions")
-		UWidgetInteractionComponent* WidgetInteractionComp;
+		USceneComponent* SceneComp;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "ProVR|Actions")
 		UCameraComponent* CameraComp;
+
+	/*
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "ProVR|Actions")
+		UWidgetInteractionComponent* WidgetInteractionComp;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "ProVR|Actions")
 		UMotionControllerComponent* MotionControllerCompRight;
@@ -43,15 +47,13 @@ public:
 		USkeletalMeshComponent* SkeletalMeshComponentRight;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "ProVR|Actions")
-		USceneComponent* SceneComp;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "ProVR|Actions")
 		USkeletalMeshComponent* SkeletalMeshComponentLeft;
-
+		*/
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	/*
 	void MoveForward(float Value);
 
 	void MoveRight(float Value);
@@ -97,7 +99,7 @@ protected:
 
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "EnableRotation"))
 		void EnableRotation();
-
+		*/
 
 public:
 	// Called every frame
