@@ -16,7 +16,7 @@ EProVRActionBehavior UProVRGetSignedURLAction::PerformAction()
         {
             if (EHttpResponseCodes::IsOk(HttpResponseCode))
             {
-                OnActionComplete.Broadcast(EProVRGetSignedURLActionResult::ENUM_OK);
+                OnActionCompleteSignedURL.Broadcast(EProVRGetSignedURLActionResult::ENUM_OK);
                 UE_LOG(LogTemp, Warning, TEXT("Get signed URL action: on action complete: 200"));
                 SignedURL = HttpResponseContent->GetStringField("signedURL");
                 //set SignedURL
@@ -24,17 +24,17 @@ EProVRActionBehavior UProVRGetSignedURLAction::PerformAction()
             }
             else if (HttpResponseCode == HTTP_UNEXPECTED_ERROR || HttpResponseCode >= 500)
             {
-                OnActionComplete.Broadcast(EProVRGetSignedURLActionResult::ENUM_InternalError);
+                OnActionCompleteSignedURL.Broadcast(EProVRGetSignedURLActionResult::ENUM_InternalError);
                 UE_LOG(LogTemp, Warning, TEXT("Get signed URL action: on action complete: 500"));
             }
             else if (HttpResponseCode == 401)
             {
-                OnActionComplete.Broadcast(EProVRGetSignedURLActionResult::ENUM_Unauthorized);
+                OnActionCompleteSignedURL.Broadcast(EProVRGetSignedURLActionResult::ENUM_Unauthorized);
                 UE_LOG(LogTemp, Warning, TEXT("Get signed URL action: on action complete: 401"));
             }
             else if (HttpResponseCode == 400) //Bad Request
             {
-                OnActionComplete.Broadcast(EProVRGetSignedURLActionResult::ENUM_UserDoesNotExists);
+                OnActionCompleteSignedURL.Broadcast(EProVRGetSignedURLActionResult::ENUM_UserDoesNotExists);
                 UE_LOG(LogTemp, Warning, TEXT("Get signed URL action: on action complete: 400"));
             }
             else
@@ -43,7 +43,7 @@ EProVRActionBehavior UProVRGetSignedURLAction::PerformAction()
                 {
                     UE_LOG(LogTemp, Error, TEXT("%s"), *HttpResponseContent->GetStringField("message"));
                 }
-                OnActionComplete.Broadcast(EProVRGetSignedURLActionResult::ENUM_OtherError);
+                OnActionCompleteSignedURL.Broadcast(EProVRGetSignedURLActionResult::ENUM_OtherError);
             }
             OnAsyncronousActionCompleted();
         });

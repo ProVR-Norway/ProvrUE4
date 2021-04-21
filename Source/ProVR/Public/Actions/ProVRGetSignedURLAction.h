@@ -10,7 +10,7 @@ UENUM(BlueprintType)
 enum class EProVRGetSignedURLActionResult : uint8
 {
     ENUM_OK                     UMETA(DisplayName = "Signed URL is successfully generated"),
-    ENUM_UserDoesNotExists      UMETA(DisplayName = "User Does Not Exists"),
+    ENUM_UserDoesNotExists      UMETA(DisplayName = "User Does Not Exist"),
     ENUM_Unauthorized           UMETA(DisplayName = "Unauthorized. Please re-login"),
     ENUM_InternalError          UMETA(DisplayName = "Internal error"),
     ENUM_OtherError             UMETA(DisplayName = "Other error"),
@@ -35,5 +35,5 @@ public:
 
     DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FProVRGetSignedURLActionDoneDelegate, EProVRGetSignedURLActionResult, Result);
     UPROPERTY(BlueprintAssignable, Category = "ProVR|Actions")
-    FProVRGetSignedURLActionDoneDelegate OnActionComplete;
+    FProVRGetSignedURLActionDoneDelegate OnActionCompleteSignedURL;
 };
