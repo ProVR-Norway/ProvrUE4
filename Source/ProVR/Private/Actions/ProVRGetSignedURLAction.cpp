@@ -1,9 +1,7 @@
 // Copyright 2021, MIT License, University of South-Eastern Norway - Kongsberg Digital
 
-
 #include "Actions/ProVRGetSignedURLAction.h"
-//#include "ProVRGameInstance.h"
-#include "Managers/ProVRNetworkManager.h"
+#include "Network/ProVRHttpRequest.h"
 #include "GenericPlatform/GenericPlatformHttp.h"
 
 #define CAD_SERVICE_GET_SIGNED_URL_PATH FString(TEXT("/cadmodels/signedurl/"))

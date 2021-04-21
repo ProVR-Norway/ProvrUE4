@@ -30,7 +30,7 @@ public:
     UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ProVR|Actions")
     FString ModelName;
 
-    UPROPERTY(BlueprintRead, EditAnywhere, Category = "ProVR|Actions")
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ProVR|Actions")
     FString SignedURL;
 
     DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FProVRGetSignedURLActionDoneDelegate, EProVRGetSignedURLActionResult, Result);
