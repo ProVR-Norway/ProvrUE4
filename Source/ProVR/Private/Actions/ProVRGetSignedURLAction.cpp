@@ -19,8 +19,7 @@ EProVRActionBehavior UProVRGetSignedURLAction::PerformAction()
                 OnActionCompleteSignedURL.Broadcast(EProVRGetSignedURLActionResult::ENUM_OK);
                 UE_LOG(LogTemp, Warning, TEXT("Get signed URL action: on action complete: 200"));
                 SignedURL = HttpResponseContent->GetStringField("signedURL");
-                //set SignedURL
-                //return SignedURL;
+                UE_LOG(LogTemp, Warning, TEXT("%s"), *SignedURL);
             }
             else if (HttpResponseCode == HTTP_UNEXPECTED_ERROR || HttpResponseCode >= 500)
             {
