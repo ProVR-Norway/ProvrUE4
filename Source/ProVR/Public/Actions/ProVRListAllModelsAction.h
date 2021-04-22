@@ -28,7 +28,6 @@ public:
 
     UPROPERTY(BlueprintReadOnly, EditAnywhere)
     FString DateUploaded;
-
 };
 
 UCLASS()
@@ -48,7 +47,7 @@ public:
     
     // HOW DO WE MAKE SURE THIS CAN BE ACCESSED IN BLUEPRINTS?
     //UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "ProVR|Actions")
-    UPROPERTY(VisibleAnywhere, Category = "ProVR|Actions")
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ProVR|Actions")
     TArray<FProVRUserModel> UserModelList;
     
     /*
