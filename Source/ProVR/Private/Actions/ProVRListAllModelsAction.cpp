@@ -27,6 +27,7 @@ EProVRActionBehavior UProVRListAllModelsAction::PerformAction()
                 // Add string object to the struct
                 CurrentModel.ModelName = obj->GetStringField("modelName");
                 CurrentModel.DateUploaded = obj->GetStringField("dateUploaded");
+                UserModelList.Add(CurrentModel);
                 // Print out all values of the JSON Array
                 UE_LOG(LogTemp, Warning, TEXT("%s %s"), *obj->GetStringField("modelName"), *obj->GetStringField("dateUploaded"));
             }
