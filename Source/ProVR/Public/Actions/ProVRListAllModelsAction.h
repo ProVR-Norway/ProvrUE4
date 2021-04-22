@@ -16,6 +16,42 @@ enum class EProVRListAllModelsActionResult : uint8
     ENUM_OtherError             UMETA(DisplayName = "Other error"),
 };
 
+USTRUCT(BlueprintType)
+struct FProVRUserModel {
+
+    GENERATED_BODY()
+
+public:
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere)
+    FString ModelName;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere)
+    FString DateUploaded;
+
+};
+
+/*
+USTRUCT(BlueprintType)
+struct FStringArray {
+
+    GENERATED_BODY()
+
+public:
+
+    TArray<FString> Arr;
+
+    FString operator[] (int32 idx) {
+        return Arr[idx];
+    }
+
+    void Add(FString str) {
+        Arr.Add(str);
+    }
+};
+*/
+
+
 UCLASS()
 class PROVR_API UProVRListAllModelsAction : public UProVRActionBase
 {
@@ -27,8 +63,18 @@ public:
     UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ProVR|Actions")
     FString Username;
 
+    // Note: TSharedPtr cannot be Blueprint editable
+    // Note: TArray cannot be nested ("Nested containers are not supported.")
+
+    
+    // HOW DO WE MAKE SURE THIS CAN BE ACCESSED IN BLUEPRINTS?
+    UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "ProVR|Actions")
+    TArray<FProVRUserModel> UserModelList;
+    
+    /*
     UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ProVR|Actions")
-    TArray<TArray<FString>> ModelList;
+    TArray<Fstring> ModelsDateUploaded;
+    */
 
     DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FProVRListAllModelsActionDoneDelegate, EProVRListAllModelsActionResult, Result);
     UPROPERTY(BlueprintAssignable, Category = "ProVR|Actions")
