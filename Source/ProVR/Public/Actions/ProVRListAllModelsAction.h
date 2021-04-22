@@ -23,34 +23,13 @@ struct FProVRUserModel {
 
 public:
 
-    UPROPERTY(BlueprintReadWrite, EditAnywhere)
+    UPROPERTY(BlueprintReadOnly, EditAnywhere)
     FString ModelName;
 
-    UPROPERTY(BlueprintReadWrite, EditAnywhere)
+    UPROPERTY(BlueprintReadOnly, EditAnywhere)
     FString DateUploaded;
 
 };
-
-/*
-USTRUCT(BlueprintType)
-struct FStringArray {
-
-    GENERATED_BODY()
-
-public:
-
-    TArray<FString> Arr;
-
-    FString operator[] (int32 idx) {
-        return Arr[idx];
-    }
-
-    void Add(FString str) {
-        Arr.Add(str);
-    }
-};
-*/
-
 
 UCLASS()
 class PROVR_API UProVRListAllModelsAction : public UProVRActionBase
@@ -68,7 +47,8 @@ public:
 
     
     // HOW DO WE MAKE SURE THIS CAN BE ACCESSED IN BLUEPRINTS?
-    UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "ProVR|Actions")
+    //UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "ProVR|Actions")
+    UPROPERTY(VisibleAnywhere, Category = "ProVR|Actions")
     TArray<FProVRUserModel> UserModelList;
     
     /*
