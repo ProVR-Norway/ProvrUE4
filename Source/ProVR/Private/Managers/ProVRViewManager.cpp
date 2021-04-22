@@ -45,6 +45,13 @@ UProVRViewManager::UProVRViewManager()
 		ViewWidgetMap.Add(EProVRView::ModelView, NewObject<UProVRWidgetBase>(this, ModelViewAsset.Class, TEXT("UI_ProVR_ModelView")));
 	}
 	
+
+	static ConstructorHelpers::FClassFinder<UProVRWidgetBase> SessionViewAsset(TEXT("/Game/Widgets/UI_ProVR_SessionView"));
+	if (SessionViewAsset.Class != NULL)
+	{
+		ViewWidgetMap.Add(EProVRView::Session, NewObject<UProVRWidgetBase>(this, SessionViewAsset.Class, TEXT("UI_ProVR_SessionView")));
+	}
+
 	/*
 	static ConstructorHelpers::FClassFinder<UProVRWidgetBase> RegisterViewAsset(TEXT("/Game/Widgets/UI_ProVR_RegisterView"));
 	if (RegisterViewAsset.Class != NULL)

@@ -68,6 +68,7 @@ UProVRGameInstance::UProVRGameInstance()
 		NetworkManager = NewObject<UProVRNetworkManager>(this, BPNetworkManager.Class, TEXT("NetworkManager"));
 	}
 
+
 }
 
 void UProVRGameInstance::Init()
