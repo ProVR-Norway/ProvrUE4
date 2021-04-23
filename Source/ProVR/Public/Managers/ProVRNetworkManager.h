@@ -35,19 +35,16 @@ class PROVR_API UProVRNetworkManager : public UProVRManagerBase
 private:
 	//https://en.wikipedia.org/wiki/Basic_access_authentication
 	FString CurrentAuthToken;
-
 	FString LastUsername;
 	FString LastPassword;
 
 	UPROPERTY()
 	TArray<class UProVRHttpRequest*> ActiveHttpRequests;
-
 	TArray<TFunction<void(int32)>> OngoingTryRenewingAuthTokenRequestSubscribers;
 	bool bTryRenewingAuthTokenRequestIsOngoing = false;
 	TSharedPtr<class IHttpRequest, ESPMode::ThreadSafe> OngoingTryRenewingAuthTokenRequest;
 	bool bWasOngoingTryRenewingAuthTokenRequestCanceled = false;
 	void CallSubscribersAfterTryRenewingAuthTokenResponse(int32 HttpResponseCode);
-
 	void OnRenewingAuthTokenRequestCompleted(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bWasSuccessful);
 
 public:
@@ -58,7 +55,7 @@ public:
 
 	void PerformLoginRequest(const FString& Username, const FString& Password, TFunction<void(int32)> OnCompleted);
 	void TryRenewingAuthToken(TFunction<void(int32)> OnCompleted);
-
 	void PushNewHttpRequest(class UProVRHttpRequest* NewHttpRequest);
 	void RemoveHttpRequest(class UProVRHttpRequest* HttpRequest);
+	FString GetUsername();
 };
