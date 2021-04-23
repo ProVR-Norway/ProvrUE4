@@ -10,10 +10,13 @@ void UProVRHttpRequest::Get(const FString& _Path, TFunction<void(int32, TSharedP
 {
 	if (UProVRHttpRequest* CreatedRequest = CreateInternalRequest(_Path, _OnResponseCompleted))
 	{
-		CreatedRequest->InternalHttpRequest->SetVerb("GET");
-		CreatedRequest->InternalHttpRequest->SetHeader("Authorization", "Basic 198ae1304e71af5bdf8698187a3065ca3184ac9fac04aad40128b5fa609685649570ab3608006f7acb463a371dba4c75b3c2a272b6e5ffdd494580ccc4e86ea6");
-		CreatedRequest->RequestType = EHttpRequestType::ENUM_Get;
-		CreatedRequest->ProcessInternalRequest();
+		if (UProVRNetworkManager* NetworkManager = UProVRGameInstance::GetNetworkManager())
+		{
+			CreatedRequest->InternalHttpRequest->SetVerb("GET");
+			CreatedRequest->InternalHttpRequest->SetHeader("Authorization", "Basic " + NetworkManager->GetCurrentAuthToken());
+			CreatedRequest->RequestType = EHttpRequestType::ENUM_Get;
+			CreatedRequest->ProcessInternalRequest();
+		}
 	}
 	else
 	{

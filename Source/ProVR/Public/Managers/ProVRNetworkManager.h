@@ -47,15 +47,20 @@ private:
 	void CallSubscribersAfterTryRenewingAuthTokenResponse(int32 HttpResponseCode);
 	void OnRenewingAuthTokenRequestCompleted(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bWasSuccessful);
 
-public:
+protected:
 	FORCEINLINE FString GetCurrentAuthToken()
 	{
 		return CurrentAuthToken;
 	}
 
+public:
 	void PerformLoginRequest(const FString& Username, const FString& Password, TFunction<void(int32)> OnCompleted);
 	void TryRenewingAuthToken(TFunction<void(int32)> OnCompleted);
 	void PushNewHttpRequest(class UProVRHttpRequest* NewHttpRequest);
 	void RemoveHttpRequest(class UProVRHttpRequest* HttpRequest);
+
+	UFUNCTION(BlueprintCallable, Category = "ProVRNetworkManager")
 	FString GetUsername();
+
+	friend class UProVRHttpRequest;
 };

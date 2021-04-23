@@ -4,6 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "Actions/ProVRActionBase.h"
+#include "Managers/ProVRNetworkManager.h"
+#include "ProVRGameInstance.h"
+#include "Network/ProVRHttpRequest.h"
 #include "ProVRGetSignedURLAction.generated.h"
 
 UENUM(BlueprintType)

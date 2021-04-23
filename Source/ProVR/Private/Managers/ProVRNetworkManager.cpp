@@ -118,5 +118,5 @@ void UProVRNetworkManager::CallSubscribersAfterTryRenewingAuthTokenResponse(int3
 
 FString UProVRNetworkManager::GetUsername()
 {
-
+	return LastUsername;
 }

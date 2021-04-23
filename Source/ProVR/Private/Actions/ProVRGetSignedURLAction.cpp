@@ -1,17 +1,23 @@
 // Copyright 2021, MIT License, University of South-Eastern Norway - Kongsberg Digital
 
 #include "Actions/ProVRGetSignedURLAction.h"
-#include "Network/ProVRHttpRequest.h"
 #include "GenericPlatform/GenericPlatformHttp.h"
 
 #define CAD_SERVICE_GET_SIGNED_URL_PATH FString(TEXT("/cadmodels/signedurl/"))
 
 EProVRActionBehavior UProVRGetSignedURLAction::PerformAction()
 {
-    FString UrlEncodedUsername = FGenericPlatformHttp::UrlEncode(Username);
-    FString UrlEncodedModelName = FGenericPlatformHttp::UrlEncode(ModelName);
+    //UProVRNetworkManager temp;
+    //FString UrlEncodedUsername = FGenericPlatformHttp::UrlEncode(temp.GetUsername());
 
+    FString UrlEncodedUsername;
+    if (UProVRNetworkManager* NetworkManager = UProVRGameInstance::GetNetworkManager())
+    {
+        UrlEncodedUsername = FGenericPlatformHttp::UrlEncode(NetworkManager->GetUsername());
+    }
+    FString UrlEncodedModelName = FGenericPlatformHttp::UrlEncode(ModelName);
     FString FullPath = CAD_SERVICE_GET_SIGNED_URL_PATH + UrlEncodedUsername + '/' + UrlEncodedModelName;
+
     UProVRHttpRequest::Get(FullPath, [this](int32 HttpResponseCode, TSharedPtr<FJsonObject> HttpResponseContent)
         {
             if (EHttpResponseCodes::IsOk(HttpResponseCode))
