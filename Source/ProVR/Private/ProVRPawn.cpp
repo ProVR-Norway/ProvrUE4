@@ -6,7 +6,7 @@
 #include "Components/SceneComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Camera/CameraComponent.h"
-#include "MotionControllerComponent.h"
+
 
 
 // Sets default values
@@ -17,6 +17,7 @@ AProVRPawn::AProVRPawn()
 	SceneComp = CreateDefaultSubobject<USceneComponent>(TEXT("SceneComp"));
 	CameraComp = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComp"));
 	WidgetComp = CreateDefaultSubobject<UWidgetComponent>(TEXT("WidgetComp"));
+	PawnMovementComp = CreateDefaultSubobject<UProVRMovementController>(TEXT("MovementComp"));
 	/*
 	WidgetInteractionComp = CreateDefaultSubobject<UWidgetInteractionComponent>(TEXT("WidgetInteractionComp"));
 	MotionControllerCompRight = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("MotionControllerCompRight"));
@@ -28,6 +29,8 @@ AProVRPawn::AProVRPawn()
 	SceneComp->SetupAttachment(RootComponent);
 	CameraComp->SetupAttachment(SceneComp);
 	WidgetComp->SetupAttachment(SceneComp);
+
+	
 	/*
 	MotionControllerCompRight->SetupAttachment(SceneComp);
 	MotionControllerCompLeft->SetupAttachment(SceneComp);
