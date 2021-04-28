@@ -44,6 +44,19 @@ UProVRViewManager::UProVRViewManager()
 	{
 		ViewWidgetMap.Add(EProVRView::ModelView, NewObject<UProVRWidgetBase>(this, ModelViewAsset.Class, TEXT("UI_ProVR_ModelView")));
 	}
+
+
+	static ConstructorHelpers::FClassFinder<UProVRWidgetBase> PauseMenuAsset(TEXT("/Game/Widgets/UI_ProVR_PauseMenu"));
+	if (PauseMenuAsset.Class != NULL)
+	{
+		ViewWidgetMap.Add(EProVRView::PauseMenu, NewObject<UProVRWidgetBase>(this, PauseMenuAsset.Class, TEXT("UI_ProVR_PauseMenu")));
+	}
+
+	static ConstructorHelpers::FClassFinder<UProVRWidgetBase> MainMenuAsset(TEXT("/Game/Widgets/UI_ProVR_PauseMenu"));
+	if (MainMenuAsset.Class != NULL)
+	{
+		ViewWidgetMap.Add(EProVRView::MainMenu, NewObject<UProVRWidgetBase>(this, MainMenuAsset.Class, TEXT("UI_ProVR_MainMenu")));
+	}
 	
 	/*
 	static ConstructorHelpers::FClassFinder<UProVRWidgetBase> RegisterViewAsset(TEXT("/Game/Widgets/UI_ProVR_RegisterView"));

@@ -14,7 +14,9 @@ enum class EProVRView : uint8
 	Login = 2,
 	Register = 3,
 	Logout = 4,
-	ModelView = 5
+	ModelView = 5,
+	PauseMenu = 6,
+	MainMenu = 7
 };
 
 UCLASS()
