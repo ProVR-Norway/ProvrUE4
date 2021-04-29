@@ -29,7 +29,7 @@ UProVRViewManager::UProVRViewManager()
 	static ConstructorHelpers::FClassFinder<UProVRWidgetBase> LoginViewAsset(TEXT("/Game/Widgets/UI_ProVR_LoginView"));
 	if (LoginViewAsset.Class != NULL)
 	{
-		ViewWidgetMap.Add(EProVRView::Login, NewObject<UProVRWidgetBase>(this, LoginViewAsset.Class, TEXT("UI_ProVR_LoginView")));
+		ViewWidgetMap.Add(EProVRView::LoginView, NewObject<UProVRWidgetBase>(this, LoginViewAsset.Class, TEXT("UI_ProVR_LoginView")));
 	}
 
 	static ConstructorHelpers::FClassFinder<UProVRWidgetBase> LogoutViewAsset(TEXT("/Game/Widgets/UI_ProVR_LogoutView"));
@@ -43,6 +43,31 @@ UProVRViewManager::UProVRViewManager()
 	if (ModelViewAsset.Class != NULL)
 	{
 		ViewWidgetMap.Add(EProVRView::ModelView, NewObject<UProVRWidgetBase>(this, ModelViewAsset.Class, TEXT("UI_ProVR_ModelView")));
+	}
+
+
+	static ConstructorHelpers::FClassFinder<UProVRWidgetBase> PauseMenuAsset(TEXT("/Game/Widgets/UI_ProVR_PauseMenu"));
+	if (PauseMenuAsset.Class != NULL)
+	{
+		ViewWidgetMap.Add(EProVRView::PauseMenu, NewObject<UProVRWidgetBase>(this, PauseMenuAsset.Class, TEXT("UI_ProVR_PauseMenu")));
+	}
+
+	static ConstructorHelpers::FClassFinder<UProVRWidgetBase> MainMenuAsset(TEXT("/Game/Widgets/UI_ProVR_MainMenu"));
+	if (MainMenuAsset.Class != NULL)
+	{
+		ViewWidgetMap.Add(EProVRView::MainMenu, NewObject<UProVRWidgetBase>(this, MainMenuAsset.Class, TEXT("UI_ProVR_MainMenu")));
+	}
+
+	static ConstructorHelpers::FClassFinder<UProVRWidgetBase> SessionViewAsset(TEXT("/Game/Widgets/UI_ProVR_SessionView"));
+	if (SessionViewAsset.Class != NULL)
+	{
+		ViewWidgetMap.Add(EProVRView::SessionView, NewObject<UProVRWidgetBase>(this, SessionViewAsset.Class, TEXT("UI_ProVR_SessionView")));
+	}
+
+	static ConstructorHelpers::FClassFinder<UProVRWidgetBase> CreateSessionViewAsset(TEXT("/Game/Widgets/UI_ProVR_CreateSessionView"));
+	if (CreateSessionViewAsset.Class != NULL)
+	{
+		ViewWidgetMap.Add(EProVRView::CreateSessionView, NewObject<UProVRWidgetBase>(this, CreateSessionViewAsset.Class, TEXT("UI_ProVR_CreateSessionView")));
 	}
 	
 	/*

@@ -115,8 +115,9 @@ void UProVRNetworkManager::CallSubscribersAfterTryRenewingAuthTokenResponse(int3
 
 	OngoingTryRenewingAuthTokenRequestSubscribers.Empty(); //Clear the array
 }
-
+/*
 FString UProVRNetworkManager::GetUsername()
 {
-
+	return Username;
 }
+*/
