@@ -11,7 +11,7 @@ void UProVRHttpRequest::Get(const FString& _Path, TFunction<void(int32, TSharedP
 	if (UProVRHttpRequest* CreatedRequest = CreateInternalRequest(_Path, _OnResponseCompleted))
 	{
 		CreatedRequest->InternalHttpRequest->SetVerb("GET");
-		CreatedRequest->InternalHttpRequest->SetHeader("Authorization", "Basic 1c1e173de4c2b0b03973a2de91a5a2ee6582883a0b9d85508659dafe77750f7302621ec95d283d2a99b7bb6bd4343f7c84fe65799118f3abf379f6329f214962");
+		CreatedRequest->InternalHttpRequest->SetHeader("Authorization", "Basic 198ae1304e71af5bdf8698187a3065ca3184ac9fac04aad40128b5fa609685649570ab3608006f7acb463a371dba4c75b3c2a272b6e5ffdd494580ccc4e86ea6");
 		CreatedRequest->RequestType = EHttpRequestType::ENUM_Get;
 		CreatedRequest->ProcessInternalRequest();
 	}
