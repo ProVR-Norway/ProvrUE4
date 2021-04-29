@@ -9,9 +9,15 @@
 /**
  * 
  */
+class AProVRPawn;
+
+
 UCLASS()
 class PROVR_API AProVRPlayerController : public APlayerController
 {
 	GENERATED_BODY()
+public:
+
+	AProVRPlayerController();
 	
 };

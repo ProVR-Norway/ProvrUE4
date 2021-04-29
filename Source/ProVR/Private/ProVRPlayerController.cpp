@@ -2,4 +2,10 @@
 
 
 #include "ProVRPlayerController.h"
+#include "ProVRPawn.h"
 
+
+AProVRPlayerController::AProVRPlayerController()
+{
+
+}
