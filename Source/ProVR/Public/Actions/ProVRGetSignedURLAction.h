@@ -4,6 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "Actions/ProVRActionBase.h"
+#include "Managers/ProVRNetworkManager.h"
+#include "ProVRGameInstance.h"
+#include "Network/ProVRHttpRequest.h"
 #include "ProVRGetSignedURLAction.generated.h"
 
 UENUM(BlueprintType)
@@ -25,15 +28,12 @@ public:
     virtual EProVRActionBehavior PerformAction() override;
 
     UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ProVR|Actions")
-    FString Username;
-
-    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ProVR|Actions")
-    FString ModelName;
+        FString ModelName;
 
     UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "ProVR|Actions")
-    FString SignedURL;
+        FString SignedURL;
 
     DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FProVRGetSignedURLActionDoneDelegate, EProVRGetSignedURLActionResult, Result);
     UPROPERTY(BlueprintAssignable, Category = "ProVR|Actions")
-    FProVRGetSignedURLActionDoneDelegate OnActionCompleteSignedURL;
+        FProVRGetSignedURLActionDoneDelegate OnActionCompleteSignedURL;
 };
