@@ -29,7 +29,7 @@ UProVRViewManager::UProVRViewManager()
 	static ConstructorHelpers::FClassFinder<UProVRWidgetBase> LoginViewAsset(TEXT("/Game/Widgets/UI_ProVR_LoginView"));
 	if (LoginViewAsset.Class != NULL)
 	{
-		ViewWidgetMap.Add(EProVRView::LoginView, NewObject<UProVRWidgetBase>(this, LoginViewAsset.Class, TEXT("UI_ProVR_LoginView")));
+		ViewWidgetMap.Add(EProVRView::Login, NewObject<UProVRWidgetBase>(this, LoginViewAsset.Class, TEXT("UI_ProVR_LoginView")));
 	}
 
 	static ConstructorHelpers::FClassFinder<UProVRWidgetBase> LogoutViewAsset(TEXT("/Game/Widgets/UI_ProVR_LogoutView"));

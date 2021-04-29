@@ -11,7 +11,7 @@ enum class EProVRView : uint8
 {
 	None = 0,
 	Welcome = 1,
-	LoginView = 2,
+	Login = 2,
 	Register = 3,
 	Logout = 4,
 	ModelView = 5,
