@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "Components/WidgetComponent.h"
+#include "ProVRMovementController.h"
 #include "ProVRPawn.generated.h"
 
 //class UWidgetComponent;
@@ -13,6 +14,8 @@ class UCameraComponent;
 class UMotionControllerComponent;
 class USkeletalMeshComponent;
 class USceneComponent;
+class UProVRMovementController;
+
 
 
 UCLASS()
@@ -23,6 +26,9 @@ class PROVR_API AProVRPawn : public APawn
 public:
 	// Sets default values for this pawn's properties
 	AProVRPawn();
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "ProVR|Actions")
+		UProVRMovementController* PawnMovementComp;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "ProVR|Actions")
 		UWidgetComponent* WidgetComp;
