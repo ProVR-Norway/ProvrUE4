@@ -94,22 +94,27 @@ void UProVRViewManager::Tick(float DeltaTime)
 
 void UProVRViewManager::SwitchView(EProVRView NextView)
 {
-	
+
 	if (CurrentView != NextView)
 	{
 		if (ViewWidgetMap.Contains(CurrentView))
 		{
 			ViewWidgetMap[CurrentView]->RemoveFromParent();
 		}
-		
+
 		if (UProVRGameInstance* GameInstance = UProVRGameInstance::GetCurrentGameInstance())
 		{
-			APawn* Pawn = GameInstance->GetWorld()->GetFirstPlayerController()->GetPawn();
-			if (Pawn)
+			if (UWorld* World = GameInstance->GetWorld())
 			{
-				AProVRPawn* Pawn_ = Cast<AProVRPawn>(Pawn);
-				Pawn_->WidgetComp->SetWidget(ViewWidgetMap[NextView]);
+				if (APlayerController* PlayerController = World->GetFirstPlayerController())
+				{
+					if (APawn* Pawn = PlayerController->GetPawn())
+					{
+						AProVRPawn* Pawn_ = Cast<AProVRPawn>(Pawn);
+						Pawn_->WidgetComp->SetWidget(ViewWidgetMap[NextView]);
+					}
+				}
 			}
-		}		
+		}
 	}
 }
