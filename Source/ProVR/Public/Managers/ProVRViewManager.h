@@ -11,10 +11,14 @@ enum class EProVRView : uint8
 {
 	None = 0,
 	Welcome = 1,
-	Login = 2,
+	LoginView = 2,
 	Register = 3,
 	Logout = 4,
-	ModelView = 5
+	ModelView = 5,
+	PauseMenu = 6,
+	MainMenu = 7,
+	SessionView = 8,
+	CreateSessionView = 9
 };
 
 UCLASS()

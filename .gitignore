@@ -48,6 +48,11 @@ Content\Levels\UiTestLevel.umap
 SourceArt/**/*.png
 SourceArt/**/*.tga
 
+WindowsNoEditor/
+LinuxServer/
+
+
+
 # Binary Files
 Binaries/*
 Plugins/*/Binaries/*
