@@ -69,6 +69,20 @@ UProVRViewManager::UProVRViewManager()
 	{
 		ViewWidgetMap.Add(EProVRView::CreateSessionView, NewObject<UProVRWidgetBase>(this, CreateSessionViewAsset.Class, TEXT("UI_ProVR_CreateSessionView")));
 	}
+
+	static ConstructorHelpers::FClassFinder<UProVRWidgetBase> OptionsMenuAsset(TEXT("/Game/Widgets/UI_ProVR_OptionsMenu"));
+	if (OptionsMenuAsset.Class != NULL)
+	{
+		ViewWidgetMap.Add(EProVRView::OptionsMenu, NewObject<UProVRWidgetBase>(this, OptionsMenuAsset.Class, TEXT("UI_ProVR_OptionsMenu")));
+	}
+
+	static ConstructorHelpers::FClassFinder<UProVRWidgetBase> ParticipantHUDAsset(TEXT("/Game/Widgets/UI_ProVR_ParticipantHUD"));
+	if (ParticipantHUDAsset.Class != NULL)
+	{
+		ViewWidgetMap.Add(EProVRView::ParticipantHUD, NewObject<UProVRWidgetBase>(this, ParticipantHUDAsset.Class, TEXT("UI_ProVR_ParticipantHUD")));
+	}
+
+
 	
 	/*
 	static ConstructorHelpers::FClassFinder<UProVRWidgetBase> RegisterViewAsset(TEXT("/Game/Widgets/UI_ProVR_RegisterView"));
