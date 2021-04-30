@@ -3,6 +3,7 @@
 #include "Managers/ProVRViewManager.h"
 #include "Views/ProVRWidgetBase.h"
 #include "ProVRPawn.h"
+#include "ProVRPlayerController.h"
 #include "Kismet/GameplayStatics.h"
 #include "ProVRGameInstance.h"
 #include "Engine/World.h"
@@ -69,20 +70,7 @@ UProVRViewManager::UProVRViewManager()
 	{
 		ViewWidgetMap.Add(EProVRView::CreateSessionView, NewObject<UProVRWidgetBase>(this, CreateSessionViewAsset.Class, TEXT("UI_ProVR_CreateSessionView")));
 	}
-	
-	/*
-	static ConstructorHelpers::FClassFinder<UProVRWidgetBase> RegisterViewAsset(TEXT("/Game/Widgets/UI_ProVR_RegisterView"));
-	if (RegisterViewAsset.Class != NULL)
-	{
-		ViewWidgetMap.Add(EProVRView::Register, RegisterViewAsset);
-	}
 
-	static ConstructorHelpers::FClassFinder<UProVRWidgetBase> LoginViewAsset(TEXT("/Game/Widgets/UI_ProVR_LoginView"));
-	if (LoginViewAsset.Class != NULL)
-	{
-		ViewWidgetMap.Add(EProVRView::Login,  LoginViewAsset);
-	}
-	*/
 }
 
 void UProVRViewManager::Tick(float DeltaTime)
@@ -104,11 +92,16 @@ void UProVRViewManager::SwitchView(EProVRView NextView)
 		
 		if (UProVRGameInstance* GameInstance = UProVRGameInstance::GetCurrentGameInstance())
 		{
-			APawn* Pawn = GameInstance->GetWorld()->GetFirstPlayerController()->GetPawn();
-			if (Pawn)
+			if (UWorld* World = GameInstance->GetWorld())
 			{
-				AProVRPawn* Pawn_ = Cast<AProVRPawn>(Pawn);
-				Pawn_->WidgetComp->SetWidget(ViewWidgetMap[NextView]);
+				if (APlayerController* PlayerController = World->GetFirstPlayerController())
+				{
+					if (APawn* Pawn = PlayerController->GetPawn())
+					{
+						AProVRPawn* Pawn_ = Cast<AProVRPawn>(Pawn);
+						Pawn_->WidgetComp->SetWidget(ViewWidgetMap[NextView]);
+					}
+				}
 			}
 		}		
 	}
