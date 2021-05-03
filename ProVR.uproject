@@ -28,6 +28,17 @@
 		{
 			"Name": "AdvancedSteamSessions",
 			"Enabled": true
+<<<<<<< Updated upstream
+=======
+		},
+		{
+            "Name": "OnlineSubsystemPython",
+           	"Enabled": true
+        },
+		{
+			"Name": "OnlineSubsystemSteam",
+			"Enabled": true
+>>>>>>> Stashed changes
 		}
 	]
 }
