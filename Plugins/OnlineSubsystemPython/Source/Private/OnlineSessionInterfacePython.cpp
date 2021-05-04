@@ -196,8 +196,10 @@ public:
 bool FOnlineSessionPython::CreateSession(int32 HostingPlayerNum, FName SessionName, const FOnlineSessionSettings& NewSessionSettings)
 {
 	uint32 Result = ONLINE_FAIL;
-
+	
+	/*
 	// Check for an existing session
+	
 	FNamedOnlineSession* Session = GetNamedSession(SessionName);
 	if (Session == NULL)
 	{
@@ -228,12 +230,14 @@ bool FOnlineSessionPython::CreateSession(int32 HostingPlayerNum, FName SessionNa
 		
 		// Unique identifier of this build for compatibility
 		Session->SessionSettings.BuildUniqueId = GetBuildUniqueId();
-
+		
+		
 		// Setup the host session info
 		FOnlineSessionInfoPython* NewSessionInfo = new FOnlineSessionInfoPython();
 		NewSessionInfo->Init(*PythonSubsystem);
 		Session->SessionInfo = MakeShareable(NewSessionInfo);
-
+		*/
+	/*
 		if (Session->SessionSettings.bIsLANMatch)
 		{
 
@@ -255,49 +259,69 @@ bool FOnlineSessionPython::CreateSession(int32 HostingPlayerNum, FName SessionNa
 				}
 			}
 		}
-		else
-		{
-			Result = ONLINE_IO_PENDING;
-			FHttpModule* Http = &FHttpModule::Get();
-			// UPDATE 2021: Added "ESPMode::ThreadSafe"
-			// TSharedRef<IHttpRequest> Request = Http->CreateRequest();
-			TSharedRef<IHttpRequest, ESPMode::ThreadSafe> Request = Http->CreateRequest();
-			Request->SetHeader(TEXT("User-Agent"), TEXT("X-UnrealEngine-Agent"));
-			Request->SetHeader(TEXT("Content-Type"), TEXT("application/json"));
-			//Request->SetHeader(TEXT("Authorization"), "Basic " + APIKey);
-			Request->SetVerb("GET");
-			FString ServerName, MapName, GameMode;
-			Session->SessionSettings.Get("SERVERNAME", ServerName);
-			Session->SessionSettings.Get("MAPNAME", MapName);
-			Session->SessionSettings.Get("GAMEMODE", GameMode);
-			bool bPasswordProtected;
+		*/
 
-			Session->SessionSettings.Get("PASSWORDPROTECTED", bPasswordProtected);
-			FOnlineSessionInfoPython* SessionInfo = (FOnlineSessionInfoPython*)Session->SessionInfo.Get();
-			UOnlineSubsystemPythonConfig* config = GetMutableDefault<UOnlineSubsystemPythonConfig>();
-			SetPortFromNetDriver(*PythonSubsystem, Session->SessionInfo);
-			// UPDATE 2021
+	Result = ONLINE_IO_PENDING;
 
-			FString PasswordProtected;
+	FHttpModule* Http = &FHttpModule::Get();
+	TSharedRef<IHttpRequest, ESPMode::ThreadSafe> Request = Http->CreateRequest();
+	
+	//Request->SetHeader(TEXT("User-Agent"), TEXT("X-UnrealEngine-Agent"));
+	Request->SetHeader(TEXT("Content-Type"), TEXT("application/json"));
+	Request->SetVerb("POST");
+	/*	
+	* Online sub system interface
+	Session->SessionSettings.Get("SERVERNAME", ServerName);
+	Session->SessionSettings.Get("MAPNAME", MapName);
+	Session->SessionSettings.Get("GAMEMODE", GameMode);
+	*/
+	FString MapName;
+	int32 MaxParticipants = NewSessionSettings.NumPublicConnections;
+	TSharedPtr<FJsonObject> RequestJson = MakeShareable(new FJsonObject);
+	RequestJson->SetStringField("sessionName", SessionName.GetPlainNameString());
+	//RequestJson->SetStringField("mapName", NewSessionSettings.Get("MAPNAME", MapName));
+	RequestJson->SetNumberField("maxParticipants", MaxParticipants);  //possible cast issues
+	RequestJson->SetStringField("hostUsername", "Username");
 
-			if (bPasswordProtected) {
-				PasswordProtected = "true";
-			}
-			else {
-				PasswordProtected = "false";
-			}
 
-			// END
-			//Request->SetURL(FString::Printf(TEXT("http://%s/register_server?name=%s&port=%d&maxplayers=%d&pwprotected=%s&gamemode=%s&map=%s"), *config->ServerAddress, *FGenericPlatformHttp::UrlEncode(ServerName), SessionInfo->HostAddr->GetPort(), Session->NumOpenPublicConnections, *FGenericPlatformHttp::UrlEncode(bPasswordProtected ? "true" : "false"), *FGenericPlatformHttp::UrlEncode(GameMode), *FGenericPlatformHttp::UrlEncode(MapName)));
-			Request->SetURL(FString::Printf(TEXT("http://%s/register_server?name=%s&port=%d&maxplayers=%d&pwprotected=%s&gamemode=%s&map=%s"), *config->ServerAddress, *FGenericPlatformHttp::UrlEncode(ServerName), SessionInfo->HostAddr->GetPort(), Session->NumOpenPublicConnections, *FGenericPlatformHttp::UrlEncode(PasswordProtected), *FGenericPlatformHttp::UrlEncode(GameMode), *FGenericPlatformHttp::UrlEncode(MapName)));
-			Request->OnProcessRequestComplete().BindRaw(this, &FOnlineSessionPython::CreateSession_ResponseReceived);
-			Request->ProcessRequest();
-		}
+
+
+
+	FString OutputString;
+	TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&OutputString);
+	FJsonSerializer::Serialize(RequestJson.ToSharedRef(), Writer);
+	TArray<uint8>* RequestContent;
+	const FTCHARToUTF8 Converter(*OutputString, OutputString.Len());
+	RequestContent->Append(reinterpret_cast<const uint8*>(Converter.Get()), Converter.Length());
+	Request->SetContent(RequestContent);
+
+
+	/*
+	* 
+	bool bPasswordProtected;
+	Session->SessionSettings.Get("PASSWORDPROTECTED", bPasswordProtected);
+	*/
+	/*
+
+	FOnlineSessionInfoPython* SessionInfo = (FOnlineSessionInfoPython*)Session->SessionInfo.Get();
+	UOnlineSubsystemPythonConfig* config = GetMutableDefault<UOnlineSubsystemPythonConfig>();
+	SetPortFromNetDriver(*PythonSubsystem, Session->SessionInfo);
+
+	*/
+	/*
+	FString PasswordProtected;
+
+	if (bPasswordProtected) {
+		PasswordProtected = "true";
 	}
-	else
-	{
-		UE_LOG_ONLINE_SESSION(Warning, TEXT("Cannot create session '%s': session already exists."), *SessionName.ToString());
+	else {
+		PasswordProtected = "false";
 	}
+	*/
+	
+	Request->SetURL(FString::Printf(TEXT("http://%s/register_server?name=%s&port=%d&maxplayers=%d&pwprotected=%s&gamemode=%s&map=%s"), *config->ServerAddress, *FGenericPlatformHttp::UrlEncode(ServerName), SessionInfo->HostAddr->GetPort(), Session->NumOpenPublicConnections, *FGenericPlatformHttp::UrlEncode(PasswordProtected), *FGenericPlatformHttp::UrlEncode(GameMode), *FGenericPlatformHttp::UrlEncode(MapName)));
+	Request->OnProcessRequestComplete().BindRaw(this, &FOnlineSessionPython::CreateSession_ResponseReceived);
+	Request->ProcessRequest();
 
 	if (Result != ONLINE_IO_PENDING)
 	{
@@ -315,6 +339,7 @@ bool FOnlineSessionPython::CreateSession(const FUniqueNetId& HostingPlayerId, FN
 
 void FOnlineSessionPython::CreateSession_ResponseReceived(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bWasSuccessful)
 {
+	
 	if (!Response.IsValid())
 	{
 
@@ -328,6 +353,11 @@ void FOnlineSessionPython::CreateSession_ResponseReceived(FHttpRequestPtr Reques
 	if (FJsonSerializer::Deserialize(Reader, JsonObject))
 	{
 		//Get the value of the json object by field name
+
+		//FString URLAddress = JsonObject->GetStringField("address");
+
+
+
 		bool bError = JsonObject->GetBoolField("error");
 		if (!bError)
 		{
