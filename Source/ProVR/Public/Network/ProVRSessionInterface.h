@@ -15,14 +15,9 @@ class PROVR_API UProVRSessionInterface : public UObject
 {
 	GENERATED_BODY()
 
-
-
-
+public:
 	UFUNCTION(BlueprintCallable, Category = "ProVR|SessionInterface")
 	void CreateSession(FString SessionName,  FString MapName, int32 MaxPlayers);
-
-	void OnCreateSessionComplete(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bWasSuccessful);
-
 
 	UFUNCTION(BlueprintCallable, Category = "ProVR|SessionInterface")
 	void SearchSessions();
@@ -33,8 +28,16 @@ class PROVR_API UProVRSessionInterface : public UObject
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnCreateSessionCompleteDelegate, bool, Success, FString, Message);
 	FOnCreateSessionCompleteDelegate OnCreateSessionCompleteDelegate;
 
-
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnSearchSessionCompleteDelegate, bool, Success, FString, );
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnSearchSessionCompleteDelegate, bool, Success);
 	FOnSearchSessionCompleteDelegate OnSearchSessionCompleteDelegate;
+
+private:
+	TMap <FString, FString>DisplayedSessions;  //<Session Name, Session URL>
+
+	void OnCreateSessionComplete(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bWasSuccessful);
+
+	void OnSearchSessionComplete(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bWasSuccessful);
+
+
 
 };
