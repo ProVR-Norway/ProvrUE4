@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
+#include "Runtime/Online/HTTP/Public/Http.h"
 #include "ProVRSessionInterface.generated.h"
 
 /**
@@ -14,13 +15,13 @@ class PROVR_API UProVRSessionInterface : public UObject
 {
 	GENERATED_BODY()
 
-	virtual void Init();
+
 
 
 	UFUNCTION(BlueprintCallable, Category = "ProVR|SessionInterface")
-	void CreateSession(FString SessionName,  FString MapName, uint32 MaxPlayers);
+	void CreateSession(FString SessionName,  FString MapName, int32 MaxPlayers);
 
-	void OnCreateSessionComplete(bool Success, FString Content);
+	void OnCreateSessionComplete(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bWasSuccessful);
 
 
 	UFUNCTION(BlueprintCallable, Category = "ProVR|SessionInterface")
@@ -29,7 +30,11 @@ class PROVR_API UProVRSessionInterface : public UObject
 	UFUNCTION(BlueprintCallable, Category = "ProVR|SessionInterface")
 	void JoinSession(FString SessionName);
 
-	DECLARE_DYNAMIC_DELEGATE_TwoParams(FProVRRequestDoneDelegate, bool, Success, FString, Content);
-		FProVRRequestDoneDelegate OnSessionCreateComplete;
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnCreateSessionCompleteDelegate, bool, Success, FString, Message);
+	FOnCreateSessionCompleteDelegate OnCreateSessionCompleteDelegate;
+
+
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnSearchSessionCompleteDelegate, bool, Success, FString, );
+	FOnSearchSessionCompleteDelegate OnSearchSessionCompleteDelegate;
 
 };
