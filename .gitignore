@@ -19,6 +19,9 @@
 # Fortran module files
 *.mod
 
+# Content asset
+Content\Levels\UiTestLevel.umap
+
 # Compiled Static libraries
 *.lai
 *.la
@@ -44,6 +47,11 @@
 # Precompiled Assets
 SourceArt/**/*.png
 SourceArt/**/*.tga
+
+WindowsNoEditor/
+LinuxServer/
+
+
 
 # Binary Files
 Binaries/*
