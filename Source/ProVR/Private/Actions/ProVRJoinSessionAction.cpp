@@ -2,9 +2,18 @@
 
 
 #include "Actions/ProVRJoinSessionAction.h"
+#include "ProVRGameInstance.h"
 
 
 EProVRActionBehavior UProVRJoinSessionAction::PerformAction()
 {
-	return EProVRActionBehavior::Asynchronous;
+	if (UProVRGameInstance* GameInstance = UProVRGameInstance::GetCurrentGameInstance())
+	{
+		if (UWorld* World = GameInstance->GetWorld())
+		{
+			FString* URLAddress_ = DisplayedSessions.Find(SessionName);
+			UGameplayStatics::OpenLevel(World, FName(*URLAddress_), false, "");
+		}
+	}
+	return EProVRActionBehavior::Synchronous;
 }

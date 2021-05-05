@@ -37,6 +37,7 @@ private:
 	FString CurrentAuthToken;
 	FString LastUsername;
 	FString LastPassword;
+	TMap <FString, FString>DisplayedSessions;  //<Session Name, Session URL>
 
 	UPROPERTY()
 		TArray<class UProVRHttpRequest*> ActiveHttpRequests;
