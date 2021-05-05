@@ -1,0 +1,14 @@
+{
+	"Targets": [
+		{
+			"Name": "OnlineSubsystemTest",
+			"Path": "C:\\Github\\ProvrUE4\\Plugins\\UE4MasterServer-master-2\\Example\\OnlineSubsystemPython\\Source\\OnlineSubsystemTest.Target.cs",
+			"Type": "Game"
+		},
+		{
+			"Name": "OnlineSubsystemTestEditor",
+			"Path": "C:\\Github\\ProvrUE4\\Plugins\\UE4MasterServer-master-2\\Example\\OnlineSubsystemPython\\Source\\OnlineSubsystemTestEditor.Target.cs",
+			"Type": "Editor"
+		}
+	]
+}

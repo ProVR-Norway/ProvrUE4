@@ -20,7 +20,13 @@ void UProVRSessionInterface::CreateSession(FString SessionName, FString MapName,
 	TSharedPtr<FJsonObject> RequestJson = MakeShareable(new FJsonObject);
 	RequestJson->SetStringField("sessionName", SessionName);
 	RequestJson->SetNumberField("maxParticipants", MaxPlayers);  //possible cast issues
-	RequestJson->SetStringField("hostUsername", "Username");
+	if (UProVRGameInstance* GameInstance = UProVRGameInstance::GetCurrentGameInstance())
+	{
+		if (UProVRNetworkManager* NetworkManager = GameInstance->GetNetworkManager())
+		{
+			RequestJson->SetStringField("hostUsername", NetworkManager->GetUsername());
+		}
+	}
 	FString OutputString;
 	TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&OutputString);
 	FJsonSerializer::Serialize(RequestJson.ToSharedRef(), Writer);
@@ -28,7 +34,6 @@ void UProVRSessionInterface::CreateSession(FString SessionName, FString MapName,
 	const FTCHARToUTF8 Converter(*OutputString, OutputString.Len());
 	RequestContent->Append(reinterpret_cast<const uint8*>(Converter.Get()), Converter.Length());
 	Request->SetContent(*RequestContent);
-
 
 	Request->SetURL("https://api-gateway-iu3tuzfidq-ez.a.run.app");
 	Request->OnProcessRequestComplete().BindUObject(this, &UProVRSessionInterface::OnCreateSessionComplete);
