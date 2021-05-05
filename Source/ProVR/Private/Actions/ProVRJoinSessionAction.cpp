@@ -3,7 +3,8 @@
 
 #include "Actions/ProVRJoinSessionAction.h"
 #include "ProVRGameInstance.h"
-
+#include "Managers/ProVRNetworkManager.h"
+#include "Kismet/GameplayStatics.h"
 
 EProVRActionBehavior UProVRJoinSessionAction::PerformAction()
 {
@@ -11,8 +12,12 @@ EProVRActionBehavior UProVRJoinSessionAction::PerformAction()
 	{
 		if (UWorld* World = GameInstance->GetWorld())
 		{
-			FString* URLAddress_ = DisplayedSessions.Find(SessionName);
-			UGameplayStatics::OpenLevel(World, FName(*URLAddress_), false, "");
+			if (UProVRNetworkManager* NetworkManager = GameInstance->GetNetworkManager())
+			{
+				FString* URLAddress_ = NetworkManager->DisplayedSessions.Find("SessionName");
+				UGameplayStatics::OpenLevel(World, FName(*URLAddress_), false, "");
+
+			}
 		}
 	}
 	return EProVRActionBehavior::Synchronous;

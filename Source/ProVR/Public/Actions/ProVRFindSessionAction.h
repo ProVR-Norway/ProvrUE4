@@ -17,6 +17,9 @@ class PROVR_API UProVRFindSessionAction : public UProVRActionBase
 	GENERATED_BODY()
 public:
 	virtual EProVRActionBehavior PerformAction();
+
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCreateSessionCompleteDelegate, bool, Success);
+	FOnCreateSessionCompleteDelegate OnCreateSessionCompleteDelegate;
 };
 
 

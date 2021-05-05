@@ -37,7 +37,6 @@ private:
 	FString CurrentAuthToken;
 	FString LastUsername;
 	FString LastPassword;
-	TMap <FString, FString>DisplayedSessions;  //<Session Name, Session URL>
 
 	UPROPERTY()
 		TArray<class UProVRHttpRequest*> ActiveHttpRequests;
@@ -55,6 +54,7 @@ protected:
 	}
 
 public:
+	TMap <FString, FString>DisplayedSessions;  //<Session Name, Session URL>
 	void PerformLoginRequest(const FString& Username, const FString& Password, TFunction<void(int32)> OnCompleted);
 	void TryRenewingAuthToken(TFunction<void(int32)> OnCompleted);
 	void PushNewHttpRequest(class UProVRHttpRequest* NewHttpRequest);

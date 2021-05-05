@@ -4,7 +4,7 @@
 #include "Actions/ProVRCreateSessionAction.h"
 #include "Managers/ProVRNetworkManager.h"
 #include "ProVRGameInstance.h"
-#include "ProVRHttpRequest.h"
+#include "Network/ProVRHttpRequest.h"
 #include "..\..\Public\Actions\ProVRCreateSessionAction.h"
 
 UProVRCreateSessionAction::UProVRCreateSessionAction()
