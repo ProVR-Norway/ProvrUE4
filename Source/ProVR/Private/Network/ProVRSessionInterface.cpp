@@ -4,6 +4,7 @@
 #include "Network/ProVRSessionInterface.h"
 #include "CoreMinimal.h"
 #include "ProVRGameInstance.h"
+#include "Managers/ProVRNetworkManager.h"
 #include "Kismet/GameplayStatics.h"
 
 
@@ -26,7 +27,7 @@ void UProVRSessionInterface::CreateSession(FString SessionName, FString MapName,
 	TArray<uint8>* RequestContent = nullptr;
 	const FTCHARToUTF8 Converter(*OutputString, OutputString.Len());
 	RequestContent->Append(reinterpret_cast<const uint8*>(Converter.Get()), Converter.Length());
-	//Request->SetContent(RequestContent);
+	Request->SetContent(*RequestContent);
 
 
 	Request->SetURL("https://api-gateway-iu3tuzfidq-ez.a.run.app");
@@ -53,24 +54,26 @@ void UProVRSessionInterface::OnCreateSessionComplete(FHttpRequestPtr Request, FH
 			{
 				OnCreateSessionCompleteDelegate.Broadcast(true, JsonField);
 			}
-			
 		}
-
 	}
 }
 
 
 void UProVRSessionInterface::SearchSessions()
 {
-	FHttpModule* Http = &FHttpModule::Get();
-	TSharedRef<IHttpRequest, ESPMode::ThreadSafe> Request = Http->CreateRequest();
-
-	Request->SetHeader(TEXT("Content-Type"), TEXT("Something"));  //Something usefull
-	Request->SetVerb("GET");
-	Request->SetURL("https://api-gateway-iu3tuzfidq-ez.a.run.app");
-	Request->OnProcessRequestComplete().BindUObject(this, &UProVRSessionInterface::OnSearchSessionComplete);
-	Request->ProcessRequest();
-
+	if (UProVRGameInstance* GameInstance = UProVRGameInstance::GetCurrentGameInstance())
+	{
+		if (UProVRNetworkManager* NetworkManager = GameInstance->GetNetworkManager())
+		{
+			FHttpModule* Http = &FHttpModule::Get();
+			TSharedRef<IHttpRequest, ESPMode::ThreadSafe> Request = Http->CreateRequest();
+			Request->SetHeader(TEXT("Content-Type"), TEXT("Something"));  //Something usefull
+			Request->SetVerb("GET");
+			Request->SetURL("https://api-gateway-iu3tuzfidq-ez.a.run.app?" + NetworkManager->GetUsername());
+			Request->OnProcessRequestComplete().BindUObject(this, &UProVRSessionInterface::OnSearchSessionComplete);
+			Request->ProcessRequest();
+		}
+	}
 }
 
 
@@ -86,7 +89,6 @@ void UProVRSessionInterface::OnSearchSessionComplete(FHttpRequestPtr Request, FH
 	{
 		TSharedPtr<FJsonObject> JsonObject;
 		TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(Response->GetContentAsString());
-
 		//DisplayedSessions.Add(FString, FString);
 	}
 }
