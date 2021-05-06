@@ -19,10 +19,12 @@ UCLASS()
 class PROVR_API UProVRFindSessionAction : public UProVRActionBase
 {
 	GENERATED_BODY()
+
 public:
 	virtual EProVRActionBehavior PerformAction();
 
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnFindSessionCompleteDelegate, bool, Success, FString, Message);
+	UPROPERTY(BlueprintAssignable, Category = "ProVR|Actions")
 	FOnFindSessionCompleteDelegate OnFindSessionCompleteDelegate;
 };
 

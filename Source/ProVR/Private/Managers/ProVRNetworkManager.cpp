@@ -13,10 +13,7 @@ void UProVRNetworkManager::RemoveHttpRequest(UProVRHttpRequest* HttpRequest)
 {
 	ActiveHttpRequests.Remove(HttpRequest);
 }
-int32 UProVRNetworkManager::GetSessionId()
-{
-	return SessionId;
-}
+
 //EmailAdress -> Username | David 15.04
 void UProVRNetworkManager::PerformLoginRequest(const FString& Username, const FString& Password, TFunction<void(int32)> OnCompleted) //EmailAdress -> Username
 {

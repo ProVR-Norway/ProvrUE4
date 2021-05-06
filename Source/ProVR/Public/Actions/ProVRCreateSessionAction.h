@@ -32,6 +32,7 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ProVR|Actions")
 	int64 MaxPlayers;
 
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnCreateSessionCompleteDelegate, bool, Success, FString, Message);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnCreateSessionCompleteDelegate, bool, Success, FString, Message, int64, SessionID);
+	UPROPERTY(BlueprintAssignable, Category = "ProVR|Actions")
 	FOnCreateSessionCompleteDelegate OnCreateSessionCompleteDelegate;
 };

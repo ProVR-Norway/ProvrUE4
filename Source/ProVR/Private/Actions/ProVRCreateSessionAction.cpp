@@ -5,6 +5,7 @@
 #include "Managers/ProVRNetworkManager.h"
 #include "ProVRGameInstance.h"
 #include "Network/ProVRHttpRequest.h"
+#include "GenericPlatform/GenericPlatform.h"
 #include "..\..\Public\Actions\ProVRCreateSessionAction.h"
 
 UProVRCreateSessionAction::UProVRCreateSessionAction()
@@ -24,7 +25,7 @@ EProVRActionBehavior UProVRCreateSessionAction::PerformAction()
 		RequestJson->SetStringField("sessionName", SessionName);
 		RequestJson->SetStringField("mapName", MapName);
 		RequestJson->SetNumberField("maxParticipants", MaxPlayers);  //possible cast issues
-		RequestJson->SetStringField("hostUsername", NetworkManager->GetUsername());
+		RequestJson->SetStringField("hostUsername", *FGenericPlatformHttp::UrlEncode(NetworkManager->GetUsername()));
 		}
 	}
 	UProVRHttpRequest::PostJson(SESSION_BASE_PATH, RequestJson,
@@ -32,32 +33,33 @@ EProVRActionBehavior UProVRCreateSessionAction::PerformAction()
 		{
 			if (EHttpResponseCodes::IsOk(HttpResponseCode))
 			{
-				FString JsonField = HttpResponseContent->GetStringField("message");// what?????
-				OnCreateSessionCompleteDelegate.Broadcast(true, JsonField);
+				int64 JsonField = HttpResponseContent->GetIntegerField("sessionId");
+				FString Message_ = TEXT("success");
+				OnCreateSessionCompleteDelegate.Broadcast(true, Message_, JsonField);
 			}
 			if (HttpResponseCode == 401)
 			{
 				FString WarningMessage = TEXT("error 401 Unauthorized.Please re - login");
 				UE_LOG(LogTemp, Warning, TEXT("error 401 Unauthorized.Please re - login"));
-				OnCreateSessionCompleteDelegate.Broadcast(false, WarningMessage);
+				OnCreateSessionCompleteDelegate.Broadcast(false, WarningMessage, -1);
 			}
 			if (HttpResponseCode == 404)
 			{
 				FString WarningMessage = TEXT("error 404 User does not exist");
 				UE_LOG(LogTemp, Warning, TEXT("error 404 User does not exist"));
-				OnCreateSessionCompleteDelegate.Broadcast(false, WarningMessage);
+				OnCreateSessionCompleteDelegate.Broadcast(false, WarningMessage, -1);
 			}
 			if (HttpResponseCode == 500 || HttpResponseCode == HTTP_UNEXPECTED_ERROR)
 			{
 				FString WarningMessage = TEXT("error 500 Internal error");
 				UE_LOG(LogTemp, Warning, TEXT("error 500 Internal error"));
-				OnCreateSessionCompleteDelegate.Broadcast(false, WarningMessage);
+				OnCreateSessionCompleteDelegate.Broadcast(false, WarningMessage, -1);
 			}
 			if (HttpResponseCode == 503)
 			{
 				FString WarningMessage = TEXT("error 503 No servers are currently available");
 				UE_LOG(LogTemp, Warning, TEXT("error 503 No servers are currently available"));
-				OnCreateSessionCompleteDelegate.Broadcast(false, WarningMessage);
+				OnCreateSessionCompleteDelegate.Broadcast(false, WarningMessage, -1);
 			}
 			else
 			{
@@ -66,7 +68,7 @@ EProVRActionBehavior UProVRCreateSessionAction::PerformAction()
 					UE_LOG(LogTemp, Error, TEXT("%s"), *HttpResponseContent->GetStringField("message"));
 				}
 
-				OnCreateSessionCompleteDelegate.Broadcast(false, *HttpResponseContent->GetStringField("message"));
+				OnCreateSessionCompleteDelegate.Broadcast(false, *HttpResponseContent->GetStringField("message"), -1);
 			}
 
 			OnAsyncronousActionCompleted();
@@ -74,3 +76,5 @@ EProVRActionBehavior UProVRCreateSessionAction::PerformAction()
 
 	return EProVRActionBehavior::Asynchronous;
 }
+
+

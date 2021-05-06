@@ -9,15 +9,23 @@
 EProVRActionBehavior UProVRJoinSessionAction::PerformAction()
 {
 	TSharedPtr<FJsonObject> RequestJson = MakeShareable(new FJsonObject);
-
-	if (UProVRGameInstance* GameInstance = UProVRGameInstance::GetCurrentGameInstance())
+		if (UProVRGameInstance* GameInstance = UProVRGameInstance::GetCurrentGameInstance())
 	{
 		if (UProVRNetworkManager* NetworkManager = GameInstance->GetNetworkManager())
 		{
-
 			RequestJson->SetStringField("userName", NetworkManager->GetUsername());
+			if (!JoinSessionAfterCreation)
+			{
+				for (int i = 0; i < NetworkManager->SessionList.Num(); i++)
+				{
+					if (NetworkManager->SessionList[i].SessionName == SessionName)
+						SessionId = NetworkManager->SessionList[i].SessionId;
+				}
+			}
+			
+			FString URLPath = SESSION_BASE_PATH + FString::Printf(TEXT("/%d/participants"), SessionId);
+			UProVRHttpRequest::PostJson(URLPath, RequestJson,
 
-			UProVRHttpRequest::PostJson(SESSION_BASE_PATH + NetworkManager->GetSessionId() + "/Participants", RequestJson,
 				[this](int32 HttpResponseCode, TSharedPtr<FJsonObject> HttpResponseContent)
 				{
 					FString Message_ = HttpResponseContent->GetStringField("message");

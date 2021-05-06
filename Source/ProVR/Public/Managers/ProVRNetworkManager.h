@@ -35,7 +35,7 @@ struct FProVRSessionsOverview {
 public:
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-		int32 SessionId;
+		int64 SessionId;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 		FString SessionName;
@@ -70,7 +70,6 @@ private:
 	FString CurrentAuthToken;
 	FString LastUsername;
 	FString LastPassword;
-	int32 SessionId;
 
 	UPROPERTY()
 		TArray<class UProVRHttpRequest*> ActiveHttpRequests;
@@ -93,12 +92,11 @@ public:
 	void TryRenewingAuthToken(TFunction<void(int32)> OnCompleted);
 	void PushNewHttpRequest(class UProVRHttpRequest* NewHttpRequest);
 	void RemoveHttpRequest(class UProVRHttpRequest* HttpRequest);
-	int32 GetSessionId();
 
 	UFUNCTION(BlueprintCallable, Category = "ProVRNetworkManager")
 	FString GetUsername();
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ProVR|Actions")
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ProVRNetworkManager")
 	TArray<FProVRSessionsOverview> SessionList;
 
 	friend class UProVRHttpRequest;

@@ -17,8 +17,19 @@ UCLASS()
 class PROVR_API UProVRJoinSessionAction : public UProVRActionBase
 {
 	GENERATED_BODY()
+public:
 	virtual EProVRActionBehavior PerformAction();
 
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnJoinSessionCompleteDelegate, bool, Success);
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ProVR|Actions")
+	FString SessionName;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ProVR|Actions")
+	int64 SessionId;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ProVR|Actions")
+	bool JoinSessionAfterCreation = false;
+
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnJoinSessionCompleteDelegate, bool, Success, FString, Message);
+	UPROPERTY(BlueprintAssignable, Category = "ProVR|Actions")
 	FOnJoinSessionCompleteDelegate OnJoinSessionCompleteDelegate;
 };
