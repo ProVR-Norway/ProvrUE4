@@ -16,7 +16,7 @@ EProVRActionBehavior UProVRFindSessionAction::PerformAction()
 	{
 		if (UProVRNetworkManager* NetworkManager = GameInstance->GetNetworkManager())
 		{
-			UProVRHttpRequest::Get(SESSION_BASE_PATH + "?username=" + *FGenericPlatformHttp::UrlEncode(NetworkManager->GetUsername()),  // query to API
+			UProVRHttpRequest::GetWithAuthToken(SESSION_BASE_PATH + "?username=" + *FGenericPlatformHttp::UrlEncode(NetworkManager->GetUsername()),  // query to API
 				[this](int32 HttpResponseCode, TSharedPtr<FJsonObject> HttpResponseContent)
 				{
 					if (EHttpResponseCodes::IsOk(HttpResponseCode))

@@ -28,7 +28,7 @@ EProVRActionBehavior UProVRCreateSessionAction::PerformAction()
 		RequestJson->SetStringField("hostUsername", *FGenericPlatformHttp::UrlEncode(NetworkManager->GetUsername()));
 		}
 	}
-	UProVRHttpRequest::PostJson(SESSION_BASE_PATH, RequestJson,
+	UProVRHttpRequest::PostJsonWithAuthToken(SESSION_BASE_PATH, RequestJson,
 		[this](int32 HttpResponseCode, TSharedPtr<FJsonObject> HttpResponseContent)
 		{
 			if (EHttpResponseCodes::IsOk(HttpResponseCode))

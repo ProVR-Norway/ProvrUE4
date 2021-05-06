@@ -12,7 +12,7 @@ EProVRActionBehavior UProVRListAllModelsAction::PerformAction()
     FString UrlEncodedUsername = FGenericPlatformHttp::UrlEncode(Username);
 
     FString FullPath = CAD_SERVICE_LIST_ALL_MODELS_PATH + UrlEncodedUsername;
-    UProVRHttpRequest::Get(FullPath, [this](int32 HttpResponseCode, TSharedPtr<FJsonObject> HttpResponseContent)
+    UProVRHttpRequest::GetWithAuthToken(FullPath, [this](int32 HttpResponseCode, TSharedPtr<FJsonObject> HttpResponseContent)
     {
         if (EHttpResponseCodes::IsOk(HttpResponseCode))
         {

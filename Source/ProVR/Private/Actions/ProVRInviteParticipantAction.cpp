@@ -38,7 +38,7 @@ EProVRActionBehavior UProVRInviteParticipantAction::PerformAction()
 			//Request->SetURL(FString::Printf(TEXT("https://%s/sessions/%d"), *config->ServerAddress, SessionInfo->SessionIdMySQL));
 			//FString URLPath = FString::Printf(TEXT("%s/%d/invited"), SESSION_BASE_PATH, SessionId);
 			FString URLPath = SESSION_BASE_PATH + FString::Printf(TEXT("/%d/invited"), SessionId);
-			UProVRHttpRequest::PostJson( URLPath, RequestJson,
+			UProVRHttpRequest::PostJsonWithAuthToken(URLPath, RequestJson,
 				[this](int32 HttpResponseCode, TSharedPtr<FJsonObject> HttpResponseContent)
 				{
 					FString Message_ = HttpResponseContent->GetStringField("message");

@@ -24,7 +24,7 @@ EProVRActionBehavior UProVRJoinSessionAction::PerformAction()
 			}
 			
 			FString URLPath = SESSION_BASE_PATH + FString::Printf(TEXT("/%d/participants"), SessionId);
-			UProVRHttpRequest::PostJson(URLPath, RequestJson,
+			UProVRHttpRequest::PostJsonWithAuthToken(URLPath, RequestJson,
 
 				[this](int32 HttpResponseCode, TSharedPtr<FJsonObject> HttpResponseContent)
 				{
