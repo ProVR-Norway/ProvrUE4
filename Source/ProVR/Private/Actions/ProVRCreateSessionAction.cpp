@@ -27,15 +27,14 @@ EProVRActionBehavior UProVRCreateSessionAction::PerformAction()
 		RequestJson->SetStringField("hostUsername", NetworkManager->GetUsername());
 		}
 	}
-
-	else
-	{
-		OnAsyncronousActionCompleted(); // Do something else here!!!!
-	}
-
-	UProVRHttpRequest::PostJson("RandomAddress", RequestJson,
+	UProVRHttpRequest::PostJson(SESSION_BASE_PATH, RequestJson,
 		[this](int32 HttpResponseCode, TSharedPtr<FJsonObject> HttpResponseContent)
 		{
+			if (EHttpResponseCodes::IsOk(HttpResponseCode))
+			{
+				FString JsonField = HttpResponseContent->GetStringField("message");// what?????
+				OnCreateSessionCompleteDelegate.Broadcast(true, JsonField);
+			}
 			if (HttpResponseCode == 401)
 			{
 				FString WarningMessage = TEXT("error 401 Unauthorized.Please re - login");
@@ -60,16 +59,14 @@ EProVRActionBehavior UProVRCreateSessionAction::PerformAction()
 				UE_LOG(LogTemp, Warning, TEXT("error 503 No servers are currently available"));
 				OnCreateSessionCompleteDelegate.Broadcast(false, WarningMessage);
 			}
-			if (EHttpResponseCodes::IsOk(HttpResponseCode))
+			else
 			{
-				FString JsonField = HttpResponseContent->GetStringField(TEXT("message"));
-				OnCreateSessionCompleteDelegate.Broadcast(true, JsonField);
-			}
-			if (!EHttpResponseCodes::IsOk(HttpResponseCode))
-			{
-				FString WarningMessage = TEXT("Somewent wrong!");
-				UE_LOG(LogTemp, Warning, TEXT("Error Creating Session: UProVRSessionInterface::OnCreateSessionComplete"));
-				OnCreateSessionCompleteDelegate.Broadcast(false, WarningMessage);
+				if (HttpResponseContent->HasTypedField<EJson::String>("message"))
+				{
+					UE_LOG(LogTemp, Error, TEXT("%s"), *HttpResponseContent->GetStringField("message"));
+				}
+
+				OnCreateSessionCompleteDelegate.Broadcast(false, *HttpResponseContent->GetStringField("message"));
 			}
 
 			OnAsyncronousActionCompleted();

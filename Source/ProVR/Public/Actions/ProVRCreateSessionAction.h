@@ -10,6 +10,9 @@
 /**
  * 
  */
+
+#define SESSION_BASE_PATH FString(TEXT("https://session-microservice-iu3tuzfidq-ez.a.run.app/sessions"))
+
 UCLASS()
 class PROVR_API UProVRCreateSessionAction : public UProVRActionBase
 {

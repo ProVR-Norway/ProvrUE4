@@ -2,47 +2,65 @@
 
 
 #include "Actions/ProVRInviteParticipantAction.h"
+#include "ProVRGameInstance.h"
+#include "Managers/ProVRNetworkManager.h"
 
 
 
 EProVRActionBehavior UProVRInviteParticipantAction::PerformAction()
 {
-	/*
+	
 	TSharedPtr<FJsonObject> RequestJson = MakeShareable(new FJsonObject);
+	TArray<TSharedPtr<FJsonValue>> JsonContent;
+	for (int i = 0; i < ParticipantsToInvite.Num(); i++)
+	{
+		JsonContent.Add(ParticipantsToInvite[i]);
+	}
+	RequestJson->SetArrayField(JsonContent);
 
 	if (UProVRGameInstance* GameInstance = UProVRGameInstance::GetCurrentGameInstance())
 	{
 		if (UProVRNetworkManager* NetworkManager = GameInstance->GetNetworkManager())
 		{
-
-			//RequestJson->SetArrayField();
+			int32 SessionID = NetworkManager->GetSessionId();
+			UProVRHttpRequest::PostJson(SESSION_BASE_PATH + SessionID + "invited" , RequestJson,
+				[this](int32 HttpResponseCode, TSharedPtr<FJsonObject> HttpResponseContent)
+				{
+					FString Message_ = HttpResponseContent->GetStringField();
+					if (EHttpResponseCodes::IsOk(HttpResponseCode))
+					{
+						OnInviteParticipantComplete.Broadcast(true, Message_);
+					}
+					if (HttpResponseCode == 401)
+					{
+						UE_LOG(LogTemp, Warning, TEXT("error 401 Unauthorized.Please re - login"));
+					OnInviteParticipantComplete.Broadcast(false, Message_);
+					}
+					if (HttpResponseCode == 404)
+					{
+						UE_LOG(LogTemp, Warning, TEXT("error 404 Session does not exist"));
+						OnInviteParticipantComplete.Broadcast(false, Message_);
+					}
+					if (HttpResponseCode == 500 || HttpResponseCode == HTTP_UNEXPECTED_ERROR)
+					{
+						UE_LOG(LogTemp, Warning, TEXT("error 500 Internal error"));
+						OnInviteParticipantComplete.Broadcast(false, Message_);
+					}
+					else
+					{
+						if (HttpResponseContent->HasTypedField<EJson::String>("message"))
+						{
+							UE_LOG(LogTemp, Error, TEXT("%s"), *HttpResponseContent->GetStringField("message"));
+						}
+						OnInviteParticipantComplete.Broadcast(false, *HttpResponseContent->GetStringField("message"));
+					}
+					OnAsyncronousActionCompleted();
+				});
 		}
 	}
 
-	else
-	{
-		OnAsyncronousActionCompleted(); // Do something else here!!!!
-	}
+	
 
-	UProVRHttpRequest::PostJson("RandomAddress", RequestJson,
-		[this](int32 HttpResponseCode, TSharedPtr<FJsonObject> HttpResponseContent)
-		{
-			if (!EHttpResponseCodes::IsOk(HttpResponseCode))
-			{
-				FString WarningMessage = TEXT("Somewent wrong!");
-				UE_LOG(LogTemp, Warning, TEXT("Error Creating Session: UProVRSessionInterface::OnCreateSessionComplete"));
-				OnActionComplete.Broadcast(false, WarningMessage);
-			}
-			else if (EHttpResponseCodes::IsOk(HttpResponseCode))
-			{
-				FString JsonField = HttpResponseContent->GetStringField(TEXT("message"));
-				OnActionComplete.Broadcast(true, JsonField);
-			}
+	return EProVRActionBehavior::Asynchronous;
 
-			OnAsyncronousActionCompleted();
-		});
-
-	return EProVRActionBehavior::Asynchronous
-	*/
-	return EProVRActionBehavior::Synchronous;
 }

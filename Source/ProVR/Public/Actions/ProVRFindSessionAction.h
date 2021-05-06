@@ -12,35 +12,9 @@
  * 
  */
 
-USTRUCT(BlueprintType)
-struct FProVRSessionsOverview {
+#define SESSION_BASE_PATH FString(TEXT("https://session-microservice-iu3tuzfidq-ez.a.run.app/sessions"))
 
-	GENERATED_BODY()
 
-public:
-
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-		FString SessionName;
-
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-		FString MapName;
-
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-		int64 maxParticipants;
-
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-		int64 ParticipantCount;
-
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-		FString HostUsername;
-
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-		FString HostIP;
-
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-		int64 HostPort;
-
-};
 UCLASS()
 class PROVR_API UProVRFindSessionAction : public UProVRActionBase
 {
@@ -48,8 +22,8 @@ class PROVR_API UProVRFindSessionAction : public UProVRActionBase
 public:
 	virtual EProVRActionBehavior PerformAction();
 
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCreateSessionCompleteDelegate, bool, Success);
-	FOnCreateSessionCompleteDelegate OnCreateSessionCompleteDelegate;
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnFindSessionCompleteDelegate, bool, Success, FString, Message);
+	FOnFindSessionCompleteDelegate OnFindSessionCompleteDelegate;
 };
 
 
