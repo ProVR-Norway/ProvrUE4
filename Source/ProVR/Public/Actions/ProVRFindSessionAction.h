@@ -11,6 +11,36 @@
 /**
  * 
  */
+
+USTRUCT(BlueprintType)
+struct FProVRSessionsOverview {
+
+	GENERATED_BODY()
+
+public:
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+		FString SessionName;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+		FString MapName;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+		int64 maxParticipants;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+		int64 ParticipantCount;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+		FString HostUsername;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+		FString HostIP;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+		int64 HostPort;
+
+};
 UCLASS()
 class PROVR_API UProVRFindSessionAction : public UProVRActionBase
 {

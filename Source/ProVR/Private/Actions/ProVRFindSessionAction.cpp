@@ -27,7 +27,17 @@ EProVRActionBehavior UProVRFindSessionAction::PerformAction()
 					else if (EHttpResponseCodes::IsOk(HttpResponseCode))
 					{
 
-						//DisplayedSessions.Add(FString, FString);
+						TArray<TSharedPtr<FJsonValue>> ModelListJSON = HttpResponseContent->GetArrayField("models");
+						for (int32 index = 0; index < ModelListJSON.Num(); index++)
+						{
+							/*
+							TSharedPtr<FJsonObject> obj = ModelListJSON[index]->AsObject();
+							FProVRUserModel CurrentModel;
+							CurrentModel.ModelName = obj->GetStringField("modelName");
+							CurrentModel.DateUploaded = obj->GetStringField("dateUploaded");
+							UserModelList.Add(CurrentModel);
+							*/
+						}
 					}
 
 					OnAsyncronousActionCompleted();

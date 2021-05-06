@@ -20,7 +20,8 @@ class PROVR_API UProVRCreateSessionAction : public UProVRActionBase
 public:
 	virtual EProVRActionBehavior PerformAction();
 	
-	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ProVR|Actions")
+	FString MapName;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ProVR|Actions")
 	FString SessionName;

@@ -15,7 +15,7 @@ EProVRActionBehavior UProVRJoinSessionAction::PerformAction()
 			if (UProVRNetworkManager* NetworkManager = GameInstance->GetNetworkManager())
 			{
 				FString* URLAddress_ = NetworkManager->DisplayedSessions.Find("SessionName");
-				UGameplayStatics::OpenLevel(World, FName(*URLAddress_), false, "");
+				UGameplayStatics::OpenLevel(World, "35.204.67.86", false, "");
 
 			}
 		}

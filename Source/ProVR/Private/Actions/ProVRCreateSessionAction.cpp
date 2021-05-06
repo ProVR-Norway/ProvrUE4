@@ -22,6 +22,7 @@ EProVRActionBehavior UProVRCreateSessionAction::PerformAction()
 		{
 		
 		RequestJson->SetStringField("sessionName", SessionName);
+		RequestJson->SetStringField("mapName", MapName);
 		RequestJson->SetNumberField("maxParticipants", MaxPlayers);  //possible cast issues
 		RequestJson->SetStringField("hostUsername", NetworkManager->GetUsername());
 		}
@@ -35,16 +36,40 @@ EProVRActionBehavior UProVRCreateSessionAction::PerformAction()
 	UProVRHttpRequest::PostJson("RandomAddress", RequestJson,
 		[this](int32 HttpResponseCode, TSharedPtr<FJsonObject> HttpResponseContent)
 		{
+			if (HttpResponseCode == 401)
+			{
+				FString WarningMessage = TEXT("error 401 Unauthorized.Please re - login");
+				UE_LOG(LogTemp, Warning, TEXT("error 401 Unauthorized.Please re - login"));
+				OnCreateSessionCompleteDelegate.Broadcast(false, WarningMessage);
+			}
+			if (HttpResponseCode == 404)
+			{
+				FString WarningMessage = TEXT("error 404 User does not exist");
+				UE_LOG(LogTemp, Warning, TEXT("error 404 User does not exist"));
+				OnCreateSessionCompleteDelegate.Broadcast(false, WarningMessage);
+			}
+			if (HttpResponseCode == 500 || HttpResponseCode == HTTP_UNEXPECTED_ERROR)
+			{
+				FString WarningMessage = TEXT("error 500 Internal error");
+				UE_LOG(LogTemp, Warning, TEXT("error 500 Internal error"));
+				OnCreateSessionCompleteDelegate.Broadcast(false, WarningMessage);
+			}
+			if (HttpResponseCode == 503)
+			{
+				FString WarningMessage = TEXT("error 503 No servers are currently available");
+				UE_LOG(LogTemp, Warning, TEXT("error 503 No servers are currently available"));
+				OnCreateSessionCompleteDelegate.Broadcast(false, WarningMessage);
+			}
+			if (EHttpResponseCodes::IsOk(HttpResponseCode))
+			{
+				FString JsonField = HttpResponseContent->GetStringField(TEXT("message"));
+				OnCreateSessionCompleteDelegate.Broadcast(true, JsonField);
+			}
 			if (!EHttpResponseCodes::IsOk(HttpResponseCode))
 			{
 				FString WarningMessage = TEXT("Somewent wrong!");
 				UE_LOG(LogTemp, Warning, TEXT("Error Creating Session: UProVRSessionInterface::OnCreateSessionComplete"));
 				OnCreateSessionCompleteDelegate.Broadcast(false, WarningMessage);
-			}
-			else if (EHttpResponseCodes::IsOk(HttpResponseCode))
-			{
-				FString JsonField = HttpResponseContent->GetStringField(TEXT("message"));
-				OnCreateSessionCompleteDelegate.Broadcast(true, JsonField);
 			}
 
 			OnAsyncronousActionCompleted();
