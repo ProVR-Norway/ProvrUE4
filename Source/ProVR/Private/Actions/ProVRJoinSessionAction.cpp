@@ -35,22 +35,22 @@ EProVRActionBehavior UProVRJoinSessionAction::PerformAction()
 								}
 							}
 						}
-						OnJoinSessionCompleteDelegate.Broadcast(true);
+						OnJoinSessionCompleteDelegate.Broadcast(true, "Joined successful!!");
 					}
 					if (HttpResponseCode == 401)
 					{
 						UE_LOG(LogTemp, Warning, TEXT("error 401 Unauthorized.Please re - login"));
-						OnJoinSessionCompleteDelegate.Broadcast(false);
+						OnJoinSessionCompleteDelegate.Broadcast(false, TEXT("error 401 Unauthorized.Please re - login"));
 					}
 					if (HttpResponseCode == 404)
 					{
 						UE_LOG(LogTemp, Warning, TEXT("error 404 Session does not exist"));
-						OnJoinSessionCompleteDelegate.Broadcast(false);
+						OnJoinSessionCompleteDelegate.Broadcast(false, TEXT("error 404 Session does not exist"));
 					}
 					if (HttpResponseCode == 500 || HttpResponseCode == HTTP_UNEXPECTED_ERROR)
 					{
 						UE_LOG(LogTemp, Warning, TEXT("error 500 Internal error"));
-						OnJoinSessionCompleteDelegate.Broadcast(false);
+						OnJoinSessionCompleteDelegate.Broadcast(false, TEXT("error 500 Internal error"));
 					}
 					else
 					{
@@ -58,7 +58,7 @@ EProVRActionBehavior UProVRJoinSessionAction::PerformAction()
 						{
 							UE_LOG(LogTemp, Error, TEXT("%s"), *HttpResponseContent->GetStringField("message"));
 						}
-						OnJoinSessionCompleteDelegate.Broadcast(false);
+						OnJoinSessionCompleteDelegate.Broadcast(false, *HttpResponseContent->GetStringField("message"));
 					}
 					OnAsyncronousActionCompleted();
 				});
