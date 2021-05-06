@@ -10,12 +10,11 @@ void UProVRHttpRequest::Get(const FString& _Path, TFunction<void(int32, TSharedP
 {
 	if (UProVRHttpRequest* CreatedRequest = CreateInternalRequest(_Path, _OnResponseCompleted))
 	{
-		if (UProVRNetworkManager* NetworkManager = UProVRGameInstance::GetNetworkManager())
-		{
-			CreatedRequest->InternalHttpRequest->SetVerb("GET");
-			CreatedRequest->RequestType = EHttpRequestType::ENUM_Get;
-			CreatedRequest->ProcessInternalRequest();
-		}
+
+		CreatedRequest->InternalHttpRequest->SetVerb("GET");
+		CreatedRequest->RequestType = EHttpRequestType::ENUM_Get;
+		CreatedRequest->ProcessInternalRequest();
+
 	}
 	else
 	{
@@ -59,10 +58,13 @@ void UProVRHttpRequest::DeleteWithAuthToken(const FString& _Path, TFunction<void
 {
 	if (UProVRHttpRequest* CreatedRequest = CreateInternalRequest(_Path, _OnResponseCompleted))
 	{
-		CreatedRequest->InternalHttpRequest->SetVerb("DELETE");
-		CreatedRequest->InternalHttpRequest->SetHeader("Authorization", "Basic " + NetworkManager->GetCurrentAuthToken());
-		CreatedRequest->RequestType = EHttpRequestType::ENUM_Delete;
-		CreatedRequest->ProcessInternalRequest();
+		if (UProVRNetworkManager* NetworkManager = UProVRGameInstance::GetNetworkManager())
+		{
+			CreatedRequest->InternalHttpRequest->SetVerb("DELETE");
+			CreatedRequest->InternalHttpRequest->SetHeader("Authorization", "Basic " + NetworkManager->GetCurrentAuthToken());
+			CreatedRequest->RequestType = EHttpRequestType::ENUM_Delete;
+			CreatedRequest->ProcessInternalRequest();
+		}
 	}
 	else
 	{
@@ -112,22 +114,25 @@ void UProVRHttpRequest::PostJsonWithAuthToken(const FString& _Path, TSharedPtr<F
 
 	if (UProVRHttpRequest* CreatedRequest = CreateInternalRequest(_Path, _OnResponseCompleted))
 	{
-		CreatedRequest->InternalHttpRequest->SetVerb("POST");
-		CreatedRequest->InternalHttpRequest->SetHeader("Content-Type", "application/json");
-		CreatedRequest->InternalHttpRequest->SetHeader("Authorization", "Basic " + NetworkManager->GetCurrentAuthToken());
-		CreatedRequest->RequestType = EHttpRequestType::ENUM_Post;
+		if (UProVRNetworkManager* NetworkManager = UProVRGameInstance::GetNetworkManager())
+		{
+			CreatedRequest->InternalHttpRequest->SetVerb("POST");
+			CreatedRequest->InternalHttpRequest->SetHeader("Content-Type", "application/json");
+			CreatedRequest->InternalHttpRequest->SetHeader("Authorization", "Basic " + NetworkManager->GetCurrentAuthToken());
+			CreatedRequest->RequestType = EHttpRequestType::ENUM_Post;
 
-		FString OutputString;
-		TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&OutputString);
-		FJsonSerializer::Serialize(_Content.ToSharedRef(), Writer);
+			FString OutputString;
+			TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&OutputString);
+			FJsonSerializer::Serialize(_Content.ToSharedRef(), Writer);
 
 
-		const FTCHARToUTF8 Converter(*OutputString, OutputString.Len());
-		CreatedRequest->RequestContent.Append(reinterpret_cast<const uint8*>(Converter.Get()), Converter.Length());
-		CreatedRequest->InternalHttpRequest->SetContent(CreatedRequest->RequestContent);
+			const FTCHARToUTF8 Converter(*OutputString, OutputString.Len());
+			CreatedRequest->RequestContent.Append(reinterpret_cast<const uint8*>(Converter.Get()), Converter.Length());
+			CreatedRequest->InternalHttpRequest->SetContent(CreatedRequest->RequestContent);
 
-		//CreatedRequest->InternalHttpRequest->SetContentAsString(OutputString);
-		CreatedRequest->ProcessInternalRequest();
+			//CreatedRequest->InternalHttpRequest->SetContentAsString(OutputString);
+			CreatedRequest->ProcessInternalRequest();
+		}
 	}
 	else
 	{
@@ -176,19 +181,22 @@ void UProVRHttpRequest::PutJsonWithAuthToken(const FString& _Path, TSharedPtr<FJ
 
 	if (UProVRHttpRequest* CreatedRequest = CreateInternalRequest(_Path, _OnResponseCompleted))
 	{
-		CreatedRequest->InternalHttpRequest->SetVerb("PUT");
-		CreatedRequest->InternalHttpRequest->SetHeader("Authorization", "Basic " + NetworkManager->GetCurrentAuthToken());
-		CreatedRequest->RequestType = EHttpRequestType::ENUM_Put;
+		if (UProVRNetworkManager* NetworkManager = UProVRGameInstance::GetNetworkManager())
+		{
+			CreatedRequest->InternalHttpRequest->SetVerb("PUT");
+			CreatedRequest->InternalHttpRequest->SetHeader("Authorization", "Basic " + NetworkManager->GetCurrentAuthToken());
+			CreatedRequest->RequestType = EHttpRequestType::ENUM_Put;
 
-		FString OutputString;
-		TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&OutputString);
-		FJsonSerializer::Serialize(_Content.ToSharedRef(), Writer);
+			FString OutputString;
+			TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&OutputString);
+			FJsonSerializer::Serialize(_Content.ToSharedRef(), Writer);
 
-		const FTCHARToUTF8 Converter(*OutputString, OutputString.Len());
-		CreatedRequest->RequestContent.Append(reinterpret_cast<const uint8*>(Converter.Get()), Converter.Length());
-		CreatedRequest->InternalHttpRequest->SetContent(CreatedRequest->RequestContent);
+			const FTCHARToUTF8 Converter(*OutputString, OutputString.Len());
+			CreatedRequest->RequestContent.Append(reinterpret_cast<const uint8*>(Converter.Get()), Converter.Length());
+			CreatedRequest->InternalHttpRequest->SetContent(CreatedRequest->RequestContent);
 
-		CreatedRequest->ProcessInternalRequest();
+			CreatedRequest->ProcessInternalRequest();
+		}
 	}
 	else
 	{
@@ -231,14 +239,17 @@ void UProVRHttpRequest::PutFileWithAuthToken(const FString& _Path, const TArray<
 
 	if (UProVRHttpRequest* CreatedRequest = CreateInternalRequest(_Path, _OnResponseCompleted))
 	{
-		CreatedRequest->RequestContent = _Content;
+		if (UProVRNetworkManager* NetworkManager = UProVRGameInstance::GetNetworkManager())
+		{
+			CreatedRequest->RequestContent = _Content;
 
-		CreatedRequest->InternalHttpRequest->SetVerb("PUT");
-		CreatedRequest->InternalHttpRequest->SetHeader("Authorization", "Basic " + NetworkManager->GetCurrentAuthToken());
-		CreatedRequest->RequestType = EHttpRequestType::ENUM_Put;
-		CreatedRequest->InternalHttpRequest->SetContent(_Content);
+			CreatedRequest->InternalHttpRequest->SetVerb("PUT");
+			CreatedRequest->InternalHttpRequest->SetHeader("Authorization", "Basic " + NetworkManager->GetCurrentAuthToken());
+			CreatedRequest->RequestType = EHttpRequestType::ENUM_Put;
+			CreatedRequest->InternalHttpRequest->SetContent(_Content);
 
-		CreatedRequest->ProcessInternalRequest();
+			CreatedRequest->ProcessInternalRequest();
+		}
 	}
 	else
 	{
