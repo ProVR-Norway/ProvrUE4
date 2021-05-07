@@ -11,7 +11,7 @@
  * 
  */
 
-#define SESSION_BASE_PATH FString(TEXT("https://session-microservice-iu3tuzfidq-ez.a.run.app/sessions"))
+#define SESSION_BASE_PATH FString(TEXT("/sessions"))
 
 UCLASS()
 class PROVR_API UProVRJoinSessionAction : public UProVRActionBase
@@ -24,7 +24,7 @@ public:
 	FString SessionName;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ProVR|Actions")
-	int64 SessionId;
+	int32 SessionId;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ProVR|Actions")
 	bool JoinSessionAfterCreation = false;

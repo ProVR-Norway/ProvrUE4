@@ -20,7 +20,6 @@ EProVRActionBehavior UProVRInviteParticipantAction::PerformAction()
 		JsonContentArr.Add(JsonValue_);
 	}
 
-	//RequestJson->SetArrayField("invited");
 	RequestJson->SetArrayField("invited", JsonContentArr);
 
 	if (UProVRGameInstance* GameInstance = UProVRGameInstance::GetCurrentGameInstance())
@@ -42,21 +41,21 @@ EProVRActionBehavior UProVRInviteParticipantAction::PerformAction()
 				[this](int32 HttpResponseCode, TSharedPtr<FJsonObject> HttpResponseContent)
 				{
 					FString Message_ = HttpResponseContent->GetStringField("message");
-					if (EHttpResponseCodes::IsOk(HttpResponseCode))
+					if (HttpResponseCode == 200)
 					{
 						OnInviteParticipantCompleteDelegate.Broadcast(true, Message_);
 					}
-					if (HttpResponseCode == 401)
+					else if (HttpResponseCode == 401)
 					{
 						UE_LOG(LogTemp, Warning, TEXT("error 401 Unauthorized.Please re - login"));
 						OnInviteParticipantCompleteDelegate.Broadcast(false, Message_);
 					}
-					if (HttpResponseCode == 404)
+					else if (HttpResponseCode == 404)
 					{
 						UE_LOG(LogTemp, Warning, TEXT("error 404 Session does not exist"));
 						OnInviteParticipantCompleteDelegate.Broadcast(false, Message_);
 					}
-					if (HttpResponseCode == 500 || HttpResponseCode == HTTP_UNEXPECTED_ERROR)
+					else if (HttpResponseCode == 500 || HttpResponseCode == HTTP_UNEXPECTED_ERROR)
 					{
 						UE_LOG(LogTemp, Warning, TEXT("error 500 Internal error"));
 						OnInviteParticipantCompleteDelegate.Broadcast(false, Message_);

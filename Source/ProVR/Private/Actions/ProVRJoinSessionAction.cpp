@@ -13,7 +13,7 @@ EProVRActionBehavior UProVRJoinSessionAction::PerformAction()
 	{
 		if (UProVRNetworkManager* NetworkManager = GameInstance->GetNetworkManager())
 		{
-			RequestJson->SetStringField("userName", NetworkManager->GetUsername());
+			RequestJson->SetStringField("username", NetworkManager->GetUsername());
 			if (!JoinSessionAfterCreation)
 			{
 				for (int i = 0; i < NetworkManager->SessionList.Num(); i++)
@@ -29,7 +29,7 @@ EProVRActionBehavior UProVRJoinSessionAction::PerformAction()
 				[this](int32 HttpResponseCode, TSharedPtr<FJsonObject> HttpResponseContent)
 				{
 					FString Message_ = HttpResponseContent->GetStringField("message");
-					if (EHttpResponseCodes::IsOk(HttpResponseCode))
+					if (HttpResponseCode == 200)
 					{
 						if (UProVRGameInstance* GameInstance = UProVRGameInstance::GetCurrentGameInstance())
 						{
@@ -38,24 +38,24 @@ EProVRActionBehavior UProVRJoinSessionAction::PerformAction()
 								if (UProVRNetworkManager* NetworkManager = GameInstance->GetNetworkManager())
 								{
 									FString* URLAddress_ = NetworkManager->DisplayedSessions.Find("SessionName");
-									UGameplayStatics::OpenLevel(World, FName(HttpResponseContent->GetStringField("message")), false, "");
+									UGameplayStatics::OpenLevel(World, "34.90.23.60:7777/Game/Maps/TestMap", false, "");
 
 								}
 							}
 						}
 						OnJoinSessionCompleteDelegate.Broadcast(true, "Joined successful!!");
 					}
-					if (HttpResponseCode == 401)
+					else if (HttpResponseCode == 401)
 					{
 						UE_LOG(LogTemp, Warning, TEXT("error 401 Unauthorized.Please re - login"));
 						OnJoinSessionCompleteDelegate.Broadcast(false, TEXT("error 401 Unauthorized.Please re - login"));
 					}
-					if (HttpResponseCode == 404)
+					else if (HttpResponseCode == 404)
 					{
 						UE_LOG(LogTemp, Warning, TEXT("error 404 Session does not exist"));
 						OnJoinSessionCompleteDelegate.Broadcast(false, TEXT("error 404 Session does not exist"));
 					}
-					if (HttpResponseCode == 500 || HttpResponseCode == HTTP_UNEXPECTED_ERROR)
+					else if (HttpResponseCode == 500 || HttpResponseCode == HTTP_UNEXPECTED_ERROR)
 					{
 						UE_LOG(LogTemp, Warning, TEXT("error 500 Internal error"));
 						OnJoinSessionCompleteDelegate.Broadcast(false, TEXT("error 500 Internal error"));

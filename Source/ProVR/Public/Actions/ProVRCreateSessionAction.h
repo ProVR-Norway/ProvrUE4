@@ -11,7 +11,7 @@
  * 
  */
 
-#define SESSION_BASE_PATH FString(TEXT("https://session-microservice-iu3tuzfidq-ez.a.run.app/sessions"))
+#define SESSION_BASE_PATH FString(TEXT("/sessions"))
 
 UCLASS()
 class PROVR_API UProVRCreateSessionAction : public UProVRActionBase
@@ -30,9 +30,9 @@ public:
 	FString SessionName;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ProVR|Actions")
-	int64 MaxPlayers;
+	int32 MaxPlayers;
 
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnCreateSessionCompleteDelegate, bool, Success, FString, Message, int64, SessionID);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnCreateSessionCompleteDelegate, bool, Success, FString, Message, int32, SessionID);
 	UPROPERTY(BlueprintAssignable, Category = "ProVR|Actions")
 	FOnCreateSessionCompleteDelegate OnCreateSessionCompleteDelegate;
 };

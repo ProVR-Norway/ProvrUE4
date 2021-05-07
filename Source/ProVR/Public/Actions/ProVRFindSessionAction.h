@@ -12,7 +12,7 @@
  * 
  */
 
-#define SESSION_BASE_PATH FString(TEXT("https://session-microservice-iu3tuzfidq-ez.a.run.app/sessions"))
+#define SESSION_BASE_PATH FString(TEXT("/sessions"))
 
 
 UCLASS()
