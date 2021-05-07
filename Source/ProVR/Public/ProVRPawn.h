@@ -15,6 +15,7 @@ class UMotionControllerComponent;
 class USkeletalMeshComponent;
 class USceneComponent;
 class UProVRMovementController;
+class UCapsuleComponent;
 
 
 
@@ -28,6 +29,9 @@ public:
 	AProVRPawn();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "ProVR|Actions")
+		UCapsuleComponent* CapsuleComp;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "ProVR|Actions")
 		UProVRMovementController* PawnMovementComp;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "ProVR|Actions")
@@ -39,10 +43,19 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "ProVR|Actions")
 		UCameraComponent* CameraComp;
 
-	/*
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "ProVR|Actions")
+		USkeletalMeshComponent* SkeletalMeshComp;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "ProVR|Actions")
+		UMotionControllerComponent* LeftHandControllerComp;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "ProVR|Actions")
+		UMotionControllerComponent* RightHandControllerComp;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "ProVR|Actions")
 		UWidgetInteractionComponent* WidgetInteractionComp;
 
+	/*
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "ProVR|Actions")
 		UMotionControllerComponent* MotionControllerCompRight;
 
