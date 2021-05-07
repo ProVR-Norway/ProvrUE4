@@ -58,19 +58,23 @@ EProVRActionBehavior UProVRCreateSessionAction::PerformAction()
 
 			else if (HttpResponseCode == 503)
 			{
+				
 				FString WarningMessage = TEXT("error 503 No servers are currently available");
 				UE_LOG(LogTemp, Warning, TEXT("error 503 No servers are currently available"));
 				OnCreateSessionCompleteDelegate.Broadcast(false, WarningMessage, -1);
+				
 			}
 			else
 			{
+				
 				if (HttpResponseContent->HasTypedField<EJson::String>("message"))
 				{
 					UE_LOG(LogTemp, Warning, TEXT("if (HttpResponseContent->HasTypedField<EJson::String>(message))  on create action, C++ code"));
-					UE_LOG(LogTemp, Error, TEXT("%s"), *HttpResponseContent->GetStringField("message"));
+					//UE_LOG(LogTemp, Error, TEXT("%s"), *HttpResponseContent->GetStringField("message"));
 				}
-
+				
 				OnCreateSessionCompleteDelegate.Broadcast(false, *HttpResponseContent->GetStringField("message"), -1);
+				
 			}
 
 			OnAsyncronousActionCompleted();

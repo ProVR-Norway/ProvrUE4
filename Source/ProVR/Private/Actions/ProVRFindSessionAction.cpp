@@ -31,7 +31,7 @@ EProVRActionBehavior UProVRFindSessionAction::PerformAction()
 							SessionToBeQueued.SessionName		= CurrentSelectedSession->GetStringField("sessionName");
 							SessionToBeQueued.MapName			= CurrentSelectedSession->GetStringField("mapName");
 							SessionToBeQueued.MaxParticipants	= CurrentSelectedSession->GetIntegerField("maxParticipants");
-							SessionToBeQueued.HostUsername		= CurrentSelectedSession->GetStringField("hostUsername");
+							SessionToBeQueued.HostUsername		= CurrentSelectedSession->GetStringField("hostUserId");
 							SessionToBeQueued.HostIP			= CurrentSelectedSession->GetStringField("hostIP");
 							SessionToBeQueued.HostPort			= CurrentSelectedSession->GetIntegerField("hostPort");
 							NetworkManager->SessionList.Add(SessionToBeQueued); // adds the new session to the  list

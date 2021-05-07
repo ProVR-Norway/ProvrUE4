@@ -97,9 +97,6 @@ public:
 	TSharedPtr<FProVRSessionsOverview> CurrentSession;
 
 	UFUNCTION(BlueprintCallable, Category = "ProVRNetworkManager")
-	void OpenLevelTest();
-
-	UFUNCTION(BlueprintCallable, Category = "ProVRNetworkManager")
 	FString GetUsername();
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ProVRNetworkManager")

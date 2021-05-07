@@ -4,23 +4,6 @@
 #include "Dom/JsonObject.h"
 #include "Serialization/JsonSerializer.h"
 
-
-#include "ProVRGameInstance.h"
-#include "Kismet/GameplayStatics.h"
-void UProVRNetworkManager::OpenLevelTest()
-{
-	if (UProVRGameInstance* GameInstance = UProVRGameInstance::GetCurrentGameInstance())
-	{
-		if (UProVRNetworkManager* NetworkManager = GameInstance->GetNetworkManager())
-		{
-			if (UWorld* World = GameInstance->GetWorld())
-			{
-				UGameplayStatics::OpenLevel(World, "/Game/Maps/EntryMap", false, "");
-			}
-		}
-	}
-}
-
 void UProVRNetworkManager::PushNewHttpRequest(UProVRHttpRequest* NewHttpRequest)
 {
 	ActiveHttpRequests.AddUnique(NewHttpRequest);

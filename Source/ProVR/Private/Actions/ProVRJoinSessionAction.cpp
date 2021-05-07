@@ -17,21 +17,20 @@ EProVRActionBehavior UProVRJoinSessionAction::PerformAction()
 			RequestJson->SetStringField("username", NetworkManager->GetUsername());
 			FString URLPathLevelToJoin;
 			int32 SessionIndexInSessionList;
-			if (!JoinSessionAfterCreation)
+
+			for (int i = 0; i < NetworkManager->SessionList.Num(); i++)
 			{
-				for (int i = 0; i < NetworkManager->SessionList.Num(); i++)
+				if (NetworkManager->SessionList[i].SessionName == SessionName)
 				{
-					if (NetworkManager->SessionList[i].SessionName == SessionName)
-					{
-						SessionId = NetworkManager->SessionList[i].SessionId;
-						URLPathLevelToJoin = 
-						  FGenericPlatformHttp::UrlEncode(NetworkManager->SessionList[i].HostIP)
-						+ FString::Printf(TEXT(":%d/Game/Maps/"), NetworkManager->SessionList[i].HostPort)
-						+ FGenericPlatformHttp::UrlEncode(NetworkManager->SessionList[i].MapName);
-						SessionIndexInSessionList = i;
-					}
+					SessionId = NetworkManager->SessionList[i].SessionId;
+					URLPathLevelToJoin = 
+					  FGenericPlatformHttp::UrlEncode(NetworkManager->SessionList[i].HostIP)
+					+ FString::Printf(TEXT(":%d/Game/Maps/"), NetworkManager->SessionList[i].HostPort)
+					+ FGenericPlatformHttp::UrlEncode(NetworkManager->SessionList[i].MapName);
+					SessionIndexInSessionList = i;
 				}
 			}
+
 			
 			FString URLPathGateway = SESSION_BASE_PATH + FString::Printf(TEXT("/%d/participants"), SessionId);
 			UProVRHttpRequest::PostJsonWithAuthToken(URLPathGateway, RequestJson,
@@ -45,10 +44,12 @@ EProVRActionBehavior UProVRJoinSessionAction::PerformAction()
 						if(UWorld* World = GameInstance->GetWorld())
 						{
 							FString* URLAddress_ = NetworkManager->DisplayedSessions.Find("SessionName");
-							//UGameplayStatics::OpenLevel(World, FName(URLPathLevelToJoin), false, "");
-							UGameplayStatics::OpenLevel(World, "34.90.23.60:7777/Game/Maps/TestMap", false, "");
+							UGameplayStatics::OpenLevel(World, FName(URLPathLevelToJoin), false, "");
+							UE_LOG(LogTemp, Warning, TEXT("%d"), *URLPathLevelToJoin);
+							//UGameplayStatics::OpenLevel(World, "34.90.23.60:7777/Game/Maps/TestMap", false, "");
 							OnJoinSessionCompleteDelegate.Broadcast(true, FString(HttpResponseContent->GetStringField("message")));
-							/*
+							
+							/* BUG! used during leave session
 							NetworkManager->CurrentSession->HostIP			= NetworkManager->SessionList[SessionIndexInSessionList].HostIP;
 							NetworkManager->CurrentSession->HostPort		= NetworkManager->SessionList[SessionIndexInSessionList].HostPort;
 							NetworkManager->CurrentSession->HostUsername	= NetworkManager->SessionList[SessionIndexInSessionList].MapName;
@@ -58,6 +59,7 @@ EProVRActionBehavior UProVRJoinSessionAction::PerformAction()
 							NetworkManager->CurrentSession->SessionName		= NetworkManager->SessionList[SessionIndexInSessionList].SessionName;
 							NetworkManager->SessionList.Empty();
 							*/
+							
 						}	
 					}
 					else if (HttpResponseCode == 401)

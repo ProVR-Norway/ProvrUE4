@@ -26,9 +26,6 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ProVR|Actions")
 	int32 SessionId;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ProVR|Actions")
-	bool JoinSessionAfterCreation = false;
-
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnJoinSessionCompleteDelegate, bool, Success, FString, Message);
 	UPROPERTY(BlueprintAssignable, Category = "ProVR|Actions")
 	FOnJoinSessionCompleteDelegate OnJoinSessionCompleteDelegate;
