@@ -36,7 +36,7 @@ struct FProVRSessionsOverview {
 public:
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-		int64 SessionId;
+		int32 SessionId;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 		FString SessionName;
@@ -45,10 +45,10 @@ public:
 		FString MapName;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-		int64 MaxParticipants;
+		int32 MaxParticipants;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-		int64 ParticipantCount;
+		int32 ParticipantCount;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 		FString HostUsername;
@@ -57,7 +57,7 @@ public:
 		FString HostIP;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-		int64 HostPort;
+		int32 HostPort;
 };
 
 

@@ -4,6 +4,7 @@
 #include "Actions/ProVRJoinSessionAction.h"
 #include "ProVRGameInstance.h"
 #include "Managers/ProVRNetworkManager.h"
+#include "GenericPlatform/GenericPlatformHttp.h"
 #include "Kismet/GameplayStatics.h"
 
 EProVRActionBehavior UProVRJoinSessionAction::PerformAction()
@@ -14,36 +15,39 @@ EProVRActionBehavior UProVRJoinSessionAction::PerformAction()
 		if (UProVRNetworkManager* NetworkManager = GameInstance->GetNetworkManager())
 		{
 			RequestJson->SetStringField("username", NetworkManager->GetUsername());
+			FString URLPathLevelToJoin;
 			if (!JoinSessionAfterCreation)
 			{
 				for (int i = 0; i < NetworkManager->SessionList.Num(); i++)
 				{
 					if (NetworkManager->SessionList[i].SessionName == SessionName)
+					{
 						SessionId = NetworkManager->SessionList[i].SessionId;
+						URLPathLevelToJoin = 
+						  FGenericPlatformHttp::UrlEncode(NetworkManager->SessionList[i].HostIP)
+						+ FString::Printf(TEXT(":%d/Game/Maps/"), NetworkManager->SessionList[i].HostPort)
+						+ FGenericPlatformHttp::UrlEncode(NetworkManager->SessionList[i].MapName);
+					}
 				}
 			}
 			
-			FString URLPath = SESSION_BASE_PATH + FString::Printf(TEXT("/%d/participants"), SessionId);
-			UProVRHttpRequest::PostJsonWithAuthToken(URLPath, RequestJson,
+			FString URLPath_ = SESSION_BASE_PATH + FString::Printf(TEXT("/%d/participants"), SessionId);
+			UProVRHttpRequest::PostJsonWithAuthToken(URLPath_, RequestJson,
 
-				[this](int32 HttpResponseCode, TSharedPtr<FJsonObject> HttpResponseContent)
+				[this, NetworkManager, GameInstance, URLPathLevelToJoin](int32 HttpResponseCode, TSharedPtr<FJsonObject> HttpResponseContent)
 				{
 					FString Message_ = HttpResponseContent->GetStringField("message");
 					if (HttpResponseCode == 200)
 					{
-						if (UProVRGameInstance* GameInstance = UProVRGameInstance::GetCurrentGameInstance())
-						{
-							if (UWorld* World = GameInstance->GetWorld())
-							{
-								if (UProVRNetworkManager* NetworkManager = GameInstance->GetNetworkManager())
-								{
-									FString* URLAddress_ = NetworkManager->DisplayedSessions.Find("SessionName");
-									UGameplayStatics::OpenLevel(World, "34.90.23.60:7777/Game/Maps/TestMap", false, "");
 
-								}
-							}
+						if(UWorld* World = GameInstance->GetWorld())
+						{
+							FString* URLAddress_ = NetworkManager->DisplayedSessions.Find("SessionName");
+							UGameplayStatics::OpenLevel(World, FName(URLPathLevelToJoin), false, "");
+							//UGameplayStatics::OpenLevel(World, false, "");
+							OnJoinSessionCompleteDelegate.Broadcast(true, "Joined successful!!");
 						}
-						OnJoinSessionCompleteDelegate.Broadcast(true, "Joined successful!!");
+	
 					}
 					else if (HttpResponseCode == 401)
 					{

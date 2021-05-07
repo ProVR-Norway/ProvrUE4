@@ -17,33 +17,26 @@ EProVRActionBehavior UProVRFindSessionAction::PerformAction()
 		if (UProVRNetworkManager* NetworkManager = GameInstance->GetNetworkManager())
 		{
 			UProVRHttpRequest::GetWithAuthToken(SESSION_BASE_PATH + "?username=" + FGenericPlatformHttp::UrlEncode(NetworkManager->GetUsername()),  // query to API
-				[this](int32 HttpResponseCode, TSharedPtr<FJsonObject> HttpResponseContent)
+				[this, GameInstance, NetworkManager](int32 HttpResponseCode, TSharedPtr<FJsonObject> HttpResponseContent)
 				{
 					if (HttpResponseCode == 200)
 					{
-						if (UProVRGameInstance* GameInstance = UProVRGameInstance::GetCurrentGameInstance()) //Game instance is not in lambda scoop line 19
+						NetworkManager->SessionList.Empty(); // deletes the old session list
+						TArray<TSharedPtr<FJsonValue>> JsonList = HttpResponseContent->GetArrayField("sessions");
+						for (int32 index = 0; index < JsonList.Num(); index++)
 						{
-							if (UProVRNetworkManager* NetworkManager = GameInstance->GetNetworkManager())
-							{
-								NetworkManager->SessionList.Empty(); // deletes the old session list
-								TArray<TSharedPtr<FJsonValue>> JsonList = HttpResponseContent->GetArrayField("sessions");
-								for (int32 index = 0; index < JsonList.Num(); index++)
-								{
-									TSharedPtr<FJsonObject> CurrentSelectedSession = JsonList[index]->AsObject();
-									FProVRSessionsOverview SessionToBeQueued;
-									SessionToBeQueued.SessionId = CurrentSelectedSession->GetIntegerField("sessionId");
-									SessionToBeQueued.SessionName = CurrentSelectedSession->GetStringField("sessionName");
-									SessionToBeQueued.MapName = CurrentSelectedSession->GetStringField("mapName");
-									SessionToBeQueued.MaxParticipants = CurrentSelectedSession->GetIntegerField("maxParticipants");
-									SessionToBeQueued.HostUsername = CurrentSelectedSession->GetStringField("hostUsername");
-									SessionToBeQueued.HostIP = CurrentSelectedSession->GetStringField("hostIP");
-									SessionToBeQueued.HostPort = CurrentSelectedSession->GetIntegerField("hostPort");
-									NetworkManager->SessionList.Add(SessionToBeQueued); // adds the new session to the  list
-								}
-								OnFindSessionCompleteDelegate.Broadcast(true, "Session Created!");
-							}
+							TSharedPtr<FJsonObject> CurrentSelectedSession = JsonList[index]->AsObject();
+							FProVRSessionsOverview SessionToBeQueued;
+							SessionToBeQueued.SessionId = CurrentSelectedSession->GetIntegerField("sessionId");
+							SessionToBeQueued.SessionName = CurrentSelectedSession->GetStringField("sessionName");
+							SessionToBeQueued.MapName = CurrentSelectedSession->GetStringField("mapName");
+							SessionToBeQueued.MaxParticipants = CurrentSelectedSession->GetIntegerField("maxParticipants");
+							SessionToBeQueued.HostUsername = CurrentSelectedSession->GetStringField("hostUsername");
+							SessionToBeQueued.HostIP = CurrentSelectedSession->GetStringField("hostIP");
+							SessionToBeQueued.HostPort = CurrentSelectedSession->GetIntegerField("hostPort");
+							NetworkManager->SessionList.Add(SessionToBeQueued); // adds the new session to the  list
 						}
-						OnFindSessionCompleteDelegate.Broadcast(false, "Could not get Game instance!");
+						OnFindSessionCompleteDelegate.Broadcast(true, "Session Created!");
 					}
 					else if (HttpResponseCode == 401)
 					{
