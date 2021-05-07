@@ -73,7 +73,7 @@ private:
 	FString LastPassword;
 
 	UPROPERTY()
-		TArray<class UProVRHttpRequest*> ActiveHttpRequests;
+	TArray<class UProVRHttpRequest*> ActiveHttpRequests;
 	TArray<TFunction<void(int32)>> OngoingTryRenewingAuthTokenRequestSubscribers;
 	bool bTryRenewingAuthTokenRequestIsOngoing = false;
 	TSharedPtr<class IHttpRequest, ESPMode::ThreadSafe> OngoingTryRenewingAuthTokenRequest;
@@ -93,6 +93,11 @@ public:
 	void TryRenewingAuthToken(TFunction<void(int32)> OnCompleted);
 	void PushNewHttpRequest(class UProVRHttpRequest* NewHttpRequest);
 	void RemoveHttpRequest(class UProVRHttpRequest* HttpRequest);
+
+	TSharedPtr<FProVRSessionsOverview> CurrentSession;
+
+	UFUNCTION(BlueprintCallable, Category = "ProVRNetworkManager")
+	void OpenLevelTest();
 
 	UFUNCTION(BlueprintCallable, Category = "ProVRNetworkManager")
 	FString GetUsername();

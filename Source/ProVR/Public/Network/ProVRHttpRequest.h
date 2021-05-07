@@ -45,15 +45,16 @@ private:
 
 public:
 	static void Get(const FString& _Path, TFunction<void(int32, TSharedPtr<class FJsonObject>)> _OnResponseCompleted);
-	static void GetWithAuthToken(const FString& _Path, TFunction<void(int32, TSharedPtr<class FJsonObject>)> _OnResponseCompleted);
 	static void Delete(const FString& _Path, TFunction<void(int32, TSharedPtr<class FJsonObject>)> _OnResponseCompleted);
-	static void DeleteWithAuthToken(const FString& _Path, TFunction<void(int32, TSharedPtr<class FJsonObject>)> _OnResponseCompleted);
 	static void PostJson(const FString& _Path, TSharedPtr<class FJsonObject> _Content, TFunction<void(int32, TSharedPtr<class FJsonObject>)> _OnResponseCompleted);
-	static void PostJsonWithAuthToken(const FString& _Path, TSharedPtr<class FJsonObject> _Content, TFunction<void(int32, TSharedPtr<class FJsonObject>)> _OnResponseCompleted);
 	static void PutJson(const FString& _Path, TSharedPtr<class FJsonObject> _Content, TFunction<void(int32, TSharedPtr<class FJsonObject>)> _OnResponseCompleted);
-	static void PutJsonWithAuthToken(const FString& _Path, TSharedPtr<class FJsonObject> _Content, TFunction<void(int32, TSharedPtr<class FJsonObject>)> _OnResponseCompleted);
 	static void PutFile(const FString& _Path, const TArray<uint8>& _Content, TFunction<void(int32, TSharedPtr<class FJsonObject>)> _OnResponseCompleted);
+	static void GetWithAuthToken(const FString& _Path, TFunction<void(int32, TSharedPtr<class FJsonObject>)> _OnResponseCompleted);
+	static void DeleteWithAuthToken(const FString& _Path, TFunction<void(int32, TSharedPtr<class FJsonObject>)> _OnResponseCompleted);
+	static void PostJsonWithAuthToken(const FString& _Path, TSharedPtr<class FJsonObject> _Content, TFunction<void(int32, TSharedPtr<class FJsonObject>)> _OnResponseCompleted);
+	static void PutJsonWithAuthToken(const FString& _Path, TSharedPtr<class FJsonObject> _Content, TFunction<void(int32, TSharedPtr<class FJsonObject>)> _OnResponseCompleted);
 	static void PutFileWithAuthToken(const FString& _Path, const TArray<uint8>& _Content, TFunction<void(int32, TSharedPtr<class FJsonObject>)> _OnResponseCompleted);
+
 	FORCEINLINE EHttpRequestType GetRequestType()
 	{
 		return RequestType;

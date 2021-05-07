@@ -16,6 +16,7 @@ EProVRActionBehavior UProVRJoinSessionAction::PerformAction()
 		{
 			RequestJson->SetStringField("username", NetworkManager->GetUsername());
 			FString URLPathLevelToJoin;
+			int32 SessionIndexInSessionList;
 			if (!JoinSessionAfterCreation)
 			{
 				for (int i = 0; i < NetworkManager->SessionList.Num(); i++)
@@ -27,14 +28,15 @@ EProVRActionBehavior UProVRJoinSessionAction::PerformAction()
 						  FGenericPlatformHttp::UrlEncode(NetworkManager->SessionList[i].HostIP)
 						+ FString::Printf(TEXT(":%d/Game/Maps/"), NetworkManager->SessionList[i].HostPort)
 						+ FGenericPlatformHttp::UrlEncode(NetworkManager->SessionList[i].MapName);
+						SessionIndexInSessionList = i;
 					}
 				}
 			}
 			
-			FString URLPath_ = SESSION_BASE_PATH + FString::Printf(TEXT("/%d/participants"), SessionId);
-			UProVRHttpRequest::PostJsonWithAuthToken(URLPath_, RequestJson,
+			FString URLPathGateway = SESSION_BASE_PATH + FString::Printf(TEXT("/%d/participants"), SessionId);
+			UProVRHttpRequest::PostJsonWithAuthToken(URLPathGateway, RequestJson,
 
-				[this, NetworkManager, GameInstance, URLPathLevelToJoin](int32 HttpResponseCode, TSharedPtr<FJsonObject> HttpResponseContent)
+				[this, NetworkManager, GameInstance, URLPathLevelToJoin, SessionIndexInSessionList](int32 HttpResponseCode, TSharedPtr<FJsonObject> HttpResponseContent)
 				{
 					FString Message_ = HttpResponseContent->GetStringField("message");
 					if (HttpResponseCode == 200)
@@ -43,26 +45,35 @@ EProVRActionBehavior UProVRJoinSessionAction::PerformAction()
 						if(UWorld* World = GameInstance->GetWorld())
 						{
 							FString* URLAddress_ = NetworkManager->DisplayedSessions.Find("SessionName");
-							UGameplayStatics::OpenLevel(World, FName(URLPathLevelToJoin), false, "");
-							//UGameplayStatics::OpenLevel(World, false, "");
-							OnJoinSessionCompleteDelegate.Broadcast(true, "Joined successful!!");
-						}
-	
+							//UGameplayStatics::OpenLevel(World, FName(URLPathLevelToJoin), false, "");
+							UGameplayStatics::OpenLevel(World, "34.90.23.60:7777/Game/Maps/TestMap", false, "");
+							OnJoinSessionCompleteDelegate.Broadcast(true, FString(HttpResponseContent->GetStringField("message")));
+							/*
+							NetworkManager->CurrentSession->HostIP			= NetworkManager->SessionList[SessionIndexInSessionList].HostIP;
+							NetworkManager->CurrentSession->HostPort		= NetworkManager->SessionList[SessionIndexInSessionList].HostPort;
+							NetworkManager->CurrentSession->HostUsername	= NetworkManager->SessionList[SessionIndexInSessionList].MapName;
+							NetworkManager->CurrentSession->MapName			= NetworkManager->SessionList[SessionIndexInSessionList].HostIP;
+							NetworkManager->CurrentSession->MaxParticipants = NetworkManager->SessionList[SessionIndexInSessionList].MaxParticipants;
+							NetworkManager->CurrentSession->SessionId		= NetworkManager->SessionList[SessionIndexInSessionList].SessionId;
+							NetworkManager->CurrentSession->SessionName		= NetworkManager->SessionList[SessionIndexInSessionList].SessionName;
+							NetworkManager->SessionList.Empty();
+							*/
+						}	
 					}
 					else if (HttpResponseCode == 401)
 					{
 						UE_LOG(LogTemp, Warning, TEXT("error 401 Unauthorized.Please re - login"));
-						OnJoinSessionCompleteDelegate.Broadcast(false, TEXT("error 401 Unauthorized.Please re - login"));
+						OnJoinSessionCompleteDelegate.Broadcast(false, FString(HttpResponseContent->GetStringField("message")));
 					}
 					else if (HttpResponseCode == 404)
 					{
 						UE_LOG(LogTemp, Warning, TEXT("error 404 Session does not exist"));
-						OnJoinSessionCompleteDelegate.Broadcast(false, TEXT("error 404 Session does not exist"));
+						OnJoinSessionCompleteDelegate.Broadcast(false, FString(HttpResponseContent->GetStringField("message")));
 					}
 					else if (HttpResponseCode == 500 || HttpResponseCode == HTTP_UNEXPECTED_ERROR)
 					{
 						UE_LOG(LogTemp, Warning, TEXT("error 500 Internal error"));
-						OnJoinSessionCompleteDelegate.Broadcast(false, TEXT("error 500 Internal error"));
+						OnJoinSessionCompleteDelegate.Broadcast(false, FString(HttpResponseContent->GetStringField("message")));
 					}
 					else
 					{

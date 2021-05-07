@@ -27,13 +27,13 @@ EProVRActionBehavior UProVRFindSessionAction::PerformAction()
 						{
 							TSharedPtr<FJsonObject> CurrentSelectedSession = JsonList[index]->AsObject();
 							FProVRSessionsOverview SessionToBeQueued;
-							SessionToBeQueued.SessionId = CurrentSelectedSession->GetIntegerField("sessionId");
-							SessionToBeQueued.SessionName = CurrentSelectedSession->GetStringField("sessionName");
-							SessionToBeQueued.MapName = CurrentSelectedSession->GetStringField("mapName");
-							SessionToBeQueued.MaxParticipants = CurrentSelectedSession->GetIntegerField("maxParticipants");
-							SessionToBeQueued.HostUsername = CurrentSelectedSession->GetStringField("hostUsername");
-							SessionToBeQueued.HostIP = CurrentSelectedSession->GetStringField("hostIP");
-							SessionToBeQueued.HostPort = CurrentSelectedSession->GetIntegerField("hostPort");
+							SessionToBeQueued.SessionId			= CurrentSelectedSession->GetIntegerField("sessionId");
+							SessionToBeQueued.SessionName		= CurrentSelectedSession->GetStringField("sessionName");
+							SessionToBeQueued.MapName			= CurrentSelectedSession->GetStringField("mapName");
+							SessionToBeQueued.MaxParticipants	= CurrentSelectedSession->GetIntegerField("maxParticipants");
+							SessionToBeQueued.HostUsername		= CurrentSelectedSession->GetStringField("hostUsername");
+							SessionToBeQueued.HostIP			= CurrentSelectedSession->GetStringField("hostIP");
+							SessionToBeQueued.HostPort			= CurrentSelectedSession->GetIntegerField("hostPort");
 							NetworkManager->SessionList.Add(SessionToBeQueued); // adds the new session to the  list
 						}
 						OnFindSessionCompleteDelegate.Broadcast(true, "Session Created!");

@@ -40,25 +40,24 @@ EProVRActionBehavior UProVRInviteParticipantAction::PerformAction()
 			UProVRHttpRequest::PostJsonWithAuthToken(URLPath, RequestJson,
 				[this](int32 HttpResponseCode, TSharedPtr<FJsonObject> HttpResponseContent)
 				{
-					FString Message_ = HttpResponseContent->GetStringField("message");
 					if (HttpResponseCode == 200)
 					{
-						OnInviteParticipantCompleteDelegate.Broadcast(true, Message_);
+						OnInviteParticipantCompleteDelegate.Broadcast(true, FString(HttpResponseContent->GetStringField("message")));
 					}
 					else if (HttpResponseCode == 401)
 					{
 						UE_LOG(LogTemp, Warning, TEXT("error 401 Unauthorized.Please re - login"));
-						OnInviteParticipantCompleteDelegate.Broadcast(false, Message_);
+						OnInviteParticipantCompleteDelegate.Broadcast(false, FString(HttpResponseContent->GetStringField("message")));
 					}
 					else if (HttpResponseCode == 404)
 					{
 						UE_LOG(LogTemp, Warning, TEXT("error 404 Session does not exist"));
-						OnInviteParticipantCompleteDelegate.Broadcast(false, Message_);
+						OnInviteParticipantCompleteDelegate.Broadcast(false, FString(HttpResponseContent->GetStringField("message")));
 					}
 					else if (HttpResponseCode == 500 || HttpResponseCode == HTTP_UNEXPECTED_ERROR)
 					{
 						UE_LOG(LogTemp, Warning, TEXT("error 500 Internal error"));
-						OnInviteParticipantCompleteDelegate.Broadcast(false, Message_);
+						OnInviteParticipantCompleteDelegate.Broadcast(false, FString(HttpResponseContent->GetStringField("message")));
 					}
 					else
 					{
