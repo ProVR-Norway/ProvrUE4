@@ -20,7 +20,6 @@ AProVRPawn::AProVRPawn()
 	SkeletalMeshComp = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalMeshComp"));
 	LeftHandControllerComp = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("LeftHandControllerComp"));
 	RightHandControllerComp = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("RightHandControllerComp"));
-	PawnMovementComp = CreateDefaultSubobject<UProVRMovementController>(TEXT("MovementComp"));
 	WidgetInteractionComp = CreateDefaultSubobject<UWidgetInteractionComponent>(TEXT("WidgetInteractionComp"));
 	/*
 	MotionControllerCompRight = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("MotionControllerCompRight"));

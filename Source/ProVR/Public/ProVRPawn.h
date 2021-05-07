@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "Components/WidgetComponent.h"
-#include "ProVRMovementController.h"
 #include "ProVRPawn.generated.h"
 
 //class UWidgetComponent;
@@ -14,7 +13,6 @@ class UCameraComponent;
 class UMotionControllerComponent;
 class USkeletalMeshComponent;
 class USceneComponent;
-class UProVRMovementController;
 class UCapsuleComponent;
 
 
@@ -30,9 +28,6 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "ProVR|Actions")
 		UCapsuleComponent* CapsuleComp;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "ProVR|Actions")
-		UProVRMovementController* PawnMovementComp;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "ProVR|Actions")
 		UWidgetComponent* WidgetComp;
