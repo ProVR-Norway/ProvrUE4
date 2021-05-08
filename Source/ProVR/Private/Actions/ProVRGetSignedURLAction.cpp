@@ -15,7 +15,7 @@ EProVRActionBehavior UProVRGetSignedURLAction::PerformAction()
     FString UrlEncodedModelName = FGenericPlatformHttp::UrlEncode(ModelName);
     FString FullPath = CAD_SERVICE_GET_SIGNED_URL_PATH + UrlEncodedUsername + '/' + UrlEncodedModelName;
 
-    UProVRHttpRequest::Get(FullPath, [this](int32 HttpResponseCode, TSharedPtr<FJsonObject> HttpResponseContent)
+    UProVRHttpRequest::GetWithAuthToken(FullPath, [this](int32 HttpResponseCode, TSharedPtr<FJsonObject> HttpResponseContent)
         {
             if (EHttpResponseCodes::IsOk(HttpResponseCode))
             {

@@ -1,7 +1,8 @@
 name: c-linter
 
-on: [push]
-  
+
+on: [pull_request]
+
 jobs:
   c-linter:
     name: c-linter

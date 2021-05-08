@@ -13,6 +13,7 @@ void UProVRNetworkManager::RemoveHttpRequest(UProVRHttpRequest* HttpRequest)
 {
 	ActiveHttpRequests.Remove(HttpRequest);
 }
+
 //EmailAdress -> Username | David 15.04
 void UProVRNetworkManager::PerformLoginRequest(const FString& Username, const FString& Password, TFunction<void(int32)> OnCompleted) //EmailAdress -> Username
 {
@@ -115,6 +116,7 @@ void UProVRNetworkManager::CallSubscribersAfterTryRenewingAuthTokenResponse(int3
 
 	OngoingTryRenewingAuthTokenRequestSubscribers.Empty(); //Clear the array
 }
+
 
 FString UProVRNetworkManager::GetUsername()
 {
