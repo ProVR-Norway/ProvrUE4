@@ -43,6 +43,12 @@ EProVRActionBehavior UProVRCreateSessionAction::PerformAction()
 				UE_LOG(LogTemp, Warning, TEXT("error 401 Unauthorized.Please re - login"));
 				OnCreateSessionCompleteDelegate.Broadcast(false, WarningMessage, -1);
 			}
+			else if (HttpResponseCode == 403)
+			{
+				FString WarningMessage = TEXT("error 403 Session with the same name already exists for the user");
+				UE_LOG(LogTemp, Warning, TEXT("error 403 Session with the same name already exists for the user"));
+				OnCreateSessionCompleteDelegate.Broadcast(false, WarningMessage, -1);
+			}
 			else if (HttpResponseCode == 404)
 			{
 				FString WarningMessage = TEXT("error 404 User does not exist");
