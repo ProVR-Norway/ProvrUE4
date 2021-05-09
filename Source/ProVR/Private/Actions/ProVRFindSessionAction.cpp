@@ -59,6 +59,7 @@ EProVRActionBehavior UProVRFindSessionAction::PerformAction()
 						{
 							UE_LOG(LogTemp, Error, TEXT("%s"), *HttpResponseContent->GetStringField("message"));
 						}
+						UE_LOG(LogTemp, Warning, TEXT("other error find session"));
 						OnFindSessionCompleteDelegate.Broadcast(false, EProVRFindSessionActionResult::ENUM_OtherError);							
 					}
 					OnAsyncronousActionCompleted();

@@ -20,8 +20,12 @@ enum class EProVRLeaveSessionActionResult : uint8
 UCLASS()
 class PROVR_API UProVRLeaveSessionAction : public UProVRActionBase
 {
+public:
 	GENERATED_BODY()
 	virtual EProVRActionBehavior PerformAction();
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ProVR|Actions")
+	int32 SessionId;
 
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnLeaveSessionCompleteDelegate, bool, Success, EProVRLeaveSessionActionResult, Result);
 	UPROPERTY(BlueprintAssignable, Category = "ProVR|Actions")

@@ -14,7 +14,9 @@ EProVRActionBehavior UProVRLeaveSessionAction::PerformAction()
 	{
 		if (UProVRNetworkManager* NetworkManager = GameInstance->GetNetworkManager())
 		{
-			FString FullPath = FString::Printf(TEXT("/sessions/%d/participants?username=%s"), NetworkManager->CurrentSession->SessionId, &FGenericPlatformHttp::UrlEncode(NetworkManager->GetUsername()));
+			//FString FullPath = FString::Printf(TEXT("/sessions/%d/participants?username=%s"), NetworkManager->CurrentSession->SessionId, &FGenericPlatformHttp::UrlEncode(NetworkManager->GetUsername()));
+			//FString FullPath = FString::Printf(TEXT("/sessions/%d/participants/%s"), SessionId, &FGenericPlatformHttp::UrlEncode(NetworkManager->GetUsername()));
+			FString FullPath = FString::Printf(TEXT("/sessions/%d/participants/"), SessionId)+ FGenericPlatformHttp::UrlEncode(NetworkManager->GetUsername());
 			UProVRHttpRequest::DeleteWithAuthToken(FullPath, [this, GameInstance, NetworkManager](int32 HttpResponseCode, TSharedPtr<FJsonObject> HttpResponseContent)
 			{
 				if (HttpResponseCode == 200)
@@ -22,7 +24,7 @@ EProVRActionBehavior UProVRLeaveSessionAction::PerformAction()
 					if (UWorld* World = GameInstance->GetWorld())
 					{
 						UE_LOG(LogTemp, Warning, TEXT("Leave session action: 200"));
-						GEngine->HandleDisconnect(World, World->GetNetDriver());
+						//GEngine->HandleDisconnect(World, World->GetNetDriver());
 						UGameplayStatics::OpenLevel(World, "/Game/Maps/EntryMap", false, ""); // opens a new level locally
 						NetworkManager->CurrentSession.Reset();
 						OnLeaveSessionCompleteDelegate.Broadcast(true, EProVRLeaveSessionActionResult::ENUM_OK);
@@ -49,6 +51,7 @@ EProVRActionBehavior UProVRLeaveSessionAction::PerformAction()
 					{
 						UE_LOG(LogTemp, Error, TEXT("%s"), *HttpResponseContent->GetStringField("message"));
 					}
+					UE_LOG(LogTemp, Warning, TEXT("other error leave session"));
 					OnLeaveSessionCompleteDelegate.Broadcast(false, EProVRLeaveSessionActionResult::ENUM_OtherError);
 				}
 				OnAsyncronousActionCompleted();

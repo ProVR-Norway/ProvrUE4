@@ -83,6 +83,7 @@ EProVRActionBehavior UProVRJoinSessionAction::PerformAction()
 						{
 							UE_LOG(LogTemp, Error, TEXT("%s"), *HttpResponseContent->GetStringField("message"));
 						}
+						UE_LOG(LogTemp, Warning, TEXT("other error join session"));
 						OnJoinSessionCompleteDelegate.Broadcast(false, EProVRJoinSessionActionResult::ENUM_OtherError);
 					}
 					OnAsyncronousActionCompleted();

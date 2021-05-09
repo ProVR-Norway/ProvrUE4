@@ -65,6 +65,7 @@ EProVRActionBehavior UProVRInviteParticipantAction::PerformAction()
 						{
 							UE_LOG(LogTemp, Error, TEXT("%s"), *HttpResponseContent->GetStringField("message"));
 						}
+						UE_LOG(LogTemp, Warning, TEXT("other error invite session"));
 						OnInviteParticipantCompleteDelegate.Broadcast(false, EProVRInviteParticipantActionResult::ENUM_OtherError);
 					}
 					OnAsyncronousActionCompleted();
