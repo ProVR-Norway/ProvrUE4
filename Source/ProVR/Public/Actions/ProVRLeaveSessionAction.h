@@ -23,7 +23,7 @@ class PROVR_API UProVRLeaveSessionAction : public UProVRActionBase
 	GENERATED_BODY()
 	virtual EProVRActionBehavior PerformAction();
 
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnLeaveSessionCompleteDelegate, bool, Success, FString, Message);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnLeaveSessionCompleteDelegate, bool, Success, EProVRLeaveSessionActionResult, Result);
 	UPROPERTY(BlueprintAssignable, Category = "ProVR|Actions")
 	FOnLeaveSessionCompleteDelegate OnLeaveSessionCompleteDelegate;
 };

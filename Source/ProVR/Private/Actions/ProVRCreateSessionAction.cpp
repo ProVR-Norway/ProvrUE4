@@ -34,55 +34,44 @@ EProVRActionBehavior UProVRCreateSessionAction::PerformAction()
 			if (HttpResponseCode == 200)
 			{
 				int32 JsonField = HttpResponseContent->GetIntegerField("sessionId");
-				FString Message_ = TEXT("Session Created Successfully");
-				OnCreateSessionCompleteDelegate.Broadcast(true, Message_, JsonField);
+				OnCreateSessionCompleteDelegate.Broadcast(true, EProVRCreateSessionActionResult::ENUM_OK, JsonField);
 			}
 			else if (HttpResponseCode == 401)
 			{
-				FString WarningMessage = TEXT("error 401 Unauthorized.Please re - login");
 				UE_LOG(LogTemp, Warning, TEXT("error 401 Unauthorized.Please re - login"));
-				OnCreateSessionCompleteDelegate.Broadcast(false, WarningMessage, -1);
+				OnCreateSessionCompleteDelegate.Broadcast(false, EProVRCreateSessionActionResult::ENUM_Unauthorized, -1);
 			}
 			else if (HttpResponseCode == 403)
 			{
-				FString WarningMessage = TEXT("error 403 Session with the same name already exists for the user");
 				UE_LOG(LogTemp, Warning, TEXT("error 403 Session with the same name already exists for the user"));
-				OnCreateSessionCompleteDelegate.Broadcast(false, WarningMessage, -1);
+				OnCreateSessionCompleteDelegate.Broadcast(false, EProVRCreateSessionActionResult::ENUM_SessionWithSameNameExists, -1);
 			}
 			else if (HttpResponseCode == 404)
 			{
-				FString WarningMessage = TEXT("error 404 User does not exist");
 				UE_LOG(LogTemp, Warning, TEXT("error 404 User does not exist"));
-				OnCreateSessionCompleteDelegate.Broadcast(false, WarningMessage, -1);
+				OnCreateSessionCompleteDelegate.Broadcast(false, EProVRCreateSessionActionResult::ENUM_UserDoesNotExists, -1);
 			}
 			else if (HttpResponseCode == 500)
 			{
-				FString WarningMessage = TEXT("error 500 Internal error");
 				UE_LOG(LogTemp, Warning, TEXT("error 500 Internal error"));
-				OnCreateSessionCompleteDelegate.Broadcast(false, WarningMessage, -1);
+				OnCreateSessionCompleteDelegate.Broadcast(false, EProVRCreateSessionActionResult::ENUM_InternalError, -1);
 				}
 
 			else if (HttpResponseCode == 503)
 			{
-				
-				FString WarningMessage = TEXT("error 503 No servers are currently available");
 				UE_LOG(LogTemp, Warning, TEXT("error 503 No servers are currently available"));
-				OnCreateSessionCompleteDelegate.Broadcast(false, WarningMessage, -1);
+				OnCreateSessionCompleteDelegate.Broadcast(false, EProVRCreateSessionActionResult::ENUM_NoServersAvailable, -1);
 				
 			}
 			else
 			{
-				
 				if (HttpResponseContent->HasTypedField<EJson::String>("message"))
 				{
-					UE_LOG(LogTemp, Warning, TEXT("if (HttpResponseContent->HasTypedField<EJson::String>(message))  on create action, C++ code"));
-					//UE_LOG(LogTemp, Error, TEXT("%s"), *HttpResponseContent->GetStringField("message"));
+					UE_LOG(LogTemp, Error, TEXT("%s"), *HttpResponseContent->GetStringField("message"));
 				}
 				
-				OnCreateSessionCompleteDelegate.Broadcast(false, *HttpResponseContent->GetStringField("message"), -1);
-				
+				OnCreateSessionCompleteDelegate.Broadcast(false, EProVRCreateSessionActionResult::ENUM_OtherError, -1);	
 			}
-
 			OnAsyncronousActionCompleted();
 		});
 
