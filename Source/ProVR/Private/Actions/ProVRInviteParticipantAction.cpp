@@ -64,20 +64,13 @@ EProVRActionBehavior UProVRInviteParticipantAction::PerformAction()
 						if (HttpResponseContent->HasTypedField<EJson::String>("message"))
 						{
 							UE_LOG(LogTemp, Error, TEXT("%s"), *HttpResponseContent->GetStringField("message"));
-							OnInviteParticipantCompleteDelegate.Broadcast(false, *HttpResponseContent->GetStringField("message"));
 						}
-						else {
-							UE_LOG(LogTemp, Warning, TEXT("Invite participants action: on action complete: other error"));
-							OnInviteParticipantCompleteDelegate.Broadcast(false, EProVRInviteParticipantActionResult::ENUM_OtherError);
-						}
-						
+						OnInviteParticipantCompleteDelegate.Broadcast(false, EProVRInviteParticipantActionResult::ENUM_OtherError);
 					}
 					OnAsyncronousActionCompleted();
 				});
 		}
 	}
-
-	
 
 	return EProVRActionBehavior::Asynchronous;
 

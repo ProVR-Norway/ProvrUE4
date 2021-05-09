@@ -43,7 +43,7 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ProVR|Actions")
 	int32 MaxPlayers;
 
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnCreateSessionCompleteDelegate, bool, Success, EProVRLeaveSessionActionResult, Result, int32, SessionID);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnCreateSessionCompleteDelegate, bool, Success, EProVRCreateSessionActionResult, Result, int32, SessionID);
 	UPROPERTY(BlueprintAssignable, Category = "ProVR|Actions")
 	FOnCreateSessionCompleteDelegate OnCreateSessionCompleteDelegate;
 };

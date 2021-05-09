@@ -14,7 +14,7 @@ EProVRActionBehavior UProVRLeaveSessionAction::PerformAction()
 	{
 		if (UProVRNetworkManager* NetworkManager = GameInstance->GetNetworkManager())
 		{
-			FString FullPath = FString::Printf(TEXT("/sessions/%d/participants?username=%s"), NetworkManager->CurrentSession->SessionId, FGenericPlatformHttp::UrlEncode(NetworkManager->GetUsername()));
+			FString FullPath = FString::Printf(TEXT("/sessions/%d/participants?username=%s"), NetworkManager->CurrentSession->SessionId, &FGenericPlatformHttp::UrlEncode(NetworkManager->GetUsername()));
 			UProVRHttpRequest::DeleteWithAuthToken(FullPath, [this, GameInstance, NetworkManager](int32 HttpResponseCode, TSharedPtr<FJsonObject> HttpResponseContent)
 			{
 				if (HttpResponseCode == 200)
@@ -22,15 +22,9 @@ EProVRActionBehavior UProVRLeaveSessionAction::PerformAction()
 					if (UWorld* World = GameInstance->GetWorld())
 					{
 						UE_LOG(LogTemp, Warning, TEXT("Leave session action: 200"));
-						
-						// Will hopefully disconnet the user from the session
 						GEngine->HandleDisconnect(World, World->GetNetDriver());
-						// Opens the correct map after diconnect
-						UGameplayStatics::OpenLevel(World, "/Game/Maps/EntryMap", false, "");
-						// Removes the data about the current session for the client
-						//NetworkManager->CurrentSession = nullptr;
+						UGameplayStatics::OpenLevel(World, "/Game/Maps/EntryMap", false, ""); // opens a new level locally
 						NetworkManager->CurrentSession.Reset();
-						
 						OnLeaveSessionCompleteDelegate.Broadcast(true, EProVRLeaveSessionActionResult::ENUM_OK);
 					}
 				}
@@ -61,10 +55,6 @@ EProVRActionBehavior UProVRLeaveSessionAction::PerformAction()
 			});			
 		}
 	}
-	//const FString& _Path, TFunction<void(int32, TSharedPtr<FJsonObject>)> _OnResponseCompleted
-	
-	OnLeaveSessionCompleteDelegate.Broadcast(false, "Could Not leave session! Network manager not available!");
-	
-	
+
 	return EProVRActionBehavior::Asynchronous;
 }

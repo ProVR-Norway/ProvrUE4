@@ -57,7 +57,7 @@ EProVRActionBehavior UProVRFindSessionAction::PerformAction()
 					{
 						if (HttpResponseContent->HasTypedField<EJson::String>("message"))
 						{
-							UE_LOG(LogTemp, Error, TEXT("%s"), HttpResponseContent->GetStringField("message"));
+							UE_LOG(LogTemp, Error, TEXT("%s"), *HttpResponseContent->GetStringField("message"));
 						}
 						OnFindSessionCompleteDelegate.Broadcast(false, EProVRFindSessionActionResult::ENUM_OtherError);							
 					}
