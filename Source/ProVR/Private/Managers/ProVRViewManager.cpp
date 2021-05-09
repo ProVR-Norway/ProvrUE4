@@ -14,25 +14,25 @@ UProVRViewManager::UProVRViewManager()
 	
 	if (HasAnyFlags(RF_ClassDefaultObject | RF_ArchetypeObject)) return;
 	
-	static ConstructorHelpers::FClassFinder<UProVRWidgetBase> WelcomeViewAsset(TEXT("/Game/Widgets/UI_ProVR_WelcomeView"));
+	static ConstructorHelpers::FClassFinder<UProVRWidgetBase> WelcomeViewAsset(TEXT("/Game/Widgets/LoginRegister/UI_ProVR_WelcomeView"));
 	if (WelcomeViewAsset.Class != NULL)
 	{
 		ViewWidgetMap.Add(EProVRView::Welcome, NewObject<UProVRWidgetBase>(this, WelcomeViewAsset.Class, TEXT("UI_ProVR_WelcomeView")));
 	}
 
-	static ConstructorHelpers::FClassFinder<UProVRWidgetBase> RegisterViewAsset(TEXT("/Game/Widgets/UI_ProVR_RegisterView"));
+	static ConstructorHelpers::FClassFinder<UProVRWidgetBase> RegisterViewAsset(TEXT("/Game/Widgets/LoginRegister/UI_ProVR_RegisterView"));
 	if (RegisterViewAsset.Class != NULL)
 	{
 		ViewWidgetMap.Add(EProVRView::Register, NewObject<UProVRWidgetBase>(this, RegisterViewAsset.Class, TEXT("UI_ProVR_RegisterView")));
 	}
 
-	static ConstructorHelpers::FClassFinder<UProVRWidgetBase> LoginViewAsset(TEXT("/Game/Widgets/UI_ProVR_LoginView"));
+	static ConstructorHelpers::FClassFinder<UProVRWidgetBase> LoginViewAsset(TEXT("/Game/Widgets/LoginRegister/UI_ProVR_LoginView"));
 	if (LoginViewAsset.Class != NULL)
 	{
 		ViewWidgetMap.Add(EProVRView::LoginView, NewObject<UProVRWidgetBase>(this, LoginViewAsset.Class, TEXT("UI_ProVR_LoginView")));
 	}
 
-	static ConstructorHelpers::FClassFinder<UProVRWidgetBase> LogoutViewAsset(TEXT("/Game/Widgets/UI_ProVR_LogoutView"));
+	static ConstructorHelpers::FClassFinder<UProVRWidgetBase> LogoutViewAsset(TEXT("/Game/Widgets/LoginRegister/UI_ProVR_LogoutView"));
 	if (LogoutViewAsset.Class != NULL)
 	{
 		ViewWidgetMap.Add(EProVRView::Logout, NewObject<UProVRWidgetBase>(this, LogoutViewAsset.Class, TEXT("UI_ProVR_LogoutView")));
@@ -58,17 +58,37 @@ UProVRViewManager::UProVRViewManager()
 		ViewWidgetMap.Add(EProVRView::MainMenu, NewObject<UProVRWidgetBase>(this, MainMenuAsset.Class, TEXT("UI_ProVR_MainMenu")));
 	}
 
-	static ConstructorHelpers::FClassFinder<UProVRWidgetBase> SessionViewAsset(TEXT("/Game/Widgets/UI_ProVR_SessionView"));
+	static ConstructorHelpers::FClassFinder<UProVRWidgetBase> SessionViewAsset(TEXT("/Game/Widgets/Sessions/UI_ProVR_SessionView"));
 	if (SessionViewAsset.Class != NULL)
 	{
 		ViewWidgetMap.Add(EProVRView::SessionView, NewObject<UProVRWidgetBase>(this, SessionViewAsset.Class, TEXT("UI_ProVR_SessionView")));
 	}
 
-	static ConstructorHelpers::FClassFinder<UProVRWidgetBase> CreateSessionViewAsset(TEXT("/Game/Widgets/UI_ProVR_CreateSessionView"));
+	static ConstructorHelpers::FClassFinder<UProVRWidgetBase> CreateSessionViewAsset(TEXT("/Game/Widgets/Sessions/UI_ProVR_CreateSessionView"));
 	if (CreateSessionViewAsset.Class != NULL)
 	{
 		ViewWidgetMap.Add(EProVRView::CreateSessionView, NewObject<UProVRWidgetBase>(this, CreateSessionViewAsset.Class, TEXT("UI_ProVR_CreateSessionView")));
 	}
+
+	static ConstructorHelpers::FClassFinder<UProVRWidgetBase> OptionsMenuAsset(TEXT("/Game/Widgets/UI_ProVR_OptionsMenu"));
+	if (OptionsMenuAsset.Class != NULL)
+	{
+		ViewWidgetMap.Add(EProVRView::OptionsMenu, NewObject<UProVRWidgetBase>(this, OptionsMenuAsset.Class, TEXT("UI_ProVR_OptionsMenu")));
+	}
+
+	static ConstructorHelpers::FClassFinder<UProVRWidgetBase> ParticipantHUDAsset(TEXT("/Game/Widgets/UI_ProVR_ParticipantHUD"));
+	if (ParticipantHUDAsset.Class != NULL)
+	{
+		ViewWidgetMap.Add(EProVRView::ParticipantHUD, NewObject<UProVRWidgetBase>(this, ParticipantHUDAsset.Class, TEXT("UI_ProVR_ParticipantHUD")));
+	}
+
+	static ConstructorHelpers::FClassFinder<UProVRWidgetBase> BrowseSessionViewAsset(TEXT("/Game/Widgets/Sessions/UI_ProVR_BrowseSessionView"));
+	if (BrowseSessionViewAsset.Class != NULL)
+	{
+		ViewWidgetMap.Add(EProVRView::BrowseSessionView, NewObject<UProVRWidgetBase>(this, BrowseSessionViewAsset.Class, TEXT("UI_ProVR_BrowseSessionView")));
+	}
+
+	
 	
 	/*
 	static ConstructorHelpers::FClassFinder<UProVRWidgetBase> RegisterViewAsset(TEXT("/Game/Widgets/UI_ProVR_RegisterView"));
