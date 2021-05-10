@@ -9,7 +9,7 @@
 UENUM(BlueprintType)
 enum class EProVRListAllModelsActionResult : uint8
 {
-    ENUM_OK                     UMETA(DisplayName = "Signed URL is successfully generated"),
+    ENUM_OK                     UMETA(DisplayName = "All models returned successfully"),
     ENUM_UserDoesNotExists      UMETA(DisplayName = "User Does Not Exist"),
     ENUM_Unauthorized           UMETA(DisplayName = "Unauthorized. Please re-login"),
     ENUM_InternalError          UMETA(DisplayName = "Internal error"),

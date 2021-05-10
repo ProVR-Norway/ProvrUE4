@@ -12,6 +12,17 @@
  */
 
 #define SESSION_BASE_PATH FString(TEXT("/sessions"))
+UENUM(BlueprintType)
+enum class EProVRCreateSessionActionResult : uint8
+{
+	ENUM_OK								 UMETA(DisplayName = "Session Created Successful"),
+	ENUM_UserDoesNotExists			     UMETA(DisplayName = "User Does Not Exist"),
+	ENUM_Unauthorized				     UMETA(DisplayName = "Unauthorized. Please re-login"),
+	ENUM_InternalError                   UMETA(DisplayName = "Internal error"),
+	ENUM_NoServersAvailable              UMETA(DisplayName = "No servers are currently available"),
+	ENUM_SessionWithSameNameExists       UMETA(DisplayName = "Session with the same name already exists for the user"),
+	ENUM_OtherError                      UMETA(DisplayName = "Other error"),
+};
 
 UCLASS()
 class PROVR_API UProVRCreateSessionAction : public UProVRActionBase
@@ -32,7 +43,7 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ProVR|Actions")
 	int32 MaxPlayers;
 
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnCreateSessionCompleteDelegate, bool, Success, FString, Message, int32, SessionID);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnCreateSessionCompleteDelegate, bool, Success, EProVRCreateSessionActionResult, Result, int32, SessionID);
 	UPROPERTY(BlueprintAssignable, Category = "ProVR|Actions")
 	FOnCreateSessionCompleteDelegate OnCreateSessionCompleteDelegate;
 };

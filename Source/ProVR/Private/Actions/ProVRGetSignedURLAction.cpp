@@ -3,7 +3,7 @@
 #include "Actions/ProVRGetSignedURLAction.h"
 #include "GenericPlatform/GenericPlatformHttp.h"
 
-#define CAD_SERVICE_GET_SIGNED_URL_PATH FString(TEXT("/cadmodels/signedurl/"))
+#define CAD_SERVICE_GET_SIGNED_URL_PATH FString(TEXT("/cadmodels/signedurl?"))
 
 EProVRActionBehavior UProVRGetSignedURLAction::PerformAction()
 {
@@ -13,7 +13,7 @@ EProVRActionBehavior UProVRGetSignedURLAction::PerformAction()
     UProVRNetworkManager* NetworkManager = UProVRGameInstance::GetNetworkManager();
     FString UrlEncodedUsername = FGenericPlatformHttp::UrlEncode(NetworkManager->GetUsername());
     FString UrlEncodedModelName = FGenericPlatformHttp::UrlEncode(ModelName);
-    FString FullPath = CAD_SERVICE_GET_SIGNED_URL_PATH + UrlEncodedUsername + '/' + UrlEncodedModelName;
+    FString FullPath = CAD_SERVICE_GET_SIGNED_URL_PATH + "username=" + UrlEncodedUsername + '&' + "modelfile=" + UrlEncodedModelName + "&action=read";
 
     UProVRHttpRequest::GetWithAuthToken(FullPath, [this](int32 HttpResponseCode, TSharedPtr<FJsonObject> HttpResponseContent)
         {

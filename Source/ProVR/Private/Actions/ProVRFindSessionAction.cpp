@@ -36,25 +36,22 @@ EProVRActionBehavior UProVRFindSessionAction::PerformAction()
 							SessionToBeQueued.HostPort			= CurrentSelectedSession->GetIntegerField("hostPort");
 							NetworkManager->SessionList.Add(SessionToBeQueued); // adds the new session to the  list
 						}
-						OnFindSessionCompleteDelegate.Broadcast(true, "Session Created!");
+						OnFindSessionCompleteDelegate.Broadcast(true, EProVRFindSessionActionResult::ENUM_OK);
 					}
 					else if (HttpResponseCode == 401)
 					{
-						FString WarningMessage = TEXT("error 401 Unauthorized.Please re - login");
 						UE_LOG(LogTemp, Warning, TEXT("error 401 Unauthorized.Please re - login"));
-						OnFindSessionCompleteDelegate.Broadcast(false, WarningMessage);
+						OnFindSessionCompleteDelegate.Broadcast(false, EProVRFindSessionActionResult::ENUM_Unauthorized);
 					}
 					else if (HttpResponseCode == 404)
 					{
-						FString WarningMessage = TEXT("error 404 Session does not exist");
 						UE_LOG(LogTemp, Warning, TEXT("error 404 Session does not exist"));
-						OnFindSessionCompleteDelegate.Broadcast(false, WarningMessage);
+						OnFindSessionCompleteDelegate.Broadcast(false, EProVRFindSessionActionResult::ENUM_UserDoesNotExists);
 					}
 					else if (HttpResponseCode == 500 || HttpResponseCode == HTTP_UNEXPECTED_ERROR)
 					{
-						FString WarningMessage = TEXT("error 500 Internal error");
 						UE_LOG(LogTemp, Warning, TEXT("error 500 Internal error"));
-						OnFindSessionCompleteDelegate.Broadcast(false, WarningMessage);
+						OnFindSessionCompleteDelegate.Broadcast(false, EProVRFindSessionActionResult::ENUM_InternalError);
 					}
 					else
 					{
@@ -62,14 +59,12 @@ EProVRActionBehavior UProVRFindSessionAction::PerformAction()
 						{
 							UE_LOG(LogTemp, Error, TEXT("%s"), *HttpResponseContent->GetStringField("message"));
 						}
-						OnFindSessionCompleteDelegate.Broadcast(false, *HttpResponseContent->GetStringField("message"));
+						UE_LOG(LogTemp, Warning, TEXT("other error find session"));
+						OnFindSessionCompleteDelegate.Broadcast(false, EProVRFindSessionActionResult::ENUM_OtherError);							
 					}
-
-
 					OnAsyncronousActionCompleted();
 				});
-		}
-		
+		}		
 	}
 
 	return EProVRActionBehavior::Asynchronous;
