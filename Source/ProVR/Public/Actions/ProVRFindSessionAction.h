@@ -14,6 +14,16 @@
 
 #define SESSION_BASE_PATH FString(TEXT("/sessions"))
 
+UENUM(BlueprintType)
+enum class EProVRFindSessionActionResult : uint8
+{
+	ENUM_OK								 UMETA(DisplayName = "All relevant sessions are returned"),
+	ENUM_UserDoesNotExists				 UMETA(DisplayName = "User Does Not Exist"),
+	ENUM_Unauthorized				     UMETA(DisplayName = "Unauthorized. Please re-login"),
+	ENUM_InternalError                   UMETA(DisplayName = "Internal error"),
+	ENUM_OtherError                      UMETA(DisplayName = "Other error"),
+};
+
 
 UCLASS()
 class PROVR_API UProVRFindSessionAction : public UProVRActionBase
@@ -23,7 +33,7 @@ class PROVR_API UProVRFindSessionAction : public UProVRActionBase
 public:
 	virtual EProVRActionBehavior PerformAction();
 
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnFindSessionCompleteDelegate, bool, Success, FString, Message);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnFindSessionCompleteDelegate, bool, Success, EProVRFindSessionActionResult, Message);
 	UPROPERTY(BlueprintAssignable, Category = "ProVR|Actions")
 	FOnFindSessionCompleteDelegate OnFindSessionCompleteDelegate;
 };

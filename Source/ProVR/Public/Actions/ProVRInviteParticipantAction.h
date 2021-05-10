@@ -26,7 +26,7 @@ public:
 
 	virtual EProVRActionBehavior PerformAction();
 
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnInviteParticipantCompleteDelegate, bool, Result, FString, Message);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnInviteParticipantCompleteDelegate, bool, Success, EProVRInviteParticipantActionResult, Result);
 	UPROPERTY(BlueprintAssignable, Category = "ProVR|Actions")
 	FOnInviteParticipantCompleteDelegate OnInviteParticipantCompleteDelegate;
 
