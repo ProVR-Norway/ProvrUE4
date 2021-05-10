@@ -34,8 +34,6 @@ struct FProVRSessionsOverview {
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-		bool InSession = false;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 		int32 SessionId;
@@ -103,6 +101,9 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ProVRNetworkManager")
 	TArray<FProVRSessionsOverview> SessionList;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	bool bInASession = false;
 
 	friend class UProVRHttpRequest;
 };

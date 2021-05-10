@@ -10,19 +10,19 @@
 EProVRActionBehavior UProVRJoinSessionAction::PerformAction()
 {
 	TSharedPtr<FJsonObject> RequestJson = MakeShareable(new FJsonObject);
-		if (UProVRGameInstance* GameInstance = UProVRGameInstance::GetCurrentGameInstance())
+
+	if (UProVRGameInstance* GameInstance = UProVRGameInstance::GetCurrentGameInstance())
 	{
 		if (UProVRNetworkManager* NetworkManager = GameInstance->GetNetworkManager())
 		{
-			RequestJson->SetStringField("username", NetworkManager->GetUsername());
 			FString URLPathLevelToJoin;
 			int32 SessionIndexInSessionList;
+			RequestJson->SetStringField("username", FGenericPlatformHttp::UrlEncode(NetworkManager->GetUsername()));
 
 			for (int i = 0; i < NetworkManager->SessionList.Num(); i++)
 			{
-				if (NetworkManager->SessionList[i].SessionName == SessionName)
+				if (NetworkManager->SessionList[i].SessionId == SessionId)
 				{
-					SessionId = NetworkManager->SessionList[i].SessionId;
 					URLPathLevelToJoin = 
 					  FGenericPlatformHttp::UrlEncode(NetworkManager->SessionList[i].HostIP)
 					+ FString::Printf(TEXT(":%d/Game/Maps/"), NetworkManager->SessionList[i].HostPort)
@@ -55,7 +55,7 @@ EProVRActionBehavior UProVRJoinSessionAction::PerformAction()
 							NetworkManager->CurrentSession.MaxParticipants  = NetworkManager->SessionList[SessionIndexInSessionList].MaxParticipants;
 							NetworkManager->CurrentSession.SessionId		= NetworkManager->SessionList[SessionIndexInSessionList].SessionId;
 							NetworkManager->CurrentSession.SessionName		= NetworkManager->SessionList[SessionIndexInSessionList].SessionName;
-							NetworkManager->CurrentSession.InSession		= true;
+							NetworkManager->bInASession = true;
 							NetworkManager->SessionList.Empty();
 						}	
 					}
