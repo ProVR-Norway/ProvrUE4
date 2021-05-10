@@ -34,6 +34,8 @@ struct FProVRSessionsOverview {
 	GENERATED_BODY()
 
 public:
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+		bool InSession = false;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 		int32 SessionId;
@@ -94,7 +96,7 @@ public:
 	void PushNewHttpRequest(class UProVRHttpRequest* NewHttpRequest);
 	void RemoveHttpRequest(class UProVRHttpRequest* HttpRequest);
 
-	TSharedPtr<FProVRSessionsOverview> CurrentSession;
+	FProVRSessionsOverview CurrentSession;
 
 	UFUNCTION(BlueprintCallable, Category = "ProVRNetworkManager")
 	FString GetUsername();

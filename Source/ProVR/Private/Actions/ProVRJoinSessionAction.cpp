@@ -48,18 +48,15 @@ EProVRActionBehavior UProVRJoinSessionAction::PerformAction()
 							UE_LOG(LogTemp, Warning, TEXT("%d"), *URLPathLevelToJoin);
 							//UGameplayStatics::OpenLevel(World, "34.90.23.60:7777/Game/Maps/TestMap", false, "");
 							OnJoinSessionCompleteDelegate.Broadcast(true, EProVRJoinSessionActionResult::ENUM_OK);
-							
-							/* BUG! used during leave session
-							NetworkManager->CurrentSession->HostIP			= NetworkManager->SessionList[SessionIndexInSessionList].HostIP;
-							NetworkManager->CurrentSession->HostPort		= NetworkManager->SessionList[SessionIndexInSessionList].HostPort;
-							NetworkManager->CurrentSession->HostUsername	= NetworkManager->SessionList[SessionIndexInSessionList].MapName;
-							NetworkManager->CurrentSession->MapName			= NetworkManager->SessionList[SessionIndexInSessionList].HostIP;
-							NetworkManager->CurrentSession->MaxParticipants = NetworkManager->SessionList[SessionIndexInSessionList].MaxParticipants;
-							NetworkManager->CurrentSession->SessionId		= NetworkManager->SessionList[SessionIndexInSessionList].SessionId;
-							NetworkManager->CurrentSession->SessionName		= NetworkManager->SessionList[SessionIndexInSessionList].SessionName;
+							NetworkManager->CurrentSession.HostIP			= NetworkManager->SessionList[SessionIndexInSessionList].HostIP;
+							NetworkManager->CurrentSession.HostPort			= NetworkManager->SessionList[SessionIndexInSessionList].HostPort;
+							NetworkManager->CurrentSession.HostUsername		= NetworkManager->SessionList[SessionIndexInSessionList].HostUsername;
+							NetworkManager->CurrentSession.MapName			= NetworkManager->SessionList[SessionIndexInSessionList].MapName;
+							NetworkManager->CurrentSession.MaxParticipants  = NetworkManager->SessionList[SessionIndexInSessionList].MaxParticipants;
+							NetworkManager->CurrentSession.SessionId		= NetworkManager->SessionList[SessionIndexInSessionList].SessionId;
+							NetworkManager->CurrentSession.SessionName		= NetworkManager->SessionList[SessionIndexInSessionList].SessionName;
+							NetworkManager->CurrentSession.InSession		= true;
 							NetworkManager->SessionList.Empty();
-							*/
-							
 						}	
 					}
 					else if (HttpResponseCode == 401)
