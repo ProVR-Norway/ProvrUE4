@@ -6,42 +6,44 @@
 #include "ProVRGameInstance.h"
 #include "Kismet/GameplayStatics.h"
 #include "Managers/ProVRNetworkManager.h"
-
+#include "GenericPlatform/GenericPlatformHttp.h"
+       
 EProVRActionBehavior UProVRLeaveSessionAction::PerformAction()
 {
 	if (UProVRGameInstance* GameInstance = UProVRGameInstance::GetCurrentGameInstance())
 	{
 		if (UProVRNetworkManager* NetworkManager = GameInstance->GetNetworkManager())
 		{
-			UProVRHttpRequest::DeleteWithAuthToken(SESSION_BASE_PATH + FString::Printf(TEXT("/%d/participants/"), 
-			NetworkManager->CurrentSession->SessionId) + NetworkManager->GetUsername(),
-			[this, GameInstance, NetworkManager](int32 HttpResponseCode, TSharedPtr<FJsonObject> HttpResponseContent)
+			//FString FullPath = FString::Printf(TEXT("/sessions/%d/participants?username=%s"), NetworkManager->CurrentSession->SessionId, &FGenericPlatformHttp::UrlEncode(NetworkManager->GetUsername()));
+			//FString FullPath = FString::Printf(TEXT("/sessions/%d/participants/%s"), SessionId, &FGenericPlatformHttp::UrlEncode(NetworkManager->GetUsername()));
+			FString FullPath = FString::Printf(TEXT("/sessions/%d/participants/"), SessionId)+ FGenericPlatformHttp::UrlEncode(NetworkManager->GetUsername());
+			UProVRHttpRequest::DeleteWithAuthToken(FullPath, [this, GameInstance, NetworkManager](int32 HttpResponseCode, TSharedPtr<FJsonObject> HttpResponseContent)
 			{
 				if (HttpResponseCode == 200)
 				{
 					if (UWorld* World = GameInstance->GetWorld())
 					{
-						OnLeaveSessionCompleteDelegate.Broadcast(true, FString(HttpResponseContent->GetStringField("message")));
-						/*
-						UGameplayStatics::OpenLevel(World, "/Game/Maps/EntryMap", false, "");
-						NetworkManager->CurrentSession = nullptr;
-						*/
+						UE_LOG(LogTemp, Warning, TEXT("Leave session action: 200"));
+						//GEngine->HandleDisconnect(World, World->GetNetDriver());
+						UGameplayStatics::OpenLevel(World, "/Game/Maps/EntryMap", false, ""); // opens a new level locally
+						NetworkManager->CurrentSession.Reset();
+						OnLeaveSessionCompleteDelegate.Broadcast(true, EProVRLeaveSessionActionResult::ENUM_OK);
 					}
 				}
 				else if (HttpResponseCode == 401)
 				{
-					UE_LOG(LogTemp, Warning, TEXT("	nauthorized.Please re - login"));
-					OnLeaveSessionCompleteDelegate.Broadcast(false, FString(HttpResponseContent->GetStringField("message")));
+					UE_LOG(LogTemp, Warning, TEXT("Leave session action: on action complete: 401"));
+					OnLeaveSessionCompleteDelegate.Broadcast(false, EProVRLeaveSessionActionResult::ENUM_Unauthorized);
 				}
 				else if (HttpResponseCode == 404)
 				{
-					UE_LOG(LogTemp, Warning, TEXT("User or session does not exist"));
-					OnLeaveSessionCompleteDelegate.Broadcast(false, FString(HttpResponseContent->GetStringField("message")));
+					UE_LOG(LogTemp, Warning, TEXT("Leave session action: on action complete: 404"));
+					OnLeaveSessionCompleteDelegate.Broadcast(false, EProVRLeaveSessionActionResult::ENUM_UserOrSessionDoesNotExists);
 				}
 				else if (HttpResponseCode == 500)
 				{
-					UE_LOG(LogTemp, Warning, TEXT("Internal error"));
-					OnLeaveSessionCompleteDelegate.Broadcast(false, FString(HttpResponseContent->GetStringField("message")));
+					UE_LOG(LogTemp, Warning, TEXT("Leave session action: on action complete: 500"));
+					OnLeaveSessionCompleteDelegate.Broadcast(false, EProVRLeaveSessionActionResult::ENUM_InternalError);
 				}
 				else
 				{
@@ -49,16 +51,13 @@ EProVRActionBehavior UProVRLeaveSessionAction::PerformAction()
 					{
 						UE_LOG(LogTemp, Error, TEXT("%s"), *HttpResponseContent->GetStringField("message"));
 					}
-					OnLeaveSessionCompleteDelegate.Broadcast(false, *HttpResponseContent->GetStringField("message"));
+					UE_LOG(LogTemp, Warning, TEXT("other error leave session"));
+					OnLeaveSessionCompleteDelegate.Broadcast(false, EProVRLeaveSessionActionResult::ENUM_OtherError);
 				}
 				OnAsyncronousActionCompleted();
 			});			
 		}
 	}
-	//const FString& _Path, TFunction<void(int32, TSharedPtr<FJsonObject>)> _OnResponseCompleted
-	
-	OnLeaveSessionCompleteDelegate.Broadcast(false, "Could Not leave session! Network manager not available!");
-	
-	
+
 	return EProVRActionBehavior::Asynchronous;
 }

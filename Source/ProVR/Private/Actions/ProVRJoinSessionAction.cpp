@@ -47,7 +47,7 @@ EProVRActionBehavior UProVRJoinSessionAction::PerformAction()
 							UGameplayStatics::OpenLevel(World, FName(URLPathLevelToJoin), false, "");
 							UE_LOG(LogTemp, Warning, TEXT("%d"), *URLPathLevelToJoin);
 							//UGameplayStatics::OpenLevel(World, "34.90.23.60:7777/Game/Maps/TestMap", false, "");
-							OnJoinSessionCompleteDelegate.Broadcast(true, FString(HttpResponseContent->GetStringField("message")));
+							OnJoinSessionCompleteDelegate.Broadcast(true, EProVRJoinSessionActionResult::ENUM_OK);
 							
 							/* BUG! used during leave session
 							NetworkManager->CurrentSession->HostIP			= NetworkManager->SessionList[SessionIndexInSessionList].HostIP;
@@ -65,17 +65,17 @@ EProVRActionBehavior UProVRJoinSessionAction::PerformAction()
 					else if (HttpResponseCode == 401)
 					{
 						UE_LOG(LogTemp, Warning, TEXT("error 401 Unauthorized.Please re - login"));
-						OnJoinSessionCompleteDelegate.Broadcast(false, FString(HttpResponseContent->GetStringField("message")));
+						OnJoinSessionCompleteDelegate.Broadcast(false, EProVRJoinSessionActionResult::ENUM_Unauthorized);
 					}
 					else if (HttpResponseCode == 404)
 					{
 						UE_LOG(LogTemp, Warning, TEXT("error 404 Session does not exist"));
-						OnJoinSessionCompleteDelegate.Broadcast(false, FString(HttpResponseContent->GetStringField("message")));
+						OnJoinSessionCompleteDelegate.Broadcast(false, EProVRJoinSessionActionResult::ENUM_UserOrSessionDoesNotExists);
 					}
 					else if (HttpResponseCode == 500 || HttpResponseCode == HTTP_UNEXPECTED_ERROR)
 					{
 						UE_LOG(LogTemp, Warning, TEXT("error 500 Internal error"));
-						OnJoinSessionCompleteDelegate.Broadcast(false, FString(HttpResponseContent->GetStringField("message")));
+						OnJoinSessionCompleteDelegate.Broadcast(false, EProVRJoinSessionActionResult::ENUM_InternalError);
 					}
 					else
 					{
@@ -83,7 +83,8 @@ EProVRActionBehavior UProVRJoinSessionAction::PerformAction()
 						{
 							UE_LOG(LogTemp, Error, TEXT("%s"), *HttpResponseContent->GetStringField("message"));
 						}
-						OnJoinSessionCompleteDelegate.Broadcast(false, *HttpResponseContent->GetStringField("message"));
+						UE_LOG(LogTemp, Warning, TEXT("other error join session"));
+						OnJoinSessionCompleteDelegate.Broadcast(false, EProVRJoinSessionActionResult::ENUM_OtherError);
 					}
 					OnAsyncronousActionCompleted();
 				});

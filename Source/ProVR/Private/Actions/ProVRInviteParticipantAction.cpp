@@ -6,7 +6,6 @@
 #include "Managers/ProVRNetworkManager.h"
 
 
-
 EProVRActionBehavior UProVRInviteParticipantAction::PerformAction()
 {
 	
@@ -42,22 +41,23 @@ EProVRActionBehavior UProVRInviteParticipantAction::PerformAction()
 				{
 					if (HttpResponseCode == 200)
 					{
-						OnInviteParticipantCompleteDelegate.Broadcast(true, FString(HttpResponseContent->GetStringField("message")));
+						UE_LOG(LogTemp, Warning, TEXT("Invite participants action: on action complete: 200"));
+						OnInviteParticipantCompleteDelegate.Broadcast(true, EProVRInviteParticipantActionResult::ENUM_OK);
 					}
 					else if (HttpResponseCode == 401)
 					{
-						UE_LOG(LogTemp, Warning, TEXT("error 401 Unauthorized.Please re - login"));
-						OnInviteParticipantCompleteDelegate.Broadcast(false, FString(HttpResponseContent->GetStringField("message")));
+						UE_LOG(LogTemp, Warning, TEXT("Invite participants action: on action complete: 401"));
+						OnInviteParticipantCompleteDelegate.Broadcast(false, EProVRInviteParticipantActionResult::ENUM_Unauthorized);
 					}
 					else if (HttpResponseCode == 404)
 					{
-						UE_LOG(LogTemp, Warning, TEXT("error 404 Session does not exist"));
-						OnInviteParticipantCompleteDelegate.Broadcast(false, FString(HttpResponseContent->GetStringField("message")));
+						UE_LOG(LogTemp, Warning, TEXT("Invite participants action: on action complete: 404"));
+						OnInviteParticipantCompleteDelegate.Broadcast(false, EProVRInviteParticipantActionResult::ENUM_UserDoesNotExists);
 					}
 					else if (HttpResponseCode == 500 || HttpResponseCode == HTTP_UNEXPECTED_ERROR)
 					{
-						UE_LOG(LogTemp, Warning, TEXT("error 500 Internal error"));
-						OnInviteParticipantCompleteDelegate.Broadcast(false, FString(HttpResponseContent->GetStringField("message")));
+						UE_LOG(LogTemp, Warning, TEXT("Invite participants action: on action complete: 500"));
+						OnInviteParticipantCompleteDelegate.Broadcast(false, EProVRInviteParticipantActionResult::ENUM_InternalError);
 					}
 					else
 					{
@@ -65,14 +65,13 @@ EProVRActionBehavior UProVRInviteParticipantAction::PerformAction()
 						{
 							UE_LOG(LogTemp, Error, TEXT("%s"), *HttpResponseContent->GetStringField("message"));
 						}
-						OnInviteParticipantCompleteDelegate.Broadcast(false, *HttpResponseContent->GetStringField("message"));
+						UE_LOG(LogTemp, Warning, TEXT("other error invite session"));
+						OnInviteParticipantCompleteDelegate.Broadcast(false, EProVRInviteParticipantActionResult::ENUM_OtherError);
 					}
 					OnAsyncronousActionCompleted();
 				});
 		}
 	}
-
-	
 
 	return EProVRActionBehavior::Asynchronous;
 
