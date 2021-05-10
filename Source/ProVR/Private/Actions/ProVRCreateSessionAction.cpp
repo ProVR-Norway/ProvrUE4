@@ -39,28 +39,28 @@ EProVRActionBehavior UProVRCreateSessionAction::PerformAction()
 			else if (HttpResponseCode == 401)
 			{
 				UE_LOG(LogTemp, Warning, TEXT("error 401 Unauthorized.Please re - login"));
-				OnCreateSessionCompleteDelegate.Broadcast(false, EProVRCreateSessionActionResult::ENUM_Unauthorized, -1);
+				OnCreateSessionCompleteDelegate.Broadcast(false, EProVRCreateSessionActionResult::ENUM_Unauthorized, 0);
 			}
 			else if (HttpResponseCode == 403)
 			{
 				UE_LOG(LogTemp, Warning, TEXT("error 403 Session with the same name already exists for the user"));
-				OnCreateSessionCompleteDelegate.Broadcast(false, EProVRCreateSessionActionResult::ENUM_SessionWithSameNameExists, -1);
+				OnCreateSessionCompleteDelegate.Broadcast(false, EProVRCreateSessionActionResult::ENUM_SessionWithSameNameExists, 0);
 			}
 			else if (HttpResponseCode == 404)
 			{
 				UE_LOG(LogTemp, Warning, TEXT("error 404 User does not exist"));
-				OnCreateSessionCompleteDelegate.Broadcast(false, EProVRCreateSessionActionResult::ENUM_UserDoesNotExists, -1);
+				OnCreateSessionCompleteDelegate.Broadcast(false, EProVRCreateSessionActionResult::ENUM_UserDoesNotExists, 0);
 			}
 			else if (HttpResponseCode == 500)
 			{
 				UE_LOG(LogTemp, Warning, TEXT("error 500 Internal error"));
-				OnCreateSessionCompleteDelegate.Broadcast(false, EProVRCreateSessionActionResult::ENUM_InternalError, -1);
+				OnCreateSessionCompleteDelegate.Broadcast(false, EProVRCreateSessionActionResult::ENUM_InternalError, 0);
 				}
 
 			else if (HttpResponseCode == 503)
 			{
 				UE_LOG(LogTemp, Warning, TEXT("error 503 No servers are currently available"));
-				OnCreateSessionCompleteDelegate.Broadcast(false, EProVRCreateSessionActionResult::ENUM_NoServersAvailable, -1);
+				OnCreateSessionCompleteDelegate.Broadcast(false, EProVRCreateSessionActionResult::ENUM_NoServersAvailable, 0);
 				
 			}
 			else
@@ -70,7 +70,7 @@ EProVRActionBehavior UProVRCreateSessionAction::PerformAction()
 					UE_LOG(LogTemp, Error, TEXT("%s"), *HttpResponseContent->GetStringField("message"));
 				}
 				UE_LOG(LogTemp, Warning, TEXT("other error create session"));
-				OnCreateSessionCompleteDelegate.Broadcast(false, EProVRCreateSessionActionResult::ENUM_OtherError, -1);	
+				OnCreateSessionCompleteDelegate.Broadcast(false, EProVRCreateSessionActionResult::ENUM_OtherError, 0);	
 			}
 			OnAsyncronousActionCompleted();
 		});
