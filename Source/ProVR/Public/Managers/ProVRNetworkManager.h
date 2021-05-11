@@ -97,7 +97,7 @@ public:
 	FProVRSessionsOverview CurrentSession;
 	
 	//UPROPERTY(BlueprintReadOnly, , Category = "ProVRNetworkManager")
-	TSharedPtr<FProVRSessionsOverview> CurrentSession;
+	//TSharedPtr<FProVRSessionsOverview> CurrentSession;
 
 	UFUNCTION(BlueprintCallable, Category = "ProVRNetworkManager")
 	FString GetUsername();

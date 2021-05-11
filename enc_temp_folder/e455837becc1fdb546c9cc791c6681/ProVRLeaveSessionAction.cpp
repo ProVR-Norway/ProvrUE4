@@ -16,7 +16,6 @@ EProVRActionBehavior UProVRLeaveSessionAction::PerformAction()
 		{
 			if (!NetworkManager->bInASession)
 			{
-				UE_LOG(LogTemp, Warning, TEXT("Leave session action: TIs not part of a session"));
 				OnLeaveSessionCompleteDelegate.Broadcast(false, EProVRLeaveSessionActionResult::ENUM_IsNotInSession);
 				return EProVRActionBehavior::Synchronous;
 			}
