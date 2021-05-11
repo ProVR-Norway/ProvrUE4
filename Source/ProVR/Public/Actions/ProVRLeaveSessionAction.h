@@ -14,6 +14,7 @@ enum class EProVRLeaveSessionActionResult : uint8
 	ENUM_Unauthorized				     UMETA(DisplayName = "Unauthorized. Please re-login"),
 	ENUM_InternalError                   UMETA(DisplayName = "Internal error"),
 	ENUM_OtherError                      UMETA(DisplayName = "Other error"),
+	ENUM_IsNotInSession					 UMETA(DisplayName = "Is not in a session"),
 };
 
 #define SESSION_BASE_PATH FString(TEXT("/sessions"))
@@ -24,7 +25,6 @@ public:
 	GENERATED_BODY()
 	virtual EProVRActionBehavior PerformAction();
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ProVR|Actions")
 	int32 SessionId;
 
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnLeaveSessionCompleteDelegate, bool, Success, EProVRLeaveSessionActionResult, Result);

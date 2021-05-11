@@ -94,13 +94,19 @@ public:
 	void PushNewHttpRequest(class UProVRHttpRequest* NewHttpRequest);
 	void RemoveHttpRequest(class UProVRHttpRequest* HttpRequest);
 
-	TSharedPtr<FProVRSessionsOverview> CurrentSession;
+	FProVRSessionsOverview CurrentSession;
+	
+	//UPROPERTY(BlueprintReadOnly, , Category = "ProVRNetworkManager")
+	//TSharedPtr<FProVRSessionsOverview> CurrentSession;
 
 	UFUNCTION(BlueprintCallable, Category = "ProVRNetworkManager")
 	FString GetUsername();
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ProVRNetworkManager")
 	TArray<FProVRSessionsOverview> SessionList;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	bool bInASession = false;
 
 	friend class UProVRHttpRequest;
 };

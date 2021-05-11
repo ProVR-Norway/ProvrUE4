@@ -2,6 +2,7 @@
 
 #include "Actions/ProVRRegisterUserAction.h"
 #include "Network/ProVRHttpRequest.h"
+#include "Misc/SecureHash.h"
 #include "Dom/JsonObject.h"
 
 #define AUTH_SERVICE_REGISTER_REQUEST_PATH FString(TEXT("/auth/register"))
@@ -57,4 +58,10 @@ EProVRActionBehavior UProVRRegisterUserAction::PerformAction()
 		});
 
 	return EProVRActionBehavior::Asynchronous;
+}
+
+void UProVRRegisterUserAction::SetPassword(FString Password_)
+{
+
+	Password = FMD5::HashAnsiString(*Password_);
 }

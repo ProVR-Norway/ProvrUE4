@@ -14,8 +14,13 @@ EProVRActionBehavior UProVRLeaveSessionAction::PerformAction()
 	{
 		if (UProVRNetworkManager* NetworkManager = GameInstance->GetNetworkManager())
 		{
-			//FString FullPath = FString::Printf(TEXT("/sessions/%d/participants?username=%s"), NetworkManager->CurrentSession->SessionId, &FGenericPlatformHttp::UrlEncode(NetworkManager->GetUsername()));
-			//FString FullPath = FString::Printf(TEXT("/sessions/%d/participants/%s"), SessionId, &FGenericPlatformHttp::UrlEncode(NetworkManager->GetUsername()));
+			if (!NetworkManager->bInASession)
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Leave session action: TIs not part of a session"));
+				OnLeaveSessionCompleteDelegate.Broadcast(false, EProVRLeaveSessionActionResult::ENUM_IsNotInSession);
+				return EProVRActionBehavior::Synchronous;
+			}
+			SessionId = NetworkManager->CurrentSession.SessionId;
 			FString FullPath = FString::Printf(TEXT("/sessions/%d/participants/"), SessionId)+ FGenericPlatformHttp::UrlEncode(NetworkManager->GetUsername());
 			UProVRHttpRequest::DeleteWithAuthToken(FullPath, [this, GameInstance, NetworkManager](int32 HttpResponseCode, TSharedPtr<FJsonObject> HttpResponseContent)
 			{
@@ -24,10 +29,11 @@ EProVRActionBehavior UProVRLeaveSessionAction::PerformAction()
 					if (UWorld* World = GameInstance->GetWorld())
 					{
 						UE_LOG(LogTemp, Warning, TEXT("Leave session action: 200"));
-						//GEngine->HandleDisconnect(World, World->GetNetDriver());
-						UGameplayStatics::OpenLevel(World, "/Game/Maps/EntryMap", false, ""); // opens a new level locally
-						NetworkManager->CurrentSession.Reset();
+						GEngine->HandleDisconnect(World, World->GetNetDriver());
+						UGameplayStatics::OpenLevel(World, "/Game/Maps/TransitionMap", false, ""); // opens a new level locally
+						NetworkManager->bInASession = false;
 						OnLeaveSessionCompleteDelegate.Broadcast(true, EProVRLeaveSessionActionResult::ENUM_OK);
+
 					}
 				}
 				else if (HttpResponseCode == 401)
