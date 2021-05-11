@@ -93,7 +93,8 @@ public:
 	void TryRenewingAuthToken(TFunction<void(int32)> OnCompleted);
 	void PushNewHttpRequest(class UProVRHttpRequest* NewHttpRequest);
 	void RemoveHttpRequest(class UProVRHttpRequest* HttpRequest);
-
+	
+	//UPROPERTY(BlueprintReadOnly, , Category = "ProVRNetworkManager")
 	TSharedPtr<FProVRSessionsOverview> CurrentSession;
 
 	UFUNCTION(BlueprintCallable, Category = "ProVRNetworkManager")
