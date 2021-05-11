@@ -40,3 +40,10 @@ EProVRActionBehavior UProVRLoginAction::PerformAction()
 	OnActionComplete.Broadcast(EProVRLoginActionResult::ENUM_OtherError);
 	return EProVRActionBehavior::Synchronous;
 }
+
+
+
+void UProVRLoginAction::SetPassword(FString Password_)
+{
+	Password = FMD5::HashAnsiString(*Password_);
+}
