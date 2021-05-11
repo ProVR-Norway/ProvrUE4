@@ -14,13 +14,15 @@ AProVRPawn::AProVRPawn()
 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	CapsuleComp = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleComp"));
-	SceneComp = CreateDefaultSubobject<USceneComponent>(TEXT("SceneComp"));
+	VROrigin = CreateDefaultSubobject<USceneComponent>(TEXT("VROrigin"));
+	HeadTarget = CreateDefaultSubobject<USceneComponent>(TEXT("GeadTarget"));
 	CameraComp = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComp"));
 	WidgetComp = CreateDefaultSubobject<UWidgetComponent>(TEXT("WidgetComp"));
 	SkeletalMeshComp = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalMeshComp"));
-	LeftHandControllerComp = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("LeftHandControllerComp"));
-	RightHandControllerComp = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("RightHandControllerComp"));
+	//LeftHandControllerComp = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("LeftHandControllerComp"));
+	//RightHandControllerComp = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("RightHandControllerComp"));
 	WidgetInteractionComp = CreateDefaultSubobject<UWidgetInteractionComponent>(TEXT("WidgetInteractionComp"));
+
 	/*
 	MotionControllerCompRight = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("MotionControllerCompRight"));
 	MotionControllerCompLeft = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("MotionControllerCompLeft"));
@@ -39,6 +41,7 @@ AProVRPawn::AProVRPawn()
 	CameraComp->SetupAttachment(SceneComp);
 	*/
 
+	/*
 	CapsuleComp->SetupAttachment(RootComponent);
 		SkeletalMeshComp->SetupAttachment(CapsuleComp);
 			SceneComp->SetupAttachment(SkeletalMeshComp);
@@ -48,6 +51,20 @@ AProVRPawn::AProVRPawn()
 			CameraComp->AttachTo(SkeletalMeshComp, "headSocket");
 			WidgetInteractionComp->AttachTo(SkeletalMeshComp, "right_index_raycast_finger");
 
+	*/
+
+	CapsuleComp->SetupAttachment(RootComponent);
+		VROrigin->SetupAttachment(CapsuleComp);
+			CameraComp->SetupAttachment(VROrigin);
+				HeadTarget->SetupAttachment(CameraComp);
+		SkeletalMeshComp->SetupAttachment(VROrigin);
+			WidgetInteractionComp->AttachTo(SkeletalMeshComp, "right_index_raycast_finger");
+		WidgetComp->SetupAttachment(VROrigin);
+		//LeftHandControllerComp->SetupAttachment(VROrigin);
+		//RightHandControllerComp->SetupAttachment(VROrigin);
+
+	
+	
 	/*
 	MotionControllerCompRight->SetupAttachment(SceneComp);
 	MotionControllerCompLeft->SetupAttachment(SceneComp);

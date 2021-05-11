@@ -33,7 +33,10 @@ public:
 		UWidgetComponent* WidgetComp;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "ProVR|Actions")
-		USceneComponent* SceneComp;
+		USceneComponent* VROrigin;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "ProVR|Actions")
+		USceneComponent* HeadTarget;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "ProVR|Actions")
 		UCameraComponent* CameraComp;
