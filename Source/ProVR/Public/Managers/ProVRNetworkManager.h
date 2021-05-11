@@ -93,15 +93,23 @@ public:
 	void TryRenewingAuthToken(TFunction<void(int32)> OnCompleted);
 	void PushNewHttpRequest(class UProVRHttpRequest* NewHttpRequest);
 	void RemoveHttpRequest(class UProVRHttpRequest* HttpRequest);
+<<<<<<< HEAD
+
+	FProVRSessionsOverview CurrentSession;
+=======
 	
 	//UPROPERTY(BlueprintReadOnly, , Category = "ProVRNetworkManager")
 	TSharedPtr<FProVRSessionsOverview> CurrentSession;
+>>>>>>> development
 
 	UFUNCTION(BlueprintCallable, Category = "ProVRNetworkManager")
 	FString GetUsername();
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ProVRNetworkManager")
 	TArray<FProVRSessionsOverview> SessionList;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	bool bInASession = false;
 
 	friend class UProVRHttpRequest;
 };

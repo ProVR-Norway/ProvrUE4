@@ -10,19 +10,19 @@
 EProVRActionBehavior UProVRJoinSessionAction::PerformAction()
 {
 	TSharedPtr<FJsonObject> RequestJson = MakeShareable(new FJsonObject);
-		if (UProVRGameInstance* GameInstance = UProVRGameInstance::GetCurrentGameInstance())
+
+	if (UProVRGameInstance* GameInstance = UProVRGameInstance::GetCurrentGameInstance())
 	{
 		if (UProVRNetworkManager* NetworkManager = GameInstance->GetNetworkManager())
 		{
-			RequestJson->SetStringField("username", NetworkManager->GetUsername());
 			FString URLPathLevelToJoin;
 			int32 SessionIndexInSessionList;
+			RequestJson->SetStringField("username", FGenericPlatformHttp::UrlEncode(NetworkManager->GetUsername()));
 
 			for (int i = 0; i < NetworkManager->SessionList.Num(); i++)
 			{
-				if (NetworkManager->SessionList[i].SessionName == SessionName)
+				if (NetworkManager->SessionList[i].SessionId == SessionId)
 				{
-					SessionId = NetworkManager->SessionList[i].SessionId;
 					URLPathLevelToJoin = 
 					  FGenericPlatformHttp::UrlEncode(NetworkManager->SessionList[i].HostIP)
 					+ FString::Printf(TEXT(":%d/Game/Maps/"), NetworkManager->SessionList[i].HostPort)
@@ -48,18 +48,15 @@ EProVRActionBehavior UProVRJoinSessionAction::PerformAction()
 							UE_LOG(LogTemp, Warning, TEXT("%d"), *URLPathLevelToJoin);
 							//UGameplayStatics::OpenLevel(World, "34.90.23.60:7777/Game/Maps/TestMap", false, "");
 							OnJoinSessionCompleteDelegate.Broadcast(true, EProVRJoinSessionActionResult::ENUM_OK);
-							
-							/* BUG! used during leave session
-							NetworkManager->CurrentSession->HostIP			= NetworkManager->SessionList[SessionIndexInSessionList].HostIP;
-							NetworkManager->CurrentSession->HostPort		= NetworkManager->SessionList[SessionIndexInSessionList].HostPort;
-							NetworkManager->CurrentSession->HostUsername	= NetworkManager->SessionList[SessionIndexInSessionList].MapName;
-							NetworkManager->CurrentSession->MapName			= NetworkManager->SessionList[SessionIndexInSessionList].HostIP;
-							NetworkManager->CurrentSession->MaxParticipants = NetworkManager->SessionList[SessionIndexInSessionList].MaxParticipants;
-							NetworkManager->CurrentSession->SessionId		= NetworkManager->SessionList[SessionIndexInSessionList].SessionId;
-							NetworkManager->CurrentSession->SessionName		= NetworkManager->SessionList[SessionIndexInSessionList].SessionName;
+							NetworkManager->CurrentSession.HostIP			= NetworkManager->SessionList[SessionIndexInSessionList].HostIP;
+							NetworkManager->CurrentSession.HostPort			= NetworkManager->SessionList[SessionIndexInSessionList].HostPort;
+							NetworkManager->CurrentSession.HostUsername		= NetworkManager->SessionList[SessionIndexInSessionList].HostUsername;
+							NetworkManager->CurrentSession.MapName			= NetworkManager->SessionList[SessionIndexInSessionList].MapName;
+							NetworkManager->CurrentSession.MaxParticipants  = NetworkManager->SessionList[SessionIndexInSessionList].MaxParticipants;
+							NetworkManager->CurrentSession.SessionId		= NetworkManager->SessionList[SessionIndexInSessionList].SessionId;
+							NetworkManager->CurrentSession.SessionName		= NetworkManager->SessionList[SessionIndexInSessionList].SessionName;
+							NetworkManager->bInASession = true;
 							NetworkManager->SessionList.Empty();
-							*/
-							
 						}	
 					}
 					else if (HttpResponseCode == 401)

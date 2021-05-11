@@ -32,9 +32,6 @@ public:
 	virtual EProVRActionBehavior PerformAction();
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ProVR|Actions")
-	FString SessionName;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ProVR|Actions")
 	int32 SessionId;
 
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnJoinSessionCompleteDelegate, bool, Success, EProVRJoinSessionActionResult, Result);
