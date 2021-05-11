@@ -260,7 +260,7 @@ bool FOnlineSessionPython::CreateSession(int32 HostingPlayerNum, FName SessionNa
 			}
 		}
 		*/
-
+	/*
 	Result = ONLINE_IO_PENDING;
 
 	FHttpModule* Http = &FHttpModule::Get();
@@ -269,12 +269,12 @@ bool FOnlineSessionPython::CreateSession(int32 HostingPlayerNum, FName SessionNa
 	//Request->SetHeader(TEXT("User-Agent"), TEXT("X-UnrealEngine-Agent"));
 	Request->SetHeader(TEXT("Content-Type"), TEXT("application/json"));
 	Request->SetVerb("POST");
-	/*	
+	/
 	* Online sub system interface
 	Session->SessionSettings.Get("SERVERNAME", ServerName);
 	Session->SessionSettings.Get("MAPNAME", MapName);
 	Session->SessionSettings.Get("GAMEMODE", GameMode);
-	*/
+	
 	FString MapName;
 	int32 MaxParticipants = NewSessionSettings.NumPublicConnections;
 	TSharedPtr<FJsonObject> RequestJson = MakeShareable(new FJsonObject);
@@ -283,9 +283,9 @@ bool FOnlineSessionPython::CreateSession(int32 HostingPlayerNum, FName SessionNa
 	RequestJson->SetNumberField("maxParticipants", MaxParticipants);  //possible cast issues
 	RequestJson->SetStringField("hostUsername", "Username");
 
+	*/
 
-
-
+	/*
 
 	FString OutputString;
 	TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&OutputString);
@@ -294,7 +294,7 @@ bool FOnlineSessionPython::CreateSession(int32 HostingPlayerNum, FName SessionNa
 	const FTCHARToUTF8 Converter(*OutputString, OutputString.Len());
 	RequestContent->Append(reinterpret_cast<const uint8*>(Converter.Get()), Converter.Length());
 	Request->SetContent(RequestContent);
-
+	*/
 
 	/*
 	* 
@@ -318,7 +318,7 @@ bool FOnlineSessionPython::CreateSession(int32 HostingPlayerNum, FName SessionNa
 		PasswordProtected = "false";
 	}
 	*/
-	
+	/*
 	Request->SetURL(FString::Printf(TEXT("http://%s/register_server?name=%s&port=%d&maxplayers=%d&pwprotected=%s&gamemode=%s&map=%s"), *config->ServerAddress, *FGenericPlatformHttp::UrlEncode(ServerName), SessionInfo->HostAddr->GetPort(), Session->NumOpenPublicConnections, *FGenericPlatformHttp::UrlEncode(PasswordProtected), *FGenericPlatformHttp::UrlEncode(GameMode), *FGenericPlatformHttp::UrlEncode(MapName)));
 	Request->OnProcessRequestComplete().BindRaw(this, &FOnlineSessionPython::CreateSession_ResponseReceived);
 	Request->ProcessRequest();
@@ -327,8 +327,9 @@ bool FOnlineSessionPython::CreateSession(int32 HostingPlayerNum, FName SessionNa
 	{
 		TriggerOnCreateSessionCompleteDelegates(SessionName, (Result == ONLINE_SUCCESS) ? true : false);
 	}
-	
+	*/
 	return Result == ONLINE_IO_PENDING || Result == ONLINE_SUCCESS;
+	
 }
 
 bool FOnlineSessionPython::CreateSession(const FUniqueNetId& HostingPlayerId, FName SessionName, const FOnlineSessionSettings& NewSessionSettings)
