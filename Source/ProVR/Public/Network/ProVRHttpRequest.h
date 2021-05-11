@@ -15,6 +15,12 @@ enum class EHttpRequestType : uint8
 	ENUM_Delete
 };
 
+enum class EProVRAuthToken : uint8
+{
+	ENUM_WithToken,
+	ENUM_WithoutToken,
+};
+
 #define HTTP_UNEXPECTED_ERROR -1
 
 UCLASS()
@@ -39,7 +45,7 @@ private:
 
 	int32 InternalErrorRetriedCount = 0;
 
-	void RetryRequest();
+	void RetryRequest(FHttpRequestPtr Request);
 
 	static TSharedPtr<class FJsonObject> ErrorMessageJson(const FString& Message);
 

@@ -117,7 +117,7 @@ void UProVRHttpRequest::PostJsonWithAuthToken(const FString& _Path, TSharedPtr<F
 		if (UProVRNetworkManager* NetworkManager = UProVRGameInstance::GetNetworkManager())
 		{
 			CreatedRequest->InternalHttpRequest->SetVerb("POST");
-			CreatedRequest->InternalHttpRequest->SetHeader("Content-Type", "application/json");
+			CreatedRequest->InternalHttpRequest->SetHeader("content-type", "application/json");
 			CreatedRequest->InternalHttpRequest->SetHeader("Authorization", "Basic " + NetworkManager->GetCurrentAuthToken());
 			CreatedRequest->RequestType = EHttpRequestType::ENUM_Post;
 
@@ -273,7 +273,7 @@ UProVRHttpRequest* UProVRHttpRequest::CreateInternalRequest(const FString& _Path
 		NewHttpRequest->RequestFinalUrl = BACKEND_BASE_URL + _Path;
 		NewHttpRequest->InternalHttpRequest->SetURL(NewHttpRequest->RequestFinalUrl);
 
-		NewHttpRequest->InternalHttpRequest->SetHeader("Authentication", NetworkManager->GetCurrentAuthToken());
+		NewHttpRequest->InternalHttpRequest->SetHeader("Authorization", "Basic " + NetworkManager->GetCurrentAuthToken());
 
 		NetworkManager->PushNewHttpRequest(NewHttpRequest);
 
@@ -316,17 +316,17 @@ void UProVRHttpRequest::OnInternalRequestCompleted(FHttpRequestPtr Request, FHtt
 				}
 				else
 				{
-					RetryRequest();
+					RetryRequest(Request);
 					return; //Return here, so the request will not be removed from NetworkManager at the end.
 				}
 			}
 			else if (ResponseCode == 401) //Retry in case the token is expired
 			{
-				NetworkManager->TryRenewingAuthToken([this](int32 RenewTokenResponseCode)
+				NetworkManager->TryRenewingAuthToken([this, Request](int32 RenewTokenResponseCode)
 					{
 						if (EHttpResponseCodes::IsOk(RenewTokenResponseCode))
 						{
-							RetryRequest();
+							RetryRequest(Request);
 						}
 						else
 						{
@@ -363,7 +363,7 @@ void UProVRHttpRequest::OnInternalRequestCompleted(FHttpRequestPtr Request, FHtt
 	}
 }
 
-void UProVRHttpRequest::RetryRequest()
+void UProVRHttpRequest::RetryRequest(FHttpRequestPtr Request)
 {
 	if (UProVRNetworkManager* NetworkManager = UProVRGameInstance::GetNetworkManager())
 	{
@@ -373,7 +373,8 @@ void UProVRHttpRequest::RetryRequest()
 
 		InternalHttpRequest->SetURL(RequestFinalUrl);
 
-		InternalHttpRequest->SetHeader("Authentication", NetworkManager->GetCurrentAuthToken());
+		if(!Request->GetHeader("Authorization").IsEmpty())
+			InternalHttpRequest->SetHeader("Authorization", "Basic " + NetworkManager->GetCurrentAuthToken());
 
 		switch (RequestType)
 		{
@@ -385,10 +386,12 @@ void UProVRHttpRequest::RetryRequest()
 			break;
 		case EHttpRequestType::ENUM_Post:
 			InternalHttpRequest->SetVerb("POST");
+			InternalHttpRequest->SetHeader("content-type", "application/json");
 			InternalHttpRequest->SetContent(RequestContent);
 			break;
 		case EHttpRequestType::ENUM_Put:
 			InternalHttpRequest->SetVerb("PUT");
+			InternalHttpRequest->SetHeader("content-type", "application/json");
 			InternalHttpRequest->SetContent(RequestContent);
 			break;
 		}
