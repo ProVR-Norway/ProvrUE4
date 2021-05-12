@@ -17,7 +17,7 @@ AProVRPawn::AProVRPawn()
 	CameraComp = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComp"));
 	HeadTarget = CreateDefaultSubobject<USceneComponent>(TEXT("GeadTarget"));
 	SkeletalMeshComp = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalMeshComp"));
-	WidgetInteractionComp = CreateDefaultSubobject<UWidgetInteractionComponent>(TEXT("WidgetInteractionComp"));
+	//WidgetInteractionComp = CreateDefaultSubobject<UWidgetInteractionComponent>(TEXT("WidgetInteractionComp"));
 	WidgetComp = CreateDefaultSubobject<UWidgetComponent>(TEXT("WidgetComp"));
 
 	CapsuleComp->SetupAttachment(RootComponent);
@@ -25,7 +25,7 @@ AProVRPawn::AProVRPawn()
 	CameraComp->SetupAttachment(VROrigin);
 	HeadTarget->SetupAttachment(CameraComp);
 	SkeletalMeshComp->SetupAttachment(VROrigin);
-	WidgetInteractionComp->AttachTo(SkeletalMeshComp, "raycast_finger");
+	//WidgetInteractionComp->AttachTo(SkeletalMeshComp, "raycast_finger");
 	WidgetComp->SetupAttachment(VROrigin);
 }
 
