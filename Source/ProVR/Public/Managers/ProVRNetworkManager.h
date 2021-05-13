@@ -9,7 +9,6 @@
 
 
 #define BACKEND_BASE_URL FString(TEXT("https://api-gateway-iu3tuzfidq-ez.a.run.app"))
-//#define BACKEND_BASE_URL FString(TEXT("https://session-microservice-iu3tuzfidq-ez.a.run.app"))
 #define INTERNAL_ERROR_RETRY_TIMES 3
 
 /*
@@ -67,9 +66,8 @@ class PROVR_API UProVRNetworkManager : public UProVRManagerBase
 	GENERATED_BODY()
 
 private:
-	//https://en.wikipedia.org/wiki/Basic_access_authentication
 	FString CurrentAuthToken;
-	FString LastUsername = "admin123";
+	FString LastUsername;
 	FString LastPassword;
 
 	UPROPERTY()
