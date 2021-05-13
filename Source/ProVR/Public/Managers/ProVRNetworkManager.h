@@ -94,6 +94,8 @@ public:
 	void TryRenewingAuthToken(TFunction<void(int32)> OnCompleted);
 	void PushNewHttpRequest(class UProVRHttpRequest* NewHttpRequest);
 	void RemoveHttpRequest(class UProVRHttpRequest* HttpRequest);
+	UFUNCTION()
+	bool Logout(FProVRLogoutActionComplete Complete);
 
 	FProVRSessionsOverview CurrentSession;
 	
@@ -110,5 +112,4 @@ public:
 	bool bInASession = false;
 
 	friend class UProVRHttpRequest;
-	friend class UProVRLogoutAction;
 };

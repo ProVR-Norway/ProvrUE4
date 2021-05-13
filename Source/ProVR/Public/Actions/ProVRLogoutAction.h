@@ -9,16 +9,7 @@
 /**
  * 
  */
-
-UENUM(BlueprintType)
-enum class EProVRLogoutActionResult : uint8
-{
-	ENUM_OK						UMETA(DisplayName = "Login OK"),
-	ENUM_UserDoesNotExists		UMETA(DisplayName = "User Does Not Exists"),
-	ENUM_InvalidUsernameOrPass	UMETA(DisplayName = "Invalid Username or Password"),
-	ENUM_ServerError			UMETA(DisplayName = "Server Error"),
-	ENUM_OtherError				UMETA(DisplayName = "Other Errors"),
-};
+DECLARE_DYNAMIC_DELEGATE_OneParam(FProVRLogoutActionComplete, bool, Success);
 
 UCLASS()
 class PROVR_API UProVRLogoutAction : public UProVRActionBase
@@ -29,4 +20,13 @@ class PROVR_API UProVRLogoutAction : public UProVRActionBase
 
 public:
 
+
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FProVRLogoutActionDoneDelegate, bool, Success);
+	UPROPERTY(BlueprintAssignable, Category = "ProVR|Actions")
+	FProVRLogoutActionDoneDelegate OnLogoutActionCompleteDelegate;
+
+	UFUNCTION()
+	void OnLogoutEventComplete(bool Success);
+
+	FProVRLogoutActionComplete Complete;
 };

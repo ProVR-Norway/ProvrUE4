@@ -10,76 +10,35 @@
 
 EProVRActionBehavior UProVRLogoutAction::PerformAction()
 {
-
+	Complete.BindUFunction(this, "OnLogoutEventComplete");
 	if (UProVRGameInstance* GameInstance = UProVRGameInstance::GetCurrentGameInstance())
 	{
 		if (UProVRNetworkManager* NetworkManager = GameInstance->GetNetworkManager())
 		{
-			NetworkManager->LastPassword.Empty();
-			NetworkManager->LastUsername.Empty();
-			NetworkManager->CurrentAuthToken.Empty();
-			if (!NetworkManager->LastPassword.IsEmpty() ||
-				!NetworkManager->LastUsername.IsEmpty() ||
-				!NetworkManager->CurrentAuthToken.IsEmpty())
+			if (NetworkManager->Logout(Complete))
 			{
-				UE_LOG(LogTemp, Warning, TEXT("Logout failed! password, username or token not deleted!"));
-				return EProVRActionBehavior::Synchronous;
-			}
-			else
-			{
-				if (UWorld* World = GameInstance->GetWorld())
-				{
-					UGameplayStatics::OpenLevel(World, "/Game/Levels/LoginRegistrationMap", false, "");
-					return EProVRActionBehavior::Synchronous;
-				}
-				UE_LOG(LogTemp, Warning, TEXT("Logout failed! Could not Get world!"));
+				return EProVRActionBehavior::Asynchronous;
 			}
 		}
-		UE_LOG(LogTemp, Warning, TEXT("Logout failed! Something went wrong!"));
 	}
-
+	UE_LOG(LogTemp, Warning, TEXT("Logout failed! Something went wrong!"));
+	OnLogoutActionCompleteDelegate.Broadcast(false);
 	return EProVRActionBehavior::Synchronous;
-	/*
+}
+
+void UProVRLogoutAction::OnLogoutEventComplete(bool Success)
+{
 	if (UProVRGameInstance* GameInstance = UProVRGameInstance::GetCurrentGameInstance())
 	{
-		if (UProVRNetworkManager* NetworkManager = GameInstance->GetNetworkManager())
+		if (UWorld* World = GameInstance->GetWorld())
 		{
-
-			SessionId = NetworkManager->CurrentSession.SessionId;
-			FString FullPath = FString::Printf(TEXT("/sessions/%d/participants/"), SessionId) + FGenericPlatformHttp::UrlEncode(NetworkManager->GetUsername());
-			UProVRHttpRequest::DeleteWithAuthToken(FullPath, [this, GameInstance, NetworkManager](int32 HttpResponseCode, TSharedPtr<FJsonObject> HttpResponseContent)
-				{
-					if (HttpResponseCode == 200)
-					{
-						NetworkManager->LastPassword.Empty();
-						NetworkManager->LastUsername.Empty();
-
-					}
-					else if (HttpResponseCode == 401)
-					{
-						UE_LOG(LogTemp, Warning, TEXT("Leave session action: on action complete: 401"));
-						OnLogoutActionCompleteDelegate.Broadcast(false, EProVRLogoutActionResult::ENUM_Unauthorized);
-					}
-					else if (HttpResponseCode == 404)
-					{
-						UE_LOG(LogTemp, Warning, TEXT("Leave session action: on action complete: 404"));
-						OnLogoutActionCompleteDelegate.Broadcast(false, EProVRLogoutActionResult::ENUM_UserOrSessionDoesNotExists);
-					}
-					else if (HttpResponseCode == 500)
-					{
-						UE_LOG(LogTemp, Warning, TEXT("Leave session action: on action complete: 500"));
-						OnLogoutActionCompleteDelegate.Broadcast(false, EProVRLogoutActionResult::ENUM_InternalError);
-					}
-					else
-					{
-						UE_LOG(LogTemp, Warning, TEXT("other error leave session"));
-						OnLogoutActionCompleteDelegate.Broadcast(false, EProVRLogoutActionResult::ENUM_OtherError);
-					}
-					OnAsyncronousActionCompleted();
-				});
+			UGameplayStatics::OpenLevel(World, "/Game/Levels/LoginRegistrationMap", false, "");
+			OnLogoutActionCompleteDelegate.Broadcast(true);
+			OnAsyncronousActionCompleted();
+			return;
 		}
 	}
-
-	return EProVRActionBehavior::Asynchronous;
-	*/
+	OnLogoutActionCompleteDelegate.Broadcast(false);
+	UE_LOG(LogTemp, Warning, TEXT("Asynchronius Action Complete Function running on logout action"));
+	OnAsyncronousActionCompleted();
 }
