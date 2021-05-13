@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Managers/ProVRManagerBase.h"
 #include "Network/ProVRHttpRequest.h"
+#include "Actions/ProVRLogoutAction.h"
 #include "ProVRNetworkManager.generated.h"
 
 
@@ -69,7 +70,7 @@ class PROVR_API UProVRNetworkManager : public UProVRManagerBase
 private:
 	//https://en.wikipedia.org/wiki/Basic_access_authentication
 	FString CurrentAuthToken;
-	FString LastUsername = "admin123";
+	FString LastUsername;
 	FString LastPassword;
 
 	UPROPERTY()
@@ -109,4 +110,5 @@ public:
 	bool bInASession = false;
 
 	friend class UProVRHttpRequest;
+	friend class UProVRLogoutAction;
 };
