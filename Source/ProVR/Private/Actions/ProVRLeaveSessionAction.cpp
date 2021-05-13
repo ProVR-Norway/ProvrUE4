@@ -30,7 +30,7 @@ EProVRActionBehavior UProVRLeaveSessionAction::PerformAction()
 					{
 						UE_LOG(LogTemp, Warning, TEXT("Leave session action: 200"));
 						GEngine->HandleDisconnect(World, World->GetNetDriver());
-						UGameplayStatics::OpenLevel(World, "/Game/Maps/TransitionMap", false, ""); // opens a new level locally
+						UGameplayStatics::OpenLevel(World, "/Game/Levels/LoginRegistrationMap", false, ""); // opens a new level locally
 						NetworkManager->bInASession = false;
 						OnLeaveSessionCompleteDelegate.Broadcast(true, EProVRLeaveSessionActionResult::ENUM_OK);
 
