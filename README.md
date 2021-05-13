@@ -5,3 +5,7 @@
 [![GitHub stars](https://img.shields.io/github/stars/ProVR-Norway/ProvrUE4.svg?style=social&label=Star&maxAge=2592000)](https://GitHub.com/Naereen/StrapDown.js/stargazers/) 
 
 VR Collaboration Room. Unreal Engine 4 plug-ins and project files.
+
+### Dedicated server deployment
+
+The Google Cloud Platform (GCP) service Compute Engine was used to deploy the dedicated servers so that online sessions can be created. All the servers run on seperate Docker containers on different network ports on a Container-Optimized OS VM instance. To allow all UDP traffic to the VM instance, we need to add a new firewall rule in GCP. Only after doing this we were able to connect a network client to the server.
