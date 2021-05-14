@@ -26,7 +26,7 @@ EProVRActionBehavior UProVRJoinSessionAction::PerformAction()
 				{
 					URLPathLevelToJoin =
 						FGenericPlatformHttp::UrlEncode(NetworkManager->SessionList[i].HostIP)
-						+ FString::Printf(TEXT(":%d/Game/Maps/"), NetworkManager->SessionList[i].HostPort)
+						+ FString::Printf(TEXT(":%d/Game/Levels/"), NetworkManager->SessionList[i].HostPort)
 						+ FGenericPlatformHttp::UrlEncode(NetworkManager->SessionList[i].MapName);
 					SessionIndexInSessionList = i;
 					bFoundSession = true;
@@ -54,7 +54,6 @@ EProVRActionBehavior UProVRJoinSessionAction::PerformAction()
 							UGameplayStatics::OpenLevel(World, FName(URLPathLevelToJoin), false, "");
 							UE_LOG(LogTemp, Warning, TEXT("%d"), *URLPathLevelToJoin);
 							//UGameplayStatics::OpenLevel(World, "34.90.23.60:7777/Game/Maps/TestMap", false, "");
-							OnJoinSessionCompleteDelegate.Broadcast(true, EProVRJoinSessionActionResult::ENUM_OK);
 							NetworkManager->CurrentSession.HostIP			= NetworkManager->SessionList[SessionIndexInSessionList].HostIP;
 							NetworkManager->CurrentSession.HostPort			= NetworkManager->SessionList[SessionIndexInSessionList].HostPort;
 							NetworkManager->CurrentSession.HostUsername		= NetworkManager->SessionList[SessionIndexInSessionList].HostUsername;
@@ -64,6 +63,7 @@ EProVRActionBehavior UProVRJoinSessionAction::PerformAction()
 							NetworkManager->CurrentSession.SessionName		= NetworkManager->SessionList[SessionIndexInSessionList].SessionName;
 							NetworkManager->bInASession = true;
 							NetworkManager->SessionList.Empty();
+							OnJoinSessionCompleteDelegate.Broadcast(true, EProVRJoinSessionActionResult::ENUM_OK);
 						}	
 					}
 					else if (HttpResponseCode == 401)
