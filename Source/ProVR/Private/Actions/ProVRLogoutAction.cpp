@@ -7,7 +7,6 @@
 #include "Kismet/GameplayStatics.h"
 
 
-
 EProVRActionBehavior UProVRLogoutAction::PerformAction()
 {
 	Complete.BindUFunction(this, "OnLogoutEventComplete");
@@ -25,6 +24,7 @@ EProVRActionBehavior UProVRLogoutAction::PerformAction()
 	OnLogoutActionCompleteDelegate.Broadcast(false);
 	return EProVRActionBehavior::Synchronous;
 }
+
 
 void UProVRLogoutAction::OnLogoutEventComplete(bool Success)
 {
