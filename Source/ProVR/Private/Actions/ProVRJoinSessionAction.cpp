@@ -19,18 +19,25 @@ EProVRActionBehavior UProVRJoinSessionAction::PerformAction()
 			int32 SessionIndexInSessionList;
 			RequestJson->SetStringField("username", FGenericPlatformHttp::UrlEncode(NetworkManager->GetUsername()));
 
+			bool bFoundSession = false;
 			for (int i = 0; i < NetworkManager->SessionList.Num(); i++)
 			{
 				if (NetworkManager->SessionList[i].SessionId == SessionId)
 				{
-					URLPathLevelToJoin = 
-					  FGenericPlatformHttp::UrlEncode(NetworkManager->SessionList[i].HostIP)
-					+ FString::Printf(TEXT(":%d/Game/Maps/"), NetworkManager->SessionList[i].HostPort)
-					+ FGenericPlatformHttp::UrlEncode(NetworkManager->SessionList[i].MapName);
+					URLPathLevelToJoin =
+						FGenericPlatformHttp::UrlEncode(NetworkManager->SessionList[i].HostIP)
+						+ FString::Printf(TEXT(":%d/Game/Maps/"), NetworkManager->SessionList[i].HostPort)
+						+ FGenericPlatformHttp::UrlEncode(NetworkManager->SessionList[i].MapName);
 					SessionIndexInSessionList = i;
+					bFoundSession = true;
 				}
 			}
-
+			if (!bFoundSession)
+			{
+				OnJoinSessionCompleteDelegate.Broadcast(false, EProVRJoinSessionActionResult::ENUM_UserOrSessionDoesNotExists);
+				UE_LOG(LogTemp, Warning, TEXT("No matching session! have you created a 'find sessions action' before you joined?"));
+				return EProVRActionBehavior::Synchronous;
+			}
 			
 			FString URLPathGateway = SESSION_BASE_PATH + FString::Printf(TEXT("/%d/participants"), SessionId);
 			UProVRHttpRequest::PostJsonWithAuthToken(URLPathGateway, RequestJson,

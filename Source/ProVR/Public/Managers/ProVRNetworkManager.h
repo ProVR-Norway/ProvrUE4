@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Managers/ProVRManagerBase.h"
 #include "Network/ProVRHttpRequest.h"
+#include "Actions/ProVRLogoutAction.h"
 #include "ProVRNetworkManager.generated.h"
 
 
@@ -91,6 +92,8 @@ public:
 	void TryRenewingAuthToken(TFunction<void(int32)> OnCompleted);
 	void PushNewHttpRequest(class UProVRHttpRequest* NewHttpRequest);
 	void RemoveHttpRequest(class UProVRHttpRequest* HttpRequest);
+	UFUNCTION()
+	bool Logout(FProVRLogoutActionComplete Complete);
 
 	FProVRSessionsOverview CurrentSession;
 	

@@ -3,6 +3,8 @@
 #include "Managers/ProVRNetworkManager.h"
 #include "Dom/JsonObject.h"
 #include "Serialization/JsonSerializer.h"
+#include "Actions/ProVRLogoutAction.h"
+#include "..\..\Public\Managers\ProVRNetworkManager.h"
 
 void UProVRNetworkManager::PushNewHttpRequest(UProVRHttpRequest* NewHttpRequest)
 {
@@ -12,6 +14,24 @@ void UProVRNetworkManager::PushNewHttpRequest(UProVRHttpRequest* NewHttpRequest)
 void UProVRNetworkManager::RemoveHttpRequest(UProVRHttpRequest* HttpRequest)
 {
 	ActiveHttpRequests.Remove(HttpRequest);
+}
+
+
+
+bool UProVRNetworkManager::Logout(FProVRLogoutActionComplete Complete_)
+{
+	LastUsername.Empty();
+	LastPassword.Empty();
+	CurrentAuthToken.Empty();
+	if (LastPassword.IsEmpty() && LastUsername.IsEmpty() &&	CurrentAuthToken.IsEmpty())
+	{
+		Complete_.Execute(true);
+		return true;
+
+	}
+	UE_LOG(LogTemp, Warning, TEXT("Failed to clear username, password and auth-token"));
+	Complete_.Execute(false);
+	return false;
 }
 
 //EmailAdress -> Username | David 15.04
