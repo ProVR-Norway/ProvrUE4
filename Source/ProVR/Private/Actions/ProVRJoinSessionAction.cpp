@@ -26,7 +26,7 @@ EProVRActionBehavior UProVRJoinSessionAction::PerformAction()
 				{
 					URLPathLevelToJoin =
 						FGenericPlatformHttp::UrlEncode(NetworkManager->SessionList[i].HostIP)
-						+ FString::Printf(TEXT(":%d/Game/Maps/"), NetworkManager->SessionList[i].HostPort)
+						+ FString::Printf(TEXT(":%d/Game/Levels/"), NetworkManager->SessionList[i].HostPort)
 						+ FGenericPlatformHttp::UrlEncode(NetworkManager->SessionList[i].MapName);
 					SessionIndexInSessionList = i;
 					bFoundSession = true;
