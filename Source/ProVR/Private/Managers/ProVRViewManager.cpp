@@ -88,6 +88,12 @@ UProVRViewManager::UProVRViewManager()
 		ViewWidgetMap.Add(EProVRView::BrowseSessionView, NewObject<UProVRWidgetBase>(this, BrowseSessionViewAsset.Class, TEXT("UI_ProVR_BrowseSessionView")));
 	}
 
+	static ConstructorHelpers::FClassFinder<UProVRWidgetBase> NoMenuViewAsset(TEXT("/Game/Widgets/UI_ProVR_NoMenu"));
+	if (NoMenuViewAsset.Class != NULL)
+	{
+		ViewWidgetMap.Add(EProVRView::NoMenu, NewObject<UProVRWidgetBase>(this, NoMenuViewAsset.Class, TEXT("UI_ProVR_NoMenu")));
+	}
+
 	
 	
 	/*

@@ -21,7 +21,8 @@ enum class EProVRView : uint8
 	CreateSessionView = 9,
 	BrowseSessionView = 10,
 	OptionsMenu = 11,
-	ParticipantHUD = 12
+	ParticipantHUD = 12,
+	NoMenu = 13
 };
 
 UCLASS()
