@@ -15,6 +15,12 @@ enum class EHttpRequestType : uint8
 	ENUM_Delete
 };
 
+enum class EProVRAuthToken : uint8
+{
+	ENUM_WithToken,
+	ENUM_WithoutToken,
+};
+
 #define HTTP_UNEXPECTED_ERROR -1
 
 UCLASS()
@@ -39,7 +45,7 @@ private:
 
 	int32 InternalErrorRetriedCount = 0;
 
-	void RetryRequest();
+	void RetryRequest(FHttpRequestPtr Request);
 
 	static TSharedPtr<class FJsonObject> ErrorMessageJson(const FString& Message);
 
@@ -49,6 +55,11 @@ public:
 	static void PostJson(const FString& _Path, TSharedPtr<class FJsonObject> _Content, TFunction<void(int32, TSharedPtr<class FJsonObject>)> _OnResponseCompleted);
 	static void PutJson(const FString& _Path, TSharedPtr<class FJsonObject> _Content, TFunction<void(int32, TSharedPtr<class FJsonObject>)> _OnResponseCompleted);
 	static void PutFile(const FString& _Path, const TArray<uint8>& _Content, TFunction<void(int32, TSharedPtr<class FJsonObject>)> _OnResponseCompleted);
+	static void GetWithAuthToken(const FString& _Path, TFunction<void(int32, TSharedPtr<class FJsonObject>)> _OnResponseCompleted);
+	static void DeleteWithAuthToken(const FString& _Path, TFunction<void(int32, TSharedPtr<class FJsonObject>)> _OnResponseCompleted);
+	static void PostJsonWithAuthToken(const FString& _Path, TSharedPtr<class FJsonObject> _Content, TFunction<void(int32, TSharedPtr<class FJsonObject>)> _OnResponseCompleted);
+	static void PutJsonWithAuthToken(const FString& _Path, TSharedPtr<class FJsonObject> _Content, TFunction<void(int32, TSharedPtr<class FJsonObject>)> _OnResponseCompleted);
+	static void PutFileWithAuthToken(const FString& _Path, const TArray<uint8>& _Content, TFunction<void(int32, TSharedPtr<class FJsonObject>)> _OnResponseCompleted);
 
 	FORCEINLINE EHttpRequestType GetRequestType()
 	{

@@ -4,6 +4,7 @@
 #include "Managers/ProVRActionManager.h"
 #include "Managers/ProVRViewManager.h"
 #include "Managers/ProVRNetworkManager.h"
+#include "Misc/NetworkVersion.h"
 #include "ProVRPawn.h"
 
 UProVRGameInstance* UProVRGameInstance::GetCurrentGameInstance()
@@ -67,7 +68,10 @@ UProVRGameInstance::UProVRGameInstance()
 	{
 		NetworkManager = NewObject<UProVRNetworkManager>(this, BPNetworkManager.Class, TEXT("NetworkManager"));
 	}
-
+	FNetworkVersion::IsNetworkCompatibleOverride.BindLambda([](uint32 LocalNetworkVersion, uint32 RemoteNetworkVersion)
+		{
+			return true;
+		});
 }
 
 void UProVRGameInstance::Init()
