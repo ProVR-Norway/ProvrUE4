@@ -4,7 +4,7 @@
 [![GitHub issues](https://img.shields.io/github/issues/ProVR-Norway/ProvrUE4.svg)](https://GitHub.com/Naereen/StrapDown.js/issues/)
 [![GitHub stars](https://img.shields.io/github/stars/ProVR-Norway/ProvrUE4.svg?style=social&label=Star&maxAge=2592000)](https://GitHub.com/Naereen/StrapDown.js/stargazers/) 
 
-VR Collaboration Room. Unreal Engine 4 plug-ins and project files.
+The ProVR virtual reality application where participants can register, log in, create online sessions, invite other people to sessions, join sessions, collaborate in a VR environment, and interact with their uploaded CAD models.
 
 ### 🚀 Dedicated server deployment
 
