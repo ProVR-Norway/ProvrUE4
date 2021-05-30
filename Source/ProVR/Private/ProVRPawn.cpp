@@ -20,7 +20,8 @@ AProVRPawn::AProVRPawn()
 	//WidgetInteractionComp = CreateDefaultSubobject<UWidgetInteractionComponent>(TEXT("WidgetInteractionComp"));
 	WidgetComp = CreateDefaultSubobject<UWidgetComponent>(TEXT("WidgetComp"));
 
-	CapsuleComp->SetupAttachment(RootComponent);
+	SetRootComponent(CapsuleComp); // This is probably best practice
+	//CapsuleComp->SetupAttachment(RootComponent);
 	VROrigin->SetupAttachment(CapsuleComp);
 	CameraComp->SetupAttachment(VROrigin);
 	HeadTarget->SetupAttachment(CameraComp);
