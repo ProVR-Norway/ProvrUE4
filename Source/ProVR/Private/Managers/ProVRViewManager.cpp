@@ -94,7 +94,11 @@ UProVRViewManager::UProVRViewManager()
 		ViewWidgetMap.Add(EProVRView::NoMenu, NewObject<UProVRWidgetBase>(this, NoMenuViewAsset.Class, TEXT("UI_ProVR_NoMenu")));
 	}
 
-	
+	static ConstructorHelpers::FClassFinder<UProVRWidgetBase> InviteViewAsset(TEXT("/Game/Widgets/Sessions/UI_ProVR_InviteView"));
+	if (InviteViewAsset.Class != NULL)
+	{
+		ViewWidgetMap.Add(EProVRView::InviteView, NewObject<UProVRWidgetBase>(this, InviteViewAsset.Class, TEXT("UI_ProVR_InviteView")));
+	}
 	
 	/*
 	static ConstructorHelpers::FClassFinder<UProVRWidgetBase> RegisterViewAsset(TEXT("/Game/Widgets/UI_ProVR_RegisterView"));
