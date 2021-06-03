@@ -51,6 +51,8 @@ SourceArt/**/*.tga
 WindowsNoEditor/
 LinuxServer/
 
+# Not needed content
+Content/Oculus-Content/
 
 
 # Binary Files
