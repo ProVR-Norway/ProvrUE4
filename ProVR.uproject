@@ -23,7 +23,7 @@
 		},
 		{
 			"Name": "AdvancedSessions",
-			"Enabled": false
+			"Enabled": true
 		},
 		{
 			"Name": "AdvancedSteamSessions",
